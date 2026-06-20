@@ -1,0 +1,51 @@
+---
+import Eyebrow from "./Eyebrow.astro";
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  intro?: string;
+  tone?: "dark" | "light";
+  align?: "start" | "center";
+  class?: string;
+}
+
+const {
+  eyebrow,
+  title,
+  intro,
+  tone = "dark",
+  align = "start",
+  class: className,
+} = Astro.props;
+
+const titleColor = tone === "light" ? "text-quill-gray-50" : "text-ink-900";
+const introColor = tone === "light" ? "text-quill-gray-300" : "text-ink-500";
+const alignClass =
+  align === "center" ? "items-center text-center" : "items-start";
+---
+
+<header class:list={["flex", "flex-col", "gap-5", alignClass, className]}>
+  <Eyebrow text={eyebrow} tone={tone === "light" ? "light" : "clay"} bar />
+  <h2
+    class:list={[
+      "max-w-3xl text-balance text-4xl font-light leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl",
+      titleColor,
+    ]}
+  >
+    {title}
+  </h2>
+  {
+    intro && (
+      <p
+        class:list={[
+          "max-w-2xl text-base leading-relaxed sm:text-lg",
+          introColor,
+          align === "center" && "mx-auto",
+        ]}
+      >
+        {intro}
+      </p>
+    )
+  }
+</header>

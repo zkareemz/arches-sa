@@ -1,0 +1,46 @@
+---
+interface Props {
+  src?: string;
+  alt?: string;
+  ratio?: string;
+  tone?: "light" | "dark";
+  imgClass?: string;
+  class?: string;
+}
+
+const {
+  src,
+  alt = "",
+  ratio = "aspect-[4/5]",
+  tone = "light",
+  imgClass,
+  class: className,
+} = Astro.props;
+
+const fallback =
+  tone === "dark"
+    ? "bg-gradient-to-br from-ink-800 to-ink-950"
+    : "bg-gradient-to-br from-quill-gray-200 to-quill-gray-400";
+---
+
+<div class:list={["relative", "overflow-hidden", ratio, fallback, className]}>
+  {
+    src && (
+      <img
+        src={src}
+        alt={alt}
+        loading="lazy"
+        decoding="async"
+        class:list={[
+          "absolute",
+          "inset-0",
+          "h-full",
+          "w-full",
+          "object-cover",
+          imgClass,
+        ]}
+      />
+    )
+  }
+  <slot />
+</div>

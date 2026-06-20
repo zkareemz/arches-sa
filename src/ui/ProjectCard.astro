@@ -1,0 +1,97 @@
+---
+import ImageFrame from "./ImageFrame.astro";
+
+interface Props {
+  name: string;
+  type: string;
+  image: string;
+  ratio?: string;
+  overlay?: boolean;
+  class?: string;
+}
+
+const {
+  name,
+  type,
+  image,
+  ratio = "aspect-[4/5]",
+  overlay = false,
+  class: className,
+} = Astro.props;
+---
+
+<figure class:list={["group", "flex", "flex-col", "gap-4", className]}>
+  <ImageFrame
+    src={image}
+    alt={name}
+    ratio={ratio}
+    class:list={["rounded-sm"]}
+    imgClass="transition-transform duration-[900ms] ease-out group-hover:scale-[1.06]"
+  >
+    {
+      overlay && (
+        <div
+          class:list={[
+            "absolute",
+            "inset-0",
+            "flex",
+            "flex-col",
+            "justify-end",
+            "bg-gradient-to-t",
+            "from-ink-950/80",
+            "via-ink-950/10",
+            "to-transparent",
+            "p-6",
+            "opacity-0",
+            "transition-opacity",
+            "duration-500",
+            "group-hover:opacity-100",
+          ]}
+        >
+          <span class:list={["text-lg", "font-light", "text-quill-gray-50"]}>
+            {name}
+          </span>
+          <span
+            class:list={[
+              "text-xs",
+              "uppercase",
+              "tracking-[0.18em]",
+              "text-clay-300",
+            ]}
+          >
+            {type}
+          </span>
+        </div>
+      )
+    }
+  </ImageFrame>
+  {
+    !overlay && (
+      <figcaption
+        class:list={[
+          "flex",
+          "items-baseline",
+          "justify-between",
+          "gap-4",
+          "border-t",
+          "border-ink-900/12",
+          "pt-3",
+        ]}
+      >
+        <span class:list={["text-base", "font-medium", "text-ink-900"]}>
+          {name}
+        </span>
+        <span
+          class:list={[
+            "text-xs",
+            "uppercase",
+            "tracking-[0.16em]",
+            "text-clay-600",
+          ]}
+        >
+          {type}
+        </span>
+      </figcaption>
+    )
+  }
+</figure>

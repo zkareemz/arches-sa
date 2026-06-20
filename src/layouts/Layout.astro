@@ -1,23 +1,62 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+---
+import "../styles/global.css";
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+import Footer from "../components/Footer.astro";
+import HeaderCentered from "../components/sections/header/HeaderCentered.astro";
+import { getContent } from "../data/content";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const locale = Astro.currentLocale || "ar";
+const content = getContent(locale);
+const dir = content.dir;
+
+const {
+  title = locale === "en"
+    ? "Arches | Architecture & Construction — Riyadh"
+    : "أقواس | مكتب هندسي متعدد التخصصات — الرياض",
+  description = content.hero.p,
+} = Astro.props;
+---
+
+<!doctype html>
+<html
+  lang={locale}
+  dir={dir}
+  class:list={["flex", "flex-1", "flex-col", "min-h-svh"]}
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+  </head>
+  <body
+    class:list={[
+      "flex",
+      "flex-1",
+      "flex-col",
+      "min-h-svh",
+      "bg-quill-gray-50",
+      "font-sans",
+      "text-ink-900",
+      "antialiased",
+    ]}
+  >
+    <HeaderCentered content={content} />
+    <main class:list={["flex", "flex-1", "flex-col"]}>
+      <slot />
+    </main>
+    <Footer content={content} />
+    <script>
+      import "../scripts/reveal.ts";
+    </script>
+  </body>
+</html>

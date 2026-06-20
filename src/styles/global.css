@@ -1,0 +1,99 @@
+@import "tailwindcss";
+@import "@fontsource-variable/readex-pro";
+
+@theme {
+  --font-sans: "Readex Pro Variable", system-ui, sans-serif;
+
+  /* Neutral — light gallery canvas (quill-gray-300 == brand #d8d8d1) */
+  --color-quill-gray: #d8d8d1;
+  --color-quill-gray-50: #f9faf9;
+  --color-quill-gray-100: #f4f5f4;
+  --color-quill-gray-200: #e8e8e3;
+  --color-quill-gray-300: #d8d8d1;
+  --color-quill-gray-400: #aaaa9c;
+  --color-quill-gray-500: #7b7b69;
+  --color-quill-gray-600: #57594c;
+  --color-quill-gray-700: #45463a;
+  --color-quill-gray-800: #2a2923;
+  --color-quill-gray-900: #1d1d16;
+  --color-quill-gray-950: #0d0d08;
+
+  /* Ink — dark bookends / text (brand #1e1f28) */
+  --color-ink: #1e1f28;
+  --color-ink-50: #f5f5f7;
+  --color-ink-100: #e7e7ea;
+  --color-ink-200: #c8c8cf;
+  --color-ink-300: #9a9ba6;
+  --color-ink-400: #6c6d7b;
+  --color-ink-500: #494a58;
+  --color-ink-600: #353643;
+  --color-ink-700: #2a2b36;
+  --color-ink-800: #232430;
+  --color-ink-900: #1e1f28;
+  --color-ink-950: #141520;
+
+  /* Clay — brown accent (brand #854b28) */
+  --color-clay: #854b28;
+  --color-clay-50: #f9f3ef;
+  --color-clay-100: #f0e0d4;
+  --color-clay-200: #e0c0a8;
+  --color-clay-300: #cd9c79;
+  --color-clay-400: #b9794f;
+  --color-clay-500: #9e5e35;
+  --color-clay-600: #854b28;
+  --color-clay-700: #6d3e22;
+  --color-clay-800: #58331f;
+  --color-clay-900: #492b1c;
+  --color-clay-950: #29160d;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Anchor offset for the fixed header */
+  :where(section[id], div[id]) {
+    scroll-margin-top: 5rem;
+  }
+
+  ::selection {
+    background-color: var(--color-clay-600);
+    color: var(--color-quill-gray-50);
+  }
+}
+
+@layer components {
+  /* Scroll-reveal — toggled by src/scripts/reveal.ts */
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(1.25rem);
+    transition:
+      opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+  }
+
+  [data-reveal][data-revealed] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

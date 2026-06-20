@@ -1,0 +1,18 @@
+---
+import ContactFormFocus from "../components/sections/contact/ContactFormFocus.astro";
+import HeroCinematic from "../components/sections/hero/HeroCinematic.astro";
+import ProjectsCarousel from "../components/sections/projects/ProjectsCarousel.astro";
+import ServicesSticky from "../components/sections/services/ServicesSticky.astro";
+import WhoColumns from "../components/sections/who/WhoColumns.astro";
+import WhyGrid from "../components/sections/why/WhyGrid.astro";
+import { getContent } from "../data/content";
+
+const content = getContent(Astro.currentLocale);
+---
+
+<HeroCinematic content={content} />
+<WhoColumns content={content} />
+<ServicesSticky content={content} />
+<WhyGrid content={content} />
+<ProjectsCarousel content={content} />
+<ContactFormFocus content={content} />

@@ -1,0 +1,71 @@
+---
+import type { SiteContent } from "../../../data/content";
+
+import Reveal from "../../../ui/Reveal.astro";
+import SectionHeader from "../../../ui/SectionHeader.astro";
+
+interface Props {
+  content: SiteContent;
+}
+
+const { content } = Astro.props;
+const { why } = content;
+---
+
+<section id="why" class:list={["bg-quill-gray-50", "text-ink-900"]}>
+  <div
+    class:list={[
+      "mx-auto",
+      "w-full",
+      "max-w-7xl",
+      "px-6",
+      "py-24",
+      "sm:px-10",
+      "sm:py-32",
+    ]}
+  >
+    <Reveal>
+      <SectionHeader eyebrow={why.eyebrow} title={why.title} />
+    </Reveal>
+
+    <div
+      class:list={[
+        "mt-14",
+        "grid",
+        "grid-cols-1",
+        "sm:mt-20",
+        "sm:grid-cols-2",
+      ]}
+    >
+      {
+        why.items.map((item, i) => (
+          <Reveal
+            delay={(i % 2) * 100}
+            class:list={[
+              "flex",
+              "flex-col",
+              "gap-3",
+              "border-t",
+              "border-ink-900/12",
+              "py-8",
+              "sm:px-8",
+              "sm:[&:nth-child(odd)]:ps-0",
+              "sm:[&:nth-child(even)]:border-s",
+              "sm:[&:nth-child(even)]:border-ink-900/12",
+            ]}
+          >
+            <span class:list={["text-sm", "font-medium", "text-clay-600"]}>
+              0{i + 1}
+            </span>
+            <h3 class:list={["text-2xl", "font-light", "tracking-tight"]}>
+              {item.title}
+            </h3>
+            <p class:list={["max-w-md", "leading-relaxed", "text-ink-500"]}>
+              {item.desc}
+            </p>
+          </Reveal>
+        ))
+      }
+    </div>
+  </div>
+</section>

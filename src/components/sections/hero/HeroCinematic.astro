@@ -1,0 +1,93 @@
+---
+import type { SiteContent } from "../../../data/content";
+
+import Button from "../../../ui/Button.astro";
+import Eyebrow from "../../../ui/Eyebrow.astro";
+import Reveal from "../../../ui/Reveal.astro";
+
+interface Props {
+  content: SiteContent;
+}
+
+const { content } = Astro.props;
+const { hero } = content;
+---
+
+<section
+  class:list={[
+    "relative",
+    "flex",
+    "min-h-svh",
+    "flex-col",
+    "justify-end",
+    "overflow-hidden",
+    "bg-ink-950",
+    "text-quill-gray-50",
+  ]}
+>
+  <video
+    autoplay
+    muted
+    loop
+    playsinline
+    poster={hero.image}
+    class:list={["absolute", "inset-0", "h-full", "w-full", "object-cover"]}
+  >
+    <source src="/bg.mp4" type="video/mp4" />
+  </video>
+  <div
+    class:list={[
+      "absolute",
+      "inset-0",
+      "bg-linear-to-t",
+      "from-ink-950",
+      "via-ink-950/55",
+      "to-ink-950/25",
+    ]}
+  >
+  </div>
+
+  <div
+    class:list={[
+      "relative",
+      "mx-auto",
+      "w-full",
+      "max-w-7xl",
+      "px-6",
+      "pb-24",
+      "pt-32",
+      "sm:px-10",
+    ]}
+  >
+    <Reveal class:list={["flex", "flex-col", "gap-6"]}>
+      <Eyebrow text={hero.eyebrow} tone="light" bar />
+      <h1
+        class:list={[
+          "max-w-4xl",
+          "text-balance",
+          "text-5xl",
+          "font-light",
+          "leading-[1.04]",
+          "tracking-tight",
+          "sm:text-7xl",
+          "lg:text-8xl",
+        ]}
+      >
+        {hero.title}
+      </h1>
+      <p
+        class:list={[
+          "max-w-xl",
+          "text-lg",
+          "leading-relaxed",
+          "text-quill-gray-300",
+        ]}
+      >
+        {hero.p}
+      </p>
+      <div class:list={["mt-4"]}>
+        <Button href="#contact" label={hero.cta} variant="primary" />
+      </div>
+    </Reveal>
+  </div>
+</section>

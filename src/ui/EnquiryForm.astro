@@ -1,0 +1,182 @@
+---
+import type { SiteContent } from "../data/content";
+
+interface Props {
+  content: SiteContent;
+  class?: string;
+}
+
+const { content, class: className } = Astro.props;
+const { form } = content.contact;
+
+// Replace with your free Web3Forms access key from https://web3forms.com
+const ACCESS_KEY = "YOUR_WEB3FORMS_ACCESS_KEY";
+
+const fieldClass =
+  "w-full border-b border-quill-gray-50/25 bg-transparent py-3 text-quill-gray-50 placeholder:text-quill-gray-500 transition-colors focus:border-clay-400 focus:outline-none";
+---
+
+<form
+  data-enquiry
+  data-sending={form.sending}
+  data-success={form.success}
+  data-error={form.error}
+  action="https://api.web3forms.com/submit"
+  method="POST"
+  class:list={["flex", "flex-col", "gap-6", className]}
+>
+  <input type="hidden" name="access_key" value={ACCESS_KEY} />
+  <input type="hidden" name="subject" value={form.subject} />
+  <input
+    type="checkbox"
+    name="botcheck"
+    class:list={["hidden"]}
+    style="display:none"
+    tabindex="-1"
+    autocomplete="off"
+  />
+
+  <div class:list={["flex", "flex-col", "gap-6", "sm:flex-row", "sm:gap-8"]}>
+    <div class:list={["flex-1"]}>
+      <label class:list={["sr-only"]} for="enquiry-name">{form.name}</label>
+      <input
+        id="enquiry-name"
+        name="name"
+        type="text"
+        required
+        placeholder={form.name}
+        class:list={[fieldClass]}
+      />
+    </div>
+    <div class:list={["flex-1"]}>
+      <label class:list={["sr-only"]} for="enquiry-email">{form.email}</label>
+      <input
+        id="enquiry-email"
+        name="email"
+        type="email"
+        required
+        placeholder={form.email}
+        class:list={[fieldClass, "text-start"]}
+      />
+    </div>
+  </div>
+
+  <div>
+    <label class:list={["sr-only"]} for="enquiry-message">{form.message}</label>
+    <textarea
+      id="enquiry-message"
+      name="message"
+      required
+      rows="4"
+      placeholder={form.message}
+      class:list={[fieldClass, "resize-none"]}></textarea>
+  </div>
+
+  <div class:list={["flex", "flex-wrap", "items-center", "gap-x-6", "gap-y-3"]}>
+    <button
+      type="submit"
+      data-submit
+      class:list={[
+        "group",
+        "inline-flex",
+        "items-center",
+        "justify-center",
+        "gap-2.5",
+        "rounded-md",
+        "bg-clay-600",
+        "px-7",
+        "py-3.5",
+        "text-sm",
+        "font-medium",
+        "tracking-wide",
+        "text-quill-gray-50",
+        "transition-colors",
+        "duration-300",
+        "hover:bg-clay-700",
+        "disabled:cursor-not-allowed",
+        "disabled:opacity-60",
+        "focus-visible:outline-2",
+        "focus-visible:outline-offset-2",
+        "focus-visible:outline-clay-400",
+      ]}
+    >
+      {form.submit}
+      <span
+        aria-hidden="true"
+        class:list={[
+          "transition-transform",
+          "duration-300",
+          "group-hover:translate-x-1",
+          "rtl:-scale-x-100",
+          "rtl:group-hover:-translate-x-1",
+        ]}>&rarr;</span
+      >
+    </button>
+    <p
+      data-form-status
+      aria-live="polite"
+      class:list={["text-sm", "text-quill-gray-300"]}
+    >
+    </p>
+  </div>
+</form>
+
+<script>
+  const forms = document.querySelectorAll<HTMLFormElement>("[data-enquiry]");
+
+  forms.forEach((form) => {
+    const status = form.querySelector<HTMLElement>("[data-form-status]");
+    const submit = form.querySelector<HTMLButtonElement>("[data-submit]");
+    const messages = {
+      sending: form.dataset.sending ?? "Sending…",
+      success: form.dataset.success ?? "Message sent.",
+      error: form.dataset.error ?? "Something went wrong.",
+    };
+
+    const setStatus = (text: string, state: "sending" | "ok" | "error") => {
+      if (!status) return;
+      status.textContent = text;
+      status.classList.remove(
+        "text-quill-gray-300",
+        "text-clay-300",
+        "text-red-400",
+      );
+      status.classList.add(
+        state === "ok"
+          ? "text-clay-300"
+          : state === "error"
+            ? "text-red-400"
+            : "text-quill-gray-300",
+      );
+    };
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!form.reportValidity()) return;
+
+      if (submit) submit.disabled = true;
+      setStatus(messages.sending, "sending");
+
+      try {
+        const data = new FormData(form);
+        const response = await fetch(form.action, {
+          method: "POST",
+          body: data,
+          headers: { Accept: "application/json" },
+        });
+        const result = await response.json().catch(() => ({}));
+
+        if (response.ok && result.success !== false) {
+          form.reset();
+          setStatus(messages.success, "ok");
+        } else {
+          setStatus(messages.error, "error");
+        }
+      } catch {
+        setStatus(messages.error, "error");
+      } finally {
+        if (submit) submit.disabled = false;
+      }
+    });
+  });
+</script>

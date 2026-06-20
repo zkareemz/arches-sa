@@ -1,0 +1,57 @@
+---
+import type { SiteContent } from "../data/content";
+
+import Logo from "../assets/logo.svg";
+
+interface Props {
+  content: SiteContent;
+}
+
+const { content } = Astro.props;
+const { contact, footer } = content;
+const year = new Date().getFullYear();
+---
+
+<footer class:list={["bg-ink-950", "text-quill-gray-300"]}>
+  <div
+    class:list={["mx-auto", "w-full", "max-w-7xl", "px-6", "py-14", "sm:px-10"]}
+  >
+    <div
+      class:list={[
+        "flex",
+        "flex-col",
+        "gap-10",
+        "border-b",
+        "border-quill-gray-50/10",
+        "pb-10",
+        "flex-row",
+        "items-start",
+        "justify-between",
+      ]}
+    >
+      <div class:list={["flex", "flex-col", "gap-4"]}>
+        <Logo
+          class:list={["h-9", "w-auto", "text-quill-gray-500"]}
+          aria-hidden="true"
+        />
+      </div>
+    </div>
+
+    <div
+      class:list={[
+        "flex",
+        "flex-col",
+        "gap-2",
+        "pt-6",
+        "text-xs",
+        "text-quill-gray-500",
+        "sm:flex-row",
+        "sm:items-center",
+        "sm:justify-between",
+      ]}
+    >
+      <span>© {year} Arches. {footer.rights}</span>
+      <span>{contact.office}</span>
+    </div>
+  </div>
+</footer>

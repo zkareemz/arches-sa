@@ -1,0 +1,42 @@
+---
+interface Props {
+  title: string;
+  desc: string;
+  number?: string;
+  tone?: "dark" | "light";
+  class?: string;
+}
+
+const { title, desc, number, tone = "dark", class: className } = Astro.props;
+
+const borderClass =
+  tone === "light" ? "border-quill-gray-50/15" : "border-ink-900/12";
+const titleColor = tone === "light" ? "text-quill-gray-50" : "text-ink-900";
+const descColor = tone === "light" ? "text-quill-gray-300" : "text-ink-500";
+---
+
+<div
+  class:list={[
+    "flex",
+    "flex-col",
+    "gap-2",
+    "border-t",
+    "pt-4",
+    borderClass,
+    className,
+  ]}
+>
+  <div class:list={["flex", "items-baseline", "gap-2"]}>
+    {
+      number && (
+        <span class:list={["text-xs", "font-medium", "text-clay-600"]}>
+          {number}
+        </span>
+      )
+    }
+    <h4 class:list={["text-sm", "font-medium", "tracking-wide", titleColor]}>
+      {title}
+    </h4>
+  </div>
+  <p class:list={["text-sm", "leading-relaxed", descColor]}>{desc}</p>
+</div>

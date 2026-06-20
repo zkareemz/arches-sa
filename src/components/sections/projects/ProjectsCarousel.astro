@@ -1,0 +1,79 @@
+---
+import type { SiteContent } from "../../../data/content";
+
+import ProjectCard from "../../../ui/ProjectCard.astro";
+import Reveal from "../../../ui/Reveal.astro";
+import SectionHeader from "../../../ui/SectionHeader.astro";
+
+interface Props {
+  content: SiteContent;
+}
+
+const { content } = Astro.props;
+const { projects } = content;
+---
+
+<section
+  id="projects"
+  class:list={["overflow-hidden", "bg-quill-gray-100", "text-ink-900"]}
+>
+  <div
+    class:list={[
+      "mx-auto",
+      "w-full",
+      "max-w-7xl",
+      "px-6",
+      "pt-24",
+      "sm:px-10",
+      "sm:pt-32",
+    ]}
+  >
+    <Reveal>
+      <SectionHeader
+        eyebrow={projects.eyebrow}
+        title={projects.title}
+        intro={projects.intro}
+      />
+    </Reveal>
+  </div>
+
+  <div
+    class:list={[
+      "mt-14",
+      "flex",
+      "snap-x",
+      "snap-mandatory",
+      "gap-6",
+      "overflow-x-auto",
+      "px-6",
+      "pb-24",
+      "sm:mt-20",
+      "sm:px-10",
+      "sm:pb-32",
+      "[scrollbar-width:none]",
+      "[&::-webkit-scrollbar]:hidden",
+    ]}
+  >
+    {
+      projects.items.map((project) => (
+        <div
+          class:list={[
+            "w-[78vw]",
+            "shrink-0",
+            "snap-start",
+            "sm:w-[44vw]",
+            "lg:w-[32vw]",
+          ]}
+        >
+          <ProjectCard
+            name={project.name}
+            type={project.type}
+            image={project.image}
+            ratio="aspect-[4/4]"
+          />
+        </div>
+      ))
+    }
+    <div class:list={["w-px", "shrink-0"]} aria-hidden="true"></div>
+  </div>
+</section>

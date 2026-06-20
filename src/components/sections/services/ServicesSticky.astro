@@ -1,0 +1,154 @@
+---
+import type { SiteContent } from "../../../data/content";
+
+import Eyebrow from "../../../ui/Eyebrow.astro";
+import Reveal from "../../../ui/Reveal.astro";
+import ServiceItem from "../../../ui/ServiceItem.astro";
+
+interface Props {
+  content: SiteContent;
+}
+
+const { content } = Astro.props;
+const { services } = content;
+---
+
+<section id="services" class:list={["bg-quill-gray-100", "text-ink-900"]}>
+  <div
+    class:list={[
+      "mx-auto",
+      "w-full",
+      "max-w-7xl",
+      "px-6",
+      "py-24",
+      "sm:px-10",
+      "sm:py-32",
+    ]}
+  >
+    <div
+      class:list={[
+        "grid",
+        "grid-cols-1",
+        "gap-12",
+        "lg:grid-cols-12",
+        "lg:gap-16",
+      ]}
+    >
+      <div class:list={["lg:col-span-4"]}>
+        <div
+          class:list={["flex", "flex-col", "gap-8", "lg:sticky", "lg:top-28"]}
+        >
+          <div class:list={["flex", "flex-col", "gap-5"]}>
+            <Eyebrow text={services.eyebrow} bar />
+            <h2
+              class:list={[
+                "text-4xl",
+                "font-light",
+                "leading-[1.1]",
+                "tracking-tight",
+                "sm:text-5xl",
+              ]}
+            >
+              {services.title}
+            </h2>
+          </div>
+          <ol class:list={["flex", "flex-col"]}>
+            {
+              services.items.map((service) => (
+                <li>
+                  <a
+                    href={`#service-${service.index}`}
+                    class:list={[
+                      "group",
+                      "flex",
+                      "items-baseline",
+                      "gap-3",
+                      "border-t",
+                      "border-ink-900/12",
+                      "py-4",
+                      "transition-colors",
+                      "hover:text-clay-600",
+                    ]}
+                  >
+                    <span
+                      class:list={["text-sm", "font-medium", "text-clay-600"]}
+                    >
+                      {service.index}
+                    </span>
+                    <span
+                      class:list={["text-lg", "font-light", "tracking-tight"]}
+                    >
+                      {service.title}
+                    </span>
+                  </a>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+      </div>
+
+      <div
+        class:list={[
+          "flex",
+          "flex-col",
+          "gap-16",
+          "lg:col-span-8",
+          "lg:gap-24",
+        ]}
+      >
+        {
+          services.items.map((service) => (
+            <Reveal
+              as="article"
+              id={`service-${service.index}`}
+              class:list={["flex", "flex-col", "gap-5", "scroll-mt-28"]}
+            >
+              <span
+                class:list={[
+                  "text-xs",
+                  "font-medium",
+                  "uppercase",
+                  "tracking-[0.22em]",
+                  "text-clay-600",
+                ]}
+              >
+                {service.label}
+              </span>
+              <h3
+                class:list={[
+                  "text-3xl",
+                  "font-light",
+                  "tracking-tight",
+                  "sm:text-4xl",
+                ]}
+              >
+                {service.title}
+              </h3>
+              <p class:list={["text-lg", "font-light", "text-clay-700"]}>
+                {service.subtitle}
+              </p>
+              <p class:list={["max-w-2xl", "leading-relaxed", "text-ink-500"]}>
+                {service.p}
+              </p>
+              <div
+                class:list={[
+                  "mt-3",
+                  "grid",
+                  "grid-cols-1",
+                  "gap-x-10",
+                  "gap-y-5",
+                  "sm:grid-cols-2",
+                ]}
+              >
+                {service.items.map((item) => (
+                  <ServiceItem title={item.title} desc={item.desc} />
+                ))}
+              </div>
+            </Reveal>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>

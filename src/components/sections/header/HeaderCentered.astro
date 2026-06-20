@@ -1,0 +1,69 @@
+---
+import type { SiteContent } from "../../../data/content";
+
+import Globe from "../../../assets/globe.svg";
+import Logo from "../../../assets/logo.svg";
+import Menu from "../../../assets/menu.svg";
+
+interface Props {
+  content: SiteContent;
+  preview?: boolean;
+}
+
+const { content, preview = false } = Astro.props;
+const home = content.dir === "rtl" ? "/" : "/en";
+---
+
+<header
+  class:list={[
+    preview ? "relative" : "fixed inset-x-0 top-0",
+    "z-40 flex items-center justify-between gap-4 border-b border-ink-900/10 bg-quill-gray-50/70 px-5 py-3.5 text-ink-900 backdrop-blur-md sm:px-8",
+  ]}
+>
+  <a
+    href={content.altLocale.href}
+    class:list={[
+      "flex",
+      "items-center",
+      "gap-2",
+      "rounded-full",
+      "px-2",
+      "py-1",
+      "text-xs",
+      "font-medium",
+      "uppercase",
+      "tracking-[0.18em]",
+      "text-ink-700",
+      "transition-colors",
+      "hover:text-clay-600",
+    ]}
+  >
+    <Globe class:list={["h-5", "w-5"]} aria-hidden="true" />
+    <span>{content.altLocale.label}</span>
+  </a>
+
+  <a href={home} aria-label="Arches" class:list={["shrink-0", "text-ink-900"]}>
+    <Logo class:list={["h-8", "w-auto", "sm:h-9"]} aria-hidden="true" />
+  </a>
+
+  <button
+    type="button"
+    data-nav-toggle
+    aria-controls="nav-overlay"
+    aria-expanded="false"
+    aria-label="Open menu"
+    class:list={[
+      "flex",
+      "h-10",
+      "w-10",
+      "items-center",
+      "justify-center",
+      "rounded-full",
+      "text-ink-900",
+      "transition-colors",
+      "hover:text-clay-600",
+    ]}
+  >
+    <Menu class:list={["h-6", "w-6"]} aria-hidden="true" />
+  </button>
+</header>

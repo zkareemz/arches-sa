@@ -1,0 +1,102 @@
+---
+import type { SiteContent } from "../data/content";
+
+import WhatsappLogo from "../assets/whatsapp.svg";
+import Button from "./Button.astro";
+
+interface Props {
+  content: SiteContent;
+  layout?: "stack" | "row";
+  class?: string;
+}
+
+const { content, layout = "stack", class: className } = Astro.props;
+const { contact } = content;
+
+const wrapClass =
+  layout === "row"
+    ? "flex flex-col gap-8 sm:flex-row sm:flex-wrap sm:gap-12"
+    : "flex flex-col gap-8";
+---
+
+<div class:list={[wrapClass, className]}>
+  <div class:list={["flex", "flex-col", "gap-2"]}>
+    <span
+      class:list={[
+        "text-xs",
+        "font-medium",
+        "uppercase",
+        "tracking-[0.2em]",
+        "text-clay-400",
+      ]}
+    >
+      {contact.officeLabel}
+    </span>
+    <p class:list={["text-quill-gray-200"]}>{contact.office}</p>
+    <a
+      href={contact.websiteUrl}
+      class:list={[
+        "text-quill-gray-400",
+        "transition-colors",
+        "hover:text-quill-gray-50",
+      ]}>{contact.website}</a
+    >
+  </div>
+
+  <div class:list={["flex", "flex-col", "gap-2"]}>
+    <span
+      class:list={[
+        "text-xs",
+        "font-medium",
+        "uppercase",
+        "tracking-[0.2em]",
+        "text-clay-400",
+      ]}
+    >
+      {contact.contactLabel}
+    </span>
+    <a
+      href={`mailto:${contact.email}`}
+      class:list={[
+        "text-quill-gray-200",
+        "transition-colors",
+        "hover:text-quill-gray-50",
+      ]}>{contact.email}</a
+    >
+    <a
+      href={`tel:${contact.phone.replace(/\s+/g, "")}`}
+      dir="ltr"
+      class:list={[
+        "text-quill-gray-400",
+        "transition-colors",
+        "hover:text-quill-gray-50",
+        "ltr:text-start",
+        "rtl:text-end",
+      ]}>{contact.phone}</a
+    >
+  </div>
+  <div class:list={["flex", "flex-col", "gap-2"]}>
+    <span
+      class:list={[
+        "text-xs",
+        "font-medium",
+        "uppercase",
+        "tracking-[0.2em]",
+        "text-clay-400",
+      ]}
+    >
+      {contact.whatsappLabel}
+    </span>
+    <div class:list={["inline-block", "pt-1"]}>
+      <Button
+        href={contact.phone}
+        variant="outline"
+        tone="light"
+        customIcon
+        label={contact.phone}
+      >
+        <WhatsappLogo class:list={["w-4", "h-auto"]} />
+      </Button>
+    </div>
+  </div>
+</div>

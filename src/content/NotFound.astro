@@ -1,0 +1,43 @@
+---
+import { getContent } from "../data/content";
+import Button from "../ui/Button.astro";
+
+const content = getContent(Astro.currentLocale);
+const isAr = content.dir === "rtl";
+const home = isAr ? "/" : "/en";
+---
+
+<section
+  class:list={[
+    "flex",
+    "min-h-svh",
+    "flex-col",
+    "items-center",
+    "justify-center",
+    "gap-6",
+    "bg-ink-950",
+    "px-6",
+    "text-center",
+    "text-quill-gray-50",
+  ]}
+>
+  <span class:list={["text-7xl", "font-light", "text-clay-500", "sm:text-8xl"]}
+    >404</span
+  >
+  <h1 class:list={["text-2xl", "font-light", "tracking-tight", "sm:text-3xl"]}>
+    {isAr ? "الصفحة غير موجودة" : "Page not found"}
+  </h1>
+  <p class:list={["max-w-sm", "leading-relaxed", "text-quill-gray-400"]}>
+    {
+      isAr
+        ? "عذراً، لا يمكننا العثور على الصفحة التي تبحث عنها."
+        : "Sorry, we couldn't find the page you were looking for."
+    }
+  </p>
+  <Button
+    href={home}
+    label={isAr ? "العودة إلى الرئيسية" : "Back home"}
+    variant="outline"
+    tone="light"
+  />
+</section>
