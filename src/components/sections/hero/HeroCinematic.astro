@@ -1,9 +1,9 @@
 ---
 import type { SiteContent } from "../../../data/content";
 
+import Logo from "../../../assets/logo.svg";
 import Button from "../../../ui/Button.astro";
 import Eyebrow from "../../../ui/Eyebrow.astro";
-import Reveal from "../../../ui/Reveal.astro";
 
 interface Props {
   content: SiteContent;
@@ -15,41 +15,67 @@ const { hero } = content;
 
 <section
   class:list={[
+    "hero",
     "relative",
     "flex",
     "min-h-svh",
     "flex-col",
-    "justify-end",
+    "justify-center",
     "overflow-hidden",
     "bg-ink-950",
     "text-quill-gray-50",
+    "z-10",
   ]}
 >
+  <!-- Layer 1 — full-bleed background video (always playing, revealed by the bloom) -->
   <video
     autoplay
     muted
     loop
     playsinline
     poster={hero.image}
-    class:list={["absolute", "inset-0", "h-full", "w-full", "object-cover"]}
-  >
-    <source src="/bg.mp4" type="video/mp4" />
-  </video>
-  <div
     class:list={[
       "absolute",
       "inset-0",
+      "h-full",
+      "w-full",
+      "object-cover",
+      "z-0",
+    ]}
+  >
+    <source src="/background.webm" type="video/webm" />
+    <source src="/background.mp4" type="video/mp4" />
+  </video>
+
+  <!-- <div 
+  class:list={[
+    "absolute", "inset-0", "h-full", "w-full","min-h-svh", "bg-cover", "bg-center", 
+    "z-20"
+  ]}
+  style={{backgroundImage: "url('/background.jpg')"}}
+   /> -->
+
+  <!-- Scrim for text legibility, fades in with the content -->
+  <div
+    aria-hidden="true"
+    class:list={[
+      "hero__scrim",
+      "absolute",
+      "inset-0",
+      "z-10",
       "bg-linear-to-t",
-      "from-ink-950",
-      "via-ink-950/55",
-      "to-ink-950/25",
+      "from-ink-950/85",
+      "via-ink-950/45",
+      "to-ink-950/15",
     ]}
   >
   </div>
 
+  <!-- Content finale — staggers up after the reveal -->
   <div
     class:list={[
       "relative",
+      "z-20",
       "mx-auto",
       "w-full",
       "max-w-7xl",
@@ -59,10 +85,13 @@ const { hero } = content;
       "sm:px-10",
     ]}
   >
-    <Reveal class:list={["flex", "flex-col", "gap-6"]}>
-      <Eyebrow text={hero.eyebrow} tone="light" bar />
+    <div class:list={["flex", "flex-col", "gap-6"]}>
+      <span class="hero__item" style="--i: 0">
+        <Eyebrow text={hero.eyebrow} tone="light" bar />
+      </span>
       <h1
         class:list={[
+          "hero__item",
           "max-w-4xl",
           "text-balance",
           "text-5xl",
@@ -72,22 +101,32 @@ const { hero } = content;
           "sm:text-7xl",
           "lg:text-8xl",
         ]}
+        style="--i: 1"
       >
         {hero.title}
       </h1>
       <p
         class:list={[
+          "hero__item",
           "max-w-xl",
           "text-lg",
           "leading-relaxed",
           "text-quill-gray-300",
         ]}
+        style="--i: 2"
       >
         {hero.p}
       </p>
-      <div class:list={["mt-4"]}>
+      <div class="hero__item mt-4" style="--i: 3">
         <Button href="#contact" label={hero.cta} variant="primary" />
       </div>
-    </Reveal>
+    </div>
   </div>
+
+  <!-- Layer 3 — white panel with the logo letters knocked out; the video shows
+       through the letters, then the whole panel blooms outward and fades. -->
+  <div class="hero__mask" aria-hidden="true"></div>
+
+  <!-- Dark logo shown first, crossfades out to reveal the video inside the letters -->
+  <!-- <Logo class="hero__logo z-50" aria-hidden="true" /> -->
 </section>
