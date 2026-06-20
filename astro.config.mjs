@@ -5,7 +5,7 @@ import { defineConfig } from "astro/config";
 // https://astro.build/config
 export default defineConfig({
   site: "https://zkareemz.github.io",
-  base: "/arches-sa",
+  base: process.env.CI ? "/arches-sa" : "/",
   i18n: {
     defaultLocale: "ar",
     locales: ["ar", "en"],
