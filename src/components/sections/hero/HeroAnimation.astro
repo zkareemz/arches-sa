@@ -1,0 +1,233 @@
+---
+import type { SiteContent } from '../../../data/content';
+import Button from '../../../ui/Button.astro';
+import Eyebrow from '../../../ui/Eyebrow.astro';
+
+interface Props {
+  delay?: number;     // ms before circle starts growing
+  duration?: number;  // ms for circle to fully expand
+  easing?: string;    // CSS easing function
+  content: SiteContent;
+}
+
+const {
+  delay = 0,
+  duration = 800,
+  easing = "cubic-bezier(0.22, 1, 0.36, 1)",
+  content,
+} = Astro.props;
+
+const { hero } = content;
+---
+
+<section
+  class:list={[
+    "hero",
+    "relative",
+    "flex",
+    "min-h-svh",
+    "flex-col",
+    "justify-center",
+    "overflow-hidden",
+    "text-quill-gray-50",
+    "z-10",
+  ]}
+>
+  <!-- Layer 1: Video (revealed through the expanding circle) -->
+  <video
+    id="hero-video"
+    data-hero-video
+    preload="auto"
+    muted
+    playsinline
+    loop
+    class:list={[
+      "absolute",
+      "inset-0",
+      "h-full",
+      "w-full",
+      "object-cover",
+      "z-0",
+    ]}
+  >
+    <source
+      src={`${import.meta.env.BASE_URL}background.mp4`}
+      type="video/mp4"
+    />
+  </video>
+
+  <!-- Layer 2: Static image (masked away by the growing circle) -->
+  <div
+    id="hero-overlay"
+    class:list={[
+      "absolute",
+      "inset-0",
+      "h-full",
+      "w-full",
+      "min-h-svh",
+      "bg-cover",
+      "bg-center",
+      "z-20",
+    ]}
+    style={{ backgroundImage: `url('${import.meta.env.BASE_URL}background.jpg')` }}
+  >
+  </div>
+  <div
+    class:list={[
+      "relative",
+      "z-20",
+      "mx-auto",
+      "w-full",
+      "max-w-7xl",
+      "px-6",
+      "pb-24",
+      "pt-32",
+      "sm:px-10",
+    ]}
+  >
+    <div class:list={["flex", "flex-col", "gap-6"]}>
+      <span class="hero__item" style="--i: 0">
+        <Eyebrow text={hero.eyebrow} tone="light" bar />
+      </span>
+      <h1
+        class:list={[
+          "hero__item",
+          "max-w-4xl",
+          "text-balance",
+          "text-5xl",
+          "font-light",
+          "leading-[1.04]",
+          "tracking-tight",
+          "sm:text-7xl",
+          "lg:text-8xl",
+        ]}
+        style="--i: 1"
+      >
+        {hero.title}
+      </h1>
+      <p
+        class:list={[
+          "hero__item",
+          "max-w-xl",
+          "text-lg",
+          "leading-relaxed",
+          "text-quill-gray-300",
+        ]}
+        style="--i: 2"
+      >
+        {hero.p}
+      </p>
+      <div class="hero__item mt-4" style="--i: 3">
+        <Button href="#contact" label={hero.cta} variant="primary" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  @media (prefers-reduced-motion: reduce) {
+    #hero-overlay {
+      display: none;
+    }
+  }
+</style>
+
+<script define:vars={{ delay, duration, easing }}>
+  (function () {
+    var video = document.querySelector("[data-hero-video]");
+    var overlay = document.getElementById("hero-overlay");
+    if (!video || !overlay) return;
+
+    var reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    if (reduceMotion) {
+      overlay.style.display = "none";
+      video.play().catch(function () {});
+      return;
+    }
+
+    // ── Parse easing ────────────────────────────────────────
+    function parseEasing(raw) {
+      var cbMatch = raw.match(
+        /cubic-bezier\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*\)/,
+      );
+      if (cbMatch) {
+        var x1 = parseFloat(cbMatch[1]);
+        var y1 = parseFloat(cbMatch[2]);
+        var x2 = parseFloat(cbMatch[3]);
+        var y2 = parseFloat(cbMatch[4]);
+        return function (t) { return solveBezier(t, x1, y1, x2, y2); };
+      }
+      switch (raw) {
+        case "ease-in":       return function (t) { return t * t; };
+        case "ease-out":      return function (t) { return 1 - Math.pow(1 - t, 3); };
+        case "ease-in-out":   return function (t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+        case "linear":        return function (t) { return t; };
+        default:              return function (t) { return 1 - Math.pow(1 - t, 3); };
+      }
+    }
+
+    function solveBezier(t, x1, y1, x2, y2) {
+      function sx(u) { return ((1 - 3*x2 + 3*x1)*u + (3*x2 - 6*x1))*u*u + 3*x1*u; }
+      function sy(u) { return ((1 - 3*y2 + 3*y1)*u + (3*y2 - 6*y1))*u*u + 3*y1*u; }
+      function dx(u) { return (3*(1 - 3*x2 + 3*x1)*u + 2*(3*x2 - 6*x1))*u + 3*x1; }
+      var u = t;
+      for (var i = 0; i < 8; i++) {
+        var err = sx(u) - t;
+        if (Math.abs(err) < 1e-7) break;
+        u -= err / dx(u);
+      }
+      return sy(u);
+    }
+
+    var easeFn = parseEasing(easing);
+
+    // ── Animate ─────────────────────────────────────────────
+    // Max radius: half the viewport diagonal (covers all corners)
+    var maxRadius = Math.hypot(window.innerWidth, window.innerHeight) / 2;
+
+    function buildMask(r) {
+      // Create a visible ring at the circle edge
+      var ringWidth = 3; // px
+      var inner = Math.max(0, r - ringWidth);
+      return "radial-gradient(circle at center, transparent " + inner + "px, rgba(255,255,255,0.5) " + inner + "px, rgba(255,255,255,0.5) " + r + "px, black " + r + "px)";
+    }
+
+    // Set initial mask (circle at 0)
+    overlay.style.setProperty("-webkit-mask-image", buildMask(0));
+    overlay.style.setProperty("mask-image", buildMask(0));
+
+    function startWipe() {
+      var startTime = performance.now();
+
+      function tick(now) {
+        var elapsed = now - startTime;
+        var progress = Math.min(elapsed / duration, 1);
+        var eased = easeFn(progress);
+        var r = eased * maxRadius;
+        var mask = buildMask(r);
+
+        overlay.style.setProperty("-webkit-mask-image", mask);
+        overlay.style.setProperty("mask-image", mask);
+
+        if (progress < 1) {
+          requestAnimationFrame(tick);
+        } else {
+          // Reveal complete — start playback now. startWipe() runs after
+          // `delay` and progress reaches 1 after `duration`, so this fires
+          // delay + duration ms after load.
+          video.play().catch(function () {});
+        }
+      }
+
+      requestAnimationFrame(tick);
+    }
+
+    if (delay > 0) {
+      setTimeout(startWipe, delay);
+    } else {
+      startWipe();
+    }
+  })();
+</script>
