@@ -137,12 +137,6 @@
     animation: hero-logo-out 0.8s ease var(--logo-out-at) forwards;
   }
 
-  .hero__item {
-    opacity: 0;
-    animation: hero-rise 0.75s cubic-bezier(0.22, 1, 0.36, 1)
-      calc(var(--content-at) + var(--i) * 0.12s) forwards;
-  }
-
   @keyframes hero-settle {
     to {
       transform: scale(1);
@@ -168,16 +162,7 @@
     }
   }
 
-  @keyframes hero-rise {
-    from {
-      opacity: 0;
-      transform: translateY(26px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
+
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -201,8 +186,7 @@
     animation: none;
   }
 
-  .hero__scrim,
-  .hero__item {
+  .hero__scrim {
     opacity: 1;
     transform: none;
     animation: none;
