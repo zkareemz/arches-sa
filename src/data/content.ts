@@ -31,6 +31,21 @@ export interface Project {
   image: string;
 }
 
+export interface Award {
+  year: string;
+  awardName: string;
+  organization: string;
+  desc: string;
+  image: string;
+}
+
+export interface TeamMember {
+  name: string;
+  role: string;
+  image: string;
+  bio: string;
+}
+
 export interface SiteContent {
   dir: "rtl" | "ltr";
   langName: string;
@@ -66,6 +81,22 @@ export interface SiteContent {
     title: string;
     intro: string;
     items: Project[];
+  };
+  award: {
+    eyebrow: string;
+    title: string;
+    intro: string;
+    year: string;
+    awardName: string;
+    organization: string;
+    desc: string;
+    image: string;
+  };
+  team: {
+    eyebrow: string;
+    title: string;
+    intro: string;
+    members: TeamMember[];
   };
   contact: {
     eyebrow: string;
@@ -118,6 +149,9 @@ const IMG = {
     "https://images.unsplash.com/photo-1416331108676-a22ccb276e35?auto=format&fit=crop&w=1100&q=80",
   project6:
     "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1100&q=80",
+  award: "/award.webp",
+  team1: "/team-1.png",
+  team2: "/team-2.png",
 } as const;
 
 const ar: SiteContent = {
@@ -276,6 +310,35 @@ const ar: SiteContent = {
       { name: "منتجع الصحراء", type: "عمارة", image: IMG.project4 },
       { name: "شقق العليا", type: "سكني", image: IMG.project5 },
       { name: "ملاذ الواحة", type: "تصميم داخلي", image: IMG.project6 },
+    ],
+  },
+  award: {
+    eyebrow: "تقدير وتميّز",
+    title: "جوائزنا",
+    intro: "تتويجٌ لالتزامنا بالتميّز في التصميم والتنفيذ",
+    year: "2025",
+    awardName: "جائزة أفضل تصميم معماري سكني",
+    organization: "الهيئة السعودية للمهندسين",
+    desc: "حصل مكتب أقواس على هذه الجائزة تقديراً لتميّزه في التصميم المعماري السكني، حيث أشادت لجنة التحكيم بالدمج الراقي بين الهوية المحلية والمعاصرة، وكفاءة الفراغات وجودة الإضاءة الطبيعية. تعكس هذه الجائزة التزامنا بتسليم مشاريع سكنية تتجاوز توقعات عملائنا",
+    image: IMG.award,
+  },
+  team: {
+    eyebrow: "فريقنا",
+    title: "تعرّف على الفريق",
+    intro: "خبراتٌ متنوّعة تجتمع لترجمة رؤيتك إلى واقع",
+    members: [
+      {
+        name: "م. خالد العتيبي",
+        role: "الشريك المؤسس — مهندس معماري",
+        image: IMG.team1,
+        bio: "خبرة تتجاوز خمسة عشر عاماً في التصميم المعماري السكني، يقود خالد رؤية المكتب ويُشرف على تطوّر كل مشروعٍ من الفكرة حتى التسليم",
+      },
+      {
+        name: "م. نورة القحطاني",
+        role: "مديرة التصميم الداخلي",
+        image: IMG.team2,
+        bio: "تجمع الحسّ الفني بالدقة التقنية لابتكار فراغاتٍ داخلية تعكس هوية العملاء وأسلوب حياتهم، من أول لوحة مزاجٍ حتى اللمسة الأخيرة",
+      },
     ],
   },
   contact: {
@@ -472,6 +535,36 @@ const en: SiteContent = {
       { name: "Desert Retreat", type: "Architecture", image: IMG.project4 },
       { name: "Olaya Apartments", type: "Residential", image: IMG.project5 },
       { name: "Oasis Hideaway", type: "Interior Design", image: IMG.project6 },
+    ],
+  },
+  award: {
+    eyebrow: "Recognition",
+    title: "Our awards",
+    intro: "A mark of our commitment to design and delivery excellence",
+    year: "2025",
+    awardName: "Best Residential Architecture Award",
+    organization: "Saudi Council of Engineers",
+    desc: "Arches received this award in recognition of excellence in residential architectural design, where the jury commended the refined balance of local identity and contemporary form, the efficiency of the spaces, and the quality of natural light. It reflects our commitment to delivering residential projects that exceed our clients' expectations",
+    image: IMG.award,
+  },
+  team: {
+    eyebrow: "Our team",
+    title: "Meet the team",
+    intro:
+      "A diverse range of expertise brought together to bring your vision to life",
+    members: [
+      {
+        name: "Khalid Al-Otaibi",
+        role: "Founding Partner — Architect",
+        image: IMG.team1,
+        bio: "With over fifteen years of experience in residential architectural design, Khalid leads the firm's vision and oversees every project from concept to handover",
+      },
+      {
+        name: "Noura Al-Qahtani",
+        role: "Interior Design Director",
+        image: IMG.team2,
+        bio: "Blending artistic sensibility with technical precision, Noura crafts interiors that reflect each client's identity and lifestyle — from the first mood board to the final touch",
+      },
     ],
   },
   contact: {

@@ -3,7 +3,6 @@ import ImageFrame from "./ImageFrame.astro";
 
 interface Props {
   name: string;
-  type: string;
   image: string;
   ratio?: string;
   overlay?: boolean;
@@ -12,7 +11,6 @@ interface Props {
 
 const {
   name,
-  type,
   image,
   ratio = "aspect-[4/5]",
   overlay = false,
@@ -37,7 +35,7 @@ const {
             "flex",
             "flex-col",
             "justify-end",
-            "bg-gradient-to-t",
+            "bg-linear-to-t",
             "from-ink-950/80",
             "via-ink-950/10",
             "to-transparent",
@@ -50,16 +48,6 @@ const {
         >
           <span class:list={["text-lg", "font-light", "text-quill-gray-50"]}>
             {name}
-          </span>
-          <span
-            class:list={[
-              "text-xs",
-              "uppercase",
-              "tracking-[0.18em]",
-              "text-clay-300",
-            ]}
-          >
-            {type}
           </span>
         </div>
       )
@@ -80,16 +68,6 @@ const {
       >
         <span class:list={["text-base", "font-medium", "text-ink-900"]}>
           {name}
-        </span>
-        <span
-          class:list={[
-            "text-xs",
-            "uppercase",
-            "tracking-[0.16em]",
-            "text-clay-600",
-          ]}
-        >
-          {type}
         </span>
       </figcaption>
     )

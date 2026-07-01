@@ -10,7 +10,10 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "gallery": "node scripts/generate-gallery.mjs",
+    "predev": "node scripts/generate-gallery.mjs",
+    "prebuild": "node scripts/generate-gallery.mjs"
   },
   "dependencies": {
     "@fontsource-variable/readex-pro": "^5.2.11",
@@ -21,6 +24,7 @@
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
     "prettier": "^3.8.4",
-    "prettier-plugin-astro": "^0.14.1"
+    "prettier-plugin-astro": "^0.14.1",
+    "sharp": "^0.35.3"
   }
 }

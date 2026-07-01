@@ -1,0 +1,138 @@
+---
+import type { SiteContent } from "../../../data/content";
+
+import Eyebrow from "../../../ui/Eyebrow.astro";
+import ImageFrame from "../../../ui/ImageFrame.astro";
+import Reveal from "../../../ui/Reveal.astro";
+
+interface Props {
+  content: SiteContent;
+}
+
+const { content } = Astro.props;
+const { award } = content;
+---
+
+<section
+  id="award"
+  class:list={[
+    "relative",
+    "overflow-hidden",
+    "bg-quill-gray-100",
+    "text-ink-900",
+  ]}
+>
+  <span
+    aria-hidden="true"
+    class:list={[
+      "pointer-events-none",
+      "select-none",
+      "absolute",
+      "inset-e-0",
+      "top-6",
+      "z-0",
+      "text-[7rem]",
+      "font-light",
+      "leading-none",
+      "text-ink-900/4",
+      "sm:text-[12rem]",
+      "md:top-10",
+    ]}
+  >
+    {award.year}
+  </span>
+
+  <div
+    class:list={[
+      "relative",
+      "mx-auto",
+      "w-full",
+      "max-w-7xl",
+      "px-6",
+      "py-24",
+      "sm:px-10",
+      "sm:py-32",
+    ]}
+  >
+    <div
+      class:list={[
+        "grid",
+        "grid-cols-1",
+        "gap-12",
+        "lg:grid-cols-12",
+        "lg:gap-16",
+        "items-center",
+      ]}
+    >
+      <Reveal class:list={["relative", "lg:col-span-5"]}>
+        <div class:list={["me-4", "relative"]}>
+          <div
+            aria-hidden="true"
+            class:list={[
+              "absolute",
+              "inset-0",
+              "z-0",
+              "translate-x-5",
+              "translate-y-5",
+              "rounded-sm",
+              "bg-clay-600",
+              "rtl:-translate-x-5",
+            ]}
+          >
+          </div>
+          <div class:list={["relative", "z-10"]}>
+            <ImageFrame
+              src={award.image}
+              alt={award.awardName}
+              ratio="aspect-[3/3]"
+              class:list={["rounded-sm"]}
+            />
+          </div>
+        </div>
+      </Reveal>
+
+      <Reveal
+        delay={120}
+        class:list={[
+          "lg:col-span-6",
+          "lg:col-start-7",
+          "flex",
+          "flex-col",
+          "gap-6",
+        ]}
+      >
+        <Eyebrow text={award.eyebrow} bar />
+        <h2
+          class:list={[
+            "max-w-md",
+            "text-balance",
+            "text-4xl",
+            "font-light",
+            "leading-[1.1]",
+            "tracking-tight",
+            "sm:text-5xl",
+          ]}
+        >
+          {award.awardName}
+        </h2>
+        <div
+          class:list={[
+            "flex",
+            "flex-col",
+            "gap-3",
+            "border-t",
+            "border-ink-900/12",
+            "pt-5",
+          ]}
+        >
+          <span class:list={["text-sm", "font-medium", "text-clay-600"]}>
+            {award.organization} — {award.year}
+          </span>
+          <p class:list={["max-w-xl", "leading-relaxed", "text-ink-500"]}>
+            {award.desc}
+          </p>
+        </div>
+      </Reveal>
+    </div>
+  </div>
+</section>

@@ -1,7 +1,7 @@
 ---
 import type { SiteContent } from "../../../data/content";
 
-import ProjectCard from "../../../ui/ProjectCard.astro";
+import { gallery } from "../../../data/gallery";
 import Reveal from "../../../ui/Reveal.astro";
 import SectionHeader from "../../../ui/SectionHeader.astro";
 
@@ -11,6 +11,31 @@ interface Props {
 
 const { content } = Astro.props;
 const { projects } = content;
+
+// Image paths in gallery.json are public-root-relative WITHOUT a leading slash —
+// prepend BASE_URL (same idiom as HeroAnimation.astro).
+const base = import.meta.env.BASE_URL;
+const withBase = (p: string) => `${base}${p}`;
+
+// One entry per category. A category's pool is the union of its direct images and
+// every sub-project's images. Skip categories that have no photos.
+const categories = gallery.categories
+  .map((cat) => ({
+    slug: cat.slug,
+    title: cat.title,
+    photos: [...cat.images, ...cat.projects.flatMap((p) => p.images)].map(
+      (img) => ({
+        full: withBase(img.full),
+        thumb: withBase(img.thumb),
+        width: img.width,
+        height: img.height,
+        alt: img.alt,
+      }),
+    ),
+  }))
+  .filter((cat) => cat.photos.length > 0);
+
+const photoLabel = (n: number) => (n === 1 ? "photo" : "photos");
 ---
 
 <section
@@ -35,45 +60,316 @@ const { projects } = content;
         intro={projects.intro}
       />
     </Reveal>
+
+    <div
+      class:list={[
+        "mt-14",
+        "grid",
+        "grid-cols-1",
+        "gap-6",
+        "pb-24",
+        "sm:mt-20",
+        "sm:grid-cols-3",
+        "sm:pb-32",
+      ]}
+    >
+      {
+        categories.map((cat, i) => {
+          const cover = cat.photos[0];
+          const num = String(i + 1).padStart(2, "0");
+          return (
+            <Reveal delay={i * 120}>
+              <button
+                type="button"
+                data-cat-index={i}
+                aria-label={`Open ${cat.title} gallery (${cat.photos.length} ${photoLabel(cat.photos.length)})`}
+                class:list={[
+                  "group",
+                  "relative",
+                  "block",
+                  "aspect-[3/4]",
+                  "w-full",
+                  "overflow-hidden",
+                  "rounded-sm",
+                  "text-start",
+                  "transition-transform",
+                  "duration-500",
+                  "ease-out",
+                  "hover:-translate-y-1",
+                  "focus:outline-none",
+                  "focus-visible:ring-2",
+                  "focus-visible:ring-clay-500",
+                  "focus-visible:ring-offset-2",
+                  "focus-visible:ring-offset-quill-gray-100",
+                ]}
+              >
+                <div class="absolute inset-0 transition-transform duration-[900ms] ease-out group-hover:scale-[1.06]">
+                  <img
+                    data-random
+                    src={cover.thumb}
+                    srcset={`${cover.thumb} 480w, ${cover.full} 1920w`}
+                    sizes="(min-width: 640px) 33vw, 100vw"
+                    width={cover.width}
+                    height={cover.height}
+                    alt={cover.alt}
+                    loading="lazy"
+                    decoding="async"
+                    class="animate-kenburns h-full w-full object-cover"
+                  />
+                </div>
+
+                <div class="absolute inset-0 bg-linear-to-t from-ink-950/85 via-ink-950/15 to-transparent" />
+
+                <span class="pointer-events-none absolute start-4 top-2 text-6xl font-light leading-none tabular-nums text-quill-gray-50/40 transition-colors duration-500 group-hover:text-quill-gray-50/75 sm:text-7xl">
+                  {num}
+                </span>
+
+                <span class="absolute inset-x-5 bottom-5 flex flex-col gap-1">
+                  <span class="text-xl font-light text-quill-gray-50">
+                    {cat.title}
+                  </span>
+                  <span class="text-sm text-quill-gray-300">
+                    {cat.photos.length} {photoLabel(cat.photos.length)}
+                  </span>
+                </span>
+              </button>
+            </Reveal>
+          );
+        })
+      }
+    </div>
   </div>
 
+  {/* Model consumed by src/scripts/gallery.ts (randomiser + lightbox). */}
+  <script
+    type="application/json"
+    id="gallery-data"
+    set:html={JSON.stringify(categories)}
+  />
+
   <div
-    class:list={[
-      "mt-14",
-      "flex",
-      "snap-x",
-      "snap-mandatory",
-      "gap-6",
-      "overflow-x-auto",
-      "px-6",
-      "pb-24",
-      "sm:mt-20",
-      "sm:px-10",
-      "sm:pb-32",
-      "[scrollbar-width:none]",
-      "[&::-webkit-scrollbar]:hidden",
-    ]}
+    id="gallery-lightbox"
+    role="dialog"
+    aria-modal="true"
+    aria-label={projects.title}
+    class:list={["fixed", "inset-0", "z-[60]"]}
   >
-    {
-      projects.items.map((project) => (
-        <div
+    <div class="relative flex h-full w-full flex-col bg-ink-950/95 text-quill-gray-50">
+      {/* Top bar */}
+      <div class="relative z-10 flex items-center justify-between gap-4 px-4 py-4 sm:px-6">
+        <div class="flex items-baseline gap-3">
+          <span data-title class="text-base font-light sm:text-lg"></span>
+          <span data-counter class="text-sm tabular-nums text-quill-gray-400"
+          ></span>
+        </div>
+        <div class="flex items-center gap-1">
+          <button
+            type="button"
+            data-fullscreen
+            aria-label="Full screen"
+            class:list={[
+              "grid",
+              "h-10",
+              "w-10",
+              "place-items-center",
+              "rounded-full",
+              "text-quill-gray-200",
+              "transition",
+              "hover:bg-quill-gray-50/10",
+              "hover:text-quill-gray-50",
+            ]}
+          >
+            <svg
+              data-fs-enter
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M4 9V5a1 1 0 0 1 1-1h4"></path>
+              <path d="M20 9V5a1 1 0 0 0-1-1h-4"></path>
+              <path d="M4 15v4a1 1 0 0 0 1 1h4"></path>
+              <path d="M20 15v4a1 1 0 0 1-1 1h-4"></path>
+            </svg>
+            <svg
+              data-fs-exit
+              hidden
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M8 4v3a1 1 0 0 1-1 1H4"></path>
+              <path d="M16 4v3a1 1 0 0 0 1 1h3"></path>
+              <path d="M8 20v-3a1 1 0 0 0-1-1H4"></path>
+              <path d="M16 20v-3a1 1 0 0 1 1-1h3"></path>
+            </svg>
+          </button>
+          <button
+            type="button"
+            data-close
+            aria-label="Close gallery"
+            class:list={[
+              "grid",
+              "h-10",
+              "w-10",
+              "place-items-center",
+              "rounded-full",
+              "text-quill-gray-200",
+              "transition",
+              "hover:bg-quill-gray-50/10",
+              "hover:text-quill-gray-50",
+            ]}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <path d="M6 6l12 12M18 6L6 18"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {/* Stage */}
+      <div
+        data-close-area
+        class="relative flex min-h-0 flex-1 items-center justify-center px-4 sm:px-16"
+      >
+        <button
+          type="button"
+          data-prev
+          aria-label="Previous photo"
           class:list={[
-            "w-[78vw]",
-            "shrink-0",
-            "snap-start",
-            "sm:w-[44vw]",
-            "lg:w-[32vw]",
+            "absolute",
+            "start-2",
+            "z-10",
+            "grid",
+            "h-11",
+            "w-11",
+            "place-items-center",
+            "rounded-full",
+            "bg-ink-950/40",
+            "text-quill-gray-100",
+            "backdrop-blur",
+            "transition",
+            "hover:bg-ink-950/70",
+            "hover:text-quill-gray-50",
+            "sm:h-12",
+            "sm:w-12",
           ]}
         >
-          <ProjectCard
-            name={project.name}
-            type={project.type}
-            image={project.image}
-            ratio="aspect-[4/4]"
-          />
-        </div>
-      ))
-    }
-    <div class:list={["w-px", "shrink-0"]} aria-hidden="true"></div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            class="rtl:rotate-180"
+          >
+            <path d="M15 5l-7 7 7 7"></path>
+          </svg>
+        </button>
+
+        <img
+          data-stage
+          alt=""
+          decoding="async"
+          draggable="false"
+          class="max-h-full max-w-full object-contain"
+        />
+
+        <button
+          type="button"
+          data-next
+          aria-label="Next photo"
+          class:list={[
+            "absolute",
+            "end-2",
+            "z-10",
+            "grid",
+            "h-11",
+            "w-11",
+            "place-items-center",
+            "rounded-full",
+            "bg-ink-950/40",
+            "text-quill-gray-100",
+            "backdrop-blur",
+            "transition",
+            "hover:bg-ink-950/70",
+            "hover:text-quill-gray-50",
+            "sm:h-12",
+            "sm:w-12",
+          ]}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            class="rtl:rotate-180"
+          >
+            <path d="M9 5l7 7-7 7"></path>
+          </svg>
+        </button>
+      </div>
+
+      {/* Dot indicators — mobile */}
+      <div
+        data-dots
+        class="flex flex-wrap items-center justify-center gap-2 px-4 py-4 sm:hidden"
+      >
+      </div>
+
+      {/* Thumbnail strip — desktop */}
+      <div
+        data-thumbs
+        class:list={[
+          "hidden",
+          "items-center",
+          "gap-2",
+          "overflow-x-auto",
+          "px-6",
+          "py-4",
+          "sm:flex",
+          "[&::-webkit-scrollbar]:hidden",
+        ]}
+      >
+      </div>
+    </div>
   </div>
+
+  <script>
+    import "../../../scripts/gallery.ts";
+  </script>
 </section>

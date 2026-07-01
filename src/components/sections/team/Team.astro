@@ -1,0 +1,101 @@
+---
+import type { SiteContent } from "../../../data/content";
+
+import ImageFrame from "../../../ui/ImageFrame.astro";
+import Reveal from "../../../ui/Reveal.astro";
+import SectionHeader from "../../../ui/SectionHeader.astro";
+
+interface Props {
+  content: SiteContent;
+}
+
+const { content } = Astro.props;
+const { team } = content;
+---
+
+<section id="team" class:list={["bg-quill-gray-50", "text-ink-900"]}>
+  <div
+    class:list={[
+      "mx-auto",
+      "w-full",
+      "max-w-6xl",
+      "px-6",
+      "py-24",
+      "sm:px-10",
+      "sm:py-32",
+    ]}
+  >
+    <Reveal>
+      <SectionHeader
+        eyebrow={team.eyebrow}
+        title={team.title}
+        intro={team.intro}
+        align="center"
+        class:list={["mx-auto"]}
+      />
+    </Reveal>
+
+    <div
+      class:list={[
+        "mt-16",
+        "grid",
+        "grid-cols-1",
+        "gap-10",
+        "sm:grid-cols-2",
+        "sm:gap-8",
+      ]}
+    >
+      {
+        team.members.map((member, i) => (
+          <Reveal
+            delay={i * 100}
+            as="figure"
+            class:list={["group", "flex", "flex-col", "gap-4"]}
+          >
+            <ImageFrame
+              src={member.image}
+              alt={member.name}
+              ratio="aspect-[4/4]"
+              class:list={["rounded-sm"]}
+              imgClass="transition-transform duration-[900ms] ease-out group-hover:scale-[1.06]"
+            />
+            <figcaption
+              class:list={[
+                "flex",
+                "flex-col",
+                "gap-1.5",
+                "border-t",
+                "border-ink-900/12",
+                "pt-4",
+              ]}
+            >
+              <span class:list={["text-lg", "font-light", "text-ink-900"]}>
+                {member.name}
+              </span>
+              <span
+                class:list={[
+                  "text-xs",
+                  "uppercase",
+                  "ltr:tracking-[0.18em]",
+                  "text-clay-600",
+                ]}
+              >
+                {member.role}
+              </span>
+              <p
+                class:list={[
+                  "mt-2",
+                  "max-w-sm",
+                  "leading-relaxed",
+                  "text-ink-500",
+                ]}
+              >
+                {member.bio}
+              </p>
+            </figcaption>
+          </Reveal>
+        ))
+      }
+    </div>
+  </div>
+</section>

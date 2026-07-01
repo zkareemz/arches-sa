@@ -161,8 +161,95 @@
       opacity: 1;
     }
   }
+}
 
+@layer components {
+  /* Cinematic gallery cards — slow Ken Burns drift on the cover photo. */
+  .animate-kenburns {
+    animation: kenburns 26s ease-in-out infinite alternate;
+    transform-origin: 50% 40%;
+    will-change: transform;
+  }
 
+  @keyframes kenburns {
+    from {
+      transform: scale(1.05) translate3d(0, 0, 0);
+    }
+    to {
+      transform: scale(1.14) translate3d(-2%, -1.5%, 0);
+    }
+  }
+
+  /* Full-screen gallery overlay — fade in/out; closed = removed from a11y tree
+     + tab order via visibility:hidden. A plain overlay (not a modal <dialog>)
+     so the Fullscreen API can be applied without the browser closing it. */
+  #gallery-lightbox {
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.3s ease,
+      visibility 0s linear 0.3s;
+    /* No text/image selection inside the viewer — avoids the stray highlight
+       overlay when tapping/swiping over photos. */
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  #gallery-lightbox[data-open] {
+    opacity: 1;
+    visibility: visible;
+    transition:
+      opacity 0.3s ease,
+      visibility 0s linear 0s;
+  }
+
+  #gallery-lightbox img {
+    -webkit-user-drag: none;
+  }
+
+  /* Lightbox dots + thumbnails are injected by gallery.ts, so style them here
+     rather than via utilities the scanner may miss on dynamic strings. */
+  .gallery-dot {
+    height: 0.5rem;
+    width: 0.5rem;
+    border-radius: 9999px;
+    background-color: color-mix(
+      in srgb,
+      var(--color-quill-gray-50) 40%,
+      transparent
+    );
+    transition: background-color 0.2s ease;
+  }
+
+  .gallery-dot[aria-current="true"] {
+    background-color: var(--color-quill-gray-50);
+  }
+
+  .gallery-thumb {
+    position: relative;
+    height: 3.5rem;
+    width: 5rem;
+    flex-shrink: 0;
+    overflow: hidden;
+    border-radius: 0.125rem;
+    opacity: 0.5;
+    box-shadow: inset 0 0 0 1px transparent;
+    transition:
+      opacity 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .gallery-thumb[aria-current="true"] {
+    opacity: 1;
+    box-shadow: inset 0 0 0 2px var(--color-quill-gray-50);
+  }
+
+  .gallery-thumb img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -190,5 +277,14 @@
     opacity: 1;
     transform: none;
     animation: none;
+  }
+
+  .animate-kenburns {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  #gallery-lightbox {
+    transition: none !important;
   }
 }
