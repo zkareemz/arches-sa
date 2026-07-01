@@ -270,7 +270,9 @@ function initGallery(): void {
   });
 
   thumbsWrap.addEventListener("click", (e) => {
-    const thumb = (e.target as HTMLElement).closest<HTMLElement>("[data-thumb]");
+    const thumb = (e.target as HTMLElement).closest<HTMLElement>(
+      "[data-thumb]",
+    );
     if (!thumb) return;
     index = Number(thumb.dataset.i);
     render();

@@ -156,8 +156,8 @@ const IMG = {
   project6:
     "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1100&q=80",
   award: "/award.webp",
-  team1: "/team-1.png",
-  team2: "/team-2.png",
+  team1: "/team-1.jpeg",
+  team2: "/team-2.jpeg",
 } as const;
 
 const ar: SiteContent = {
@@ -340,10 +340,10 @@ const ar: SiteContent = {
         bio: "خبرة تتجاوز خمسة عشر عاماً في التصميم المعماري السكني، يقود خالد رؤية المكتب ويُشرف على تطوّر كل مشروعٍ من الفكرة حتى التسليم",
       },
       {
-        name: "م. نورة القحطاني",
-        role: "مديرة التصميم الداخلي",
+        name: "م. خالد العتيبي",
+        role: "الشريك المؤسس — مهندس معماري",
         image: IMG.team2,
-        bio: "تجمع الحسّ الفني بالدقة التقنية لابتكار فراغاتٍ داخلية تعكس هوية العملاء وأسلوب حياتهم، من أول لوحة مزاجٍ حتى اللمسة الأخيرة",
+        bio: "خبرة تتجاوز خمسة عشر عاماً في التصميم المعماري السكني، يقود خالد رؤية المكتب ويُشرف على تطوّر كل مشروعٍ من الفكرة حتى التسليم",
       },
     ],
   },
@@ -572,10 +572,10 @@ const en: SiteContent = {
         bio: "With over fifteen years of experience in residential architectural design, Khalid leads the firm's vision and oversees every project from concept to handover",
       },
       {
-        name: "Noura Al-Qahtani",
-        role: "Interior Design Director",
+        name: "Khalid Al-Otaibi",
+        role: "Founding Partner — Architect",
         image: IMG.team2,
-        bio: "Blending artistic sensibility with technical precision, Noura crafts interiors that reflect each client's identity and lifestyle — from the first mood board to the final touch",
+        bio: "With over fifteen years of experience in residential architectural design, Khalid leads the firm's vision and oversees every project from concept to handover",
       },
     ],
   },

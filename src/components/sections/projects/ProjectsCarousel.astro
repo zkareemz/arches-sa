@@ -153,9 +153,13 @@ const photoLabel = (n: number) => (n === 1 ? "photo" : "photos");
     aria-label={projects.title}
     class:list={["fixed", "inset-0", "z-[60]"]}
   >
-    <div class="relative flex h-full w-full flex-col bg-ink-950/95 text-quill-gray-50">
+    <div
+      class="relative flex h-full w-full flex-col bg-ink-950/95 text-quill-gray-50"
+    >
       {/* Top bar */}
-      <div class="relative z-10 flex items-center justify-between gap-4 px-4 py-4 sm:px-6">
+      <div
+        class="relative z-10 flex items-center justify-between gap-4 px-4 py-4 sm:px-6"
+      >
         <div class="flex items-baseline gap-3">
           <span data-title class="text-base font-light sm:text-lg"></span>
           <span data-counter class="text-sm tabular-nums text-quill-gray-400"
