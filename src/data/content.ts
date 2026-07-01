@@ -110,6 +110,12 @@ export interface SiteContent {
     email: string;
     phone: string;
     whatsappLabel: string;
+    mapLabel: string;
+    /** Office location pin — replace with the exact office coordinates. */
+    mapLat: number;
+    mapLng: number;
+    mapZoom?: number;
+    directionsLabel: string;
     form: {
       name: string;
       email: string;
@@ -353,6 +359,12 @@ const ar: SiteContent = {
     email: "contact@archesriyadh.com",
     phone: "+966 54 66 54 333",
     whatsappLabel: "WhatsApp",
+    mapLabel: "الموقع",
+    // Placeholder: Riyadh city center — replace with the exact office coordinates.
+    mapLat: 24.7136,
+    mapLng: 46.6753,
+    mapZoom: 15,
+    directionsLabel: "الاتجاهات على الخريطة",
     form: {
       name: "الاسم",
       email: "البريد الإلكتروني",
@@ -580,6 +592,12 @@ const en: SiteContent = {
     email: "contact@archesriyadh.com",
     phone: "+966 54 66 54 333",
     whatsappLabel: "WhatsApp",
+    mapLabel: "Location",
+    // Placeholder: Riyadh city center — replace with the exact office coordinates.
+    mapLat: 24.7136,
+    mapLng: 46.6753,
+    mapZoom: 15,
+    directionsLabel: "Get directions",
     form: {
       name: "Name",
       email: "Email",

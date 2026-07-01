@@ -4,6 +4,7 @@ import type { SiteContent } from "../../../data/content";
 import ContactDetails from "../../../ui/ContactDetails.astro";
 import EnquiryForm from "../../../ui/EnquiryForm.astro";
 import Eyebrow from "../../../ui/Eyebrow.astro";
+import LocationMap from "../../../ui/LocationMap.astro";
 import Reveal from "../../../ui/Reveal.astro";
 
 interface Props {
@@ -74,5 +75,9 @@ const { contact } = content;
         <ContactDetails content={content} />
       </Reveal>
     </div>
+
+    <Reveal delay={80} class:list={["mt-14", "lg:mt-20"]}>
+      <LocationMap content={content} />
+    </Reveal>
   </div>
 </section>

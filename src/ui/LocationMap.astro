@@ -1,0 +1,81 @@
+---
+import type { SiteContent } from "../data/content";
+
+import Eyebrow from "./Eyebrow.astro";
+
+interface Props {
+  content: SiteContent;
+  class?: string;
+}
+
+const { content, class: className } = Astro.props;
+const { contact } = content;
+const { mapLat, mapLng, mapZoom = 15, office } = contact;
+
+const locale = Astro.currentLocale ?? "ar";
+
+// Keyless Google Maps embed — driven purely by coordinates, so the pin stays
+// fully configurable from src/data/content.ts (mapLat / mapLng / mapZoom).
+const embedSrc = `https://www.google.com/maps?q=${mapLat},${mapLng}&z=${mapZoom}&hl=${locale}&output=embed`;
+const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${mapLat},${mapLng}`;
+---
+
+<div class:list={["flex", "flex-col", "gap-5", className]}>
+  <div
+    class:list={[
+      "flex",
+      "flex-wrap",
+      "items-center",
+      "justify-between",
+      "gap-x-6",
+      "gap-y-2",
+    ]}
+  >
+    <div class:list={["flex", "flex-col", "gap-2"]}>
+      <Eyebrow text={contact.mapLabel} tone="light" bar />
+      <p class:list={["text-quill-gray-200"]}>{office}</p>
+    </div>
+    <a
+      href={directionsUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class:list={[
+        "inline-flex",
+        "items-center",
+        "gap-2",
+        "text-xs",
+        "font-medium",
+        "uppercase",
+        "ltr:tracking-[0.2em]",
+        "text-clay-300",
+        "transition-colors",
+        "hover:text-quill-gray-50",
+      ]}
+    >
+      {contact.directionsLabel}
+    </a>
+  </div>
+
+  <div
+    class:list={[
+      "relative",
+      "h-[300px]",
+      "overflow-hidden",
+      "rounded-2xl",
+      "border",
+      "border-quill-gray-50/10",
+      "bg-ink-900",
+      "sm:h-[360px]",
+      "lg:h-[420px]",
+    ]}
+  >
+    <iframe
+      src={embedSrc}
+      title={office}
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      allowfullscreen
+      class:list={["absolute", "inset-0", "h-full", "w-full"]}
+      style="border:0;"></iframe>
+  </div>
+</div>
