@@ -112,7 +112,7 @@ const readManifest = async () => {
 
 // Encodes one source photo into full + thumbnail webp. Returns the JSON entry
 // (paths are public-root-relative, without a leading slash, so the consumer
-// can prepend `import.meta.env.BASE_URL`).
+// can prepend "/").
 const processImage = async (srcAbs, hash, alt) => {
   const name = hash.slice(0, HASH_LEN);
   const fullOut = path.join(OUT_IMG_DIR, `${name}.webp`);

@@ -1,6 +1,10 @@
 # build output
 dist/
 
+# firebase
+.firebase/
+firebase-debug.log
+
 # generated types
 .astro/
 

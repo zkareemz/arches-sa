@@ -28,6 +28,6 @@ export interface GalleryData {
   categories: GalleryCategory[];
 }
 
-// Image paths are public-root-relative WITHOUT a leading slash — prepend
-// `import.meta.env.BASE_URL` at render time (see HeroAnimation.astro pattern).
+// Image paths are public-root-relative WITHOUT a leading slash — prepend "/"
+// at render time (see ProjectsCarousel.astro pattern).
 export const gallery: GalleryData = galleryJson as GalleryData;

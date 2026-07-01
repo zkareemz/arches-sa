@@ -13,9 +13,8 @@ const { content } = Astro.props;
 const { projects } = content;
 
 // Image paths in gallery.json are public-root-relative WITHOUT a leading slash —
-// prepend BASE_URL (same idiom as HeroAnimation.astro).
-const base = import.meta.env.BASE_URL;
-const withBase = (p: string) => `${base}${p}`;
+// prepend "/" so they resolve from the site root.
+const withBase = (p: string) => `/${p}`;
 
 // One entry per category. A category's pool is the union of its direct images and
 // every sub-project's images. Skip categories that have no photos.
