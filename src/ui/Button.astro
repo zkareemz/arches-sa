@@ -3,6 +3,8 @@ import type { SvgComponent } from "astro/types";
 
 interface Props {
   href?: string;
+  target?: string;
+  rel?: string;
   label: string;
   variant?: "primary" | "outline" | "ghost" | "whatsapp";
   tone?: "dark" | "light";
@@ -16,6 +18,8 @@ interface Props {
 
 const {
   href,
+  target,
+  rel,
   label,
   variant = "primary",
   tone = "dark",
@@ -63,6 +67,8 @@ const Tag = href ? "a" : "button";
 
 <Tag
   href={href}
+  target={href ? target : undefined}
+  rel={href ? rel : undefined}
   type={href ? undefined : type}
   class:list={[base, variants[variant], className]}
 >

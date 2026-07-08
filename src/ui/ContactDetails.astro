@@ -89,7 +89,9 @@ const wrapClass =
     </span>
     <div class:list={["inline-block", "pt-1"]}>
       <Button
-        href={contact.phone}
+        href={`https://wa.me/${contact.phone.replace(/\D/g, "")}`}
+        target="_blank"
+        rel="noopener noreferrer"
         variant="whatsapp"
         tone="light"
         customIcon
