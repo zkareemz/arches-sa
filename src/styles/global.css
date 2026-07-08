@@ -45,6 +45,11 @@
   --color-clay-800: #58331f;
   --color-clay-900: #492b1c;
   --color-clay-950: #29160d;
+
+  /* WhatsApp — brand green (#25d366) */
+  --color-whatsapp: #25d366;
+  --color-whatsapp-600: #25d366;
+  --color-whatsapp-700: #1da851;
 }
 
 @layer base {

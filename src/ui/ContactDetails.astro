@@ -87,12 +87,13 @@ const wrapClass =
     >
       {contact.whatsappLabel}
     </span>
-    <div dir="ltr" class:list={["inline-block", "pt-1"]}>
+    <div class:list={["inline-block", "pt-1"]}>
       <Button
         href={contact.phone}
-        variant="outline"
+        variant="whatsapp"
         tone="light"
         customIcon
+        dir="ltr"
         label={contact.phone}
       >
         <WhatsappLogo class:list={["w-4", "h-auto"]} />

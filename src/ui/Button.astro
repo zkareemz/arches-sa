@@ -4,12 +4,14 @@ import type { SvgComponent } from "astro/types";
 interface Props {
   href?: string;
   label: string;
-  variant?: "primary" | "outline" | "ghost";
+  variant?: "primary" | "outline" | "ghost" | "whatsapp";
   tone?: "dark" | "light";
   type?: "button" | "submit";
   class?: string;
   Icon?: SvgComponent & ImageMetadata;
   customIcon?: boolean;
+  /** Force text direction on the label (e.g. "ltr" for phone numbers in RTL). */
+  dir?: "ltr" | "rtl";
 }
 
 const {
@@ -20,6 +22,7 @@ const {
   type = "button",
   class: className,
   customIcon = false,
+  dir,
 } = Astro.props;
 
 const base = [
@@ -51,6 +54,8 @@ const variants = {
     tone === "light"
       ? "text-quill-gray-100 hover:text-quill-gray-50"
       : "text-ink-700 hover:text-clay-600",
+  whatsapp:
+    "border border-whatsapp-600/50 text-whatsapp-600 hover:border-whatsapp-600 hover:bg-whatsapp-600/10",
 };
 
 const Tag = href ? "a" : "button";
@@ -62,7 +67,7 @@ const Tag = href ? "a" : "button";
   class:list={[base, variants[variant], className]}
 >
   {customIcon ? <slot /> : undefined}
-  {label}
+  <bdi dir={dir}>{label}</bdi>
   <span
     aria-hidden="true"
     class:list={[

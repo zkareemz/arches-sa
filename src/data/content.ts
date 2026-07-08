@@ -43,7 +43,6 @@ export interface TeamMember {
   name: string;
   role: string;
   image: string;
-  bio: string;
 }
 
 export interface SiteContent {
@@ -155,7 +154,7 @@ const IMG = {
     "https://images.unsplash.com/photo-1416331108676-a22ccb276e35?auto=format&fit=crop&w=1100&q=80",
   project6:
     "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1100&q=80",
-  award: "/award.webp",
+  award: "/award.png",
   team1: "/team-1.jpeg",
   team2: "/team-2.jpeg",
 } as const;
@@ -336,14 +335,12 @@ const ar: SiteContent = {
       {
         name: "م. ابراهيم القصير",
         role: "الشريك المؤسس — مهندس معماري",
-        image: IMG.team1,
-        bio: "خبرة تتجاوز عشرون عاماً في التصميم المعماري السكني، يقود رؤية المكتب ويُشرف على تطوّر كل مشروعٍ من الفكرة حتى تسليم المخططات التنفيذية",
+        image: IMG.team1
       },
       {
         name: "م. تركي الحصيني",
         role: "الشريك المؤسس — مهندس معماري",
-        image: IMG.team2,
-        bio: "خبرة تتجاوز عشرون عاماً في ادارة المشاريع، يقود  فريق ادارة المشاريع ويُشرف على تسليم كل مشروع بداية من توقيع عقود المقاولين حتى تسليم المفتاح",
+        image: IMG.team2
       },
     ],
   },
@@ -357,12 +354,12 @@ const ar: SiteContent = {
     websiteUrl: "https://arches.sa",
     contactLabel: "تواصل",
     email: "info@arches.sa",
-    phone: "+966 54 66 54 333",
+    phone: "+966559995768",
     whatsappLabel: "WhatsApp",
     mapLabel: "الموقع",
-    // Placeholder: Riyadh city center — replace with the exact office coordinates.
-    mapLat: 24.7136,
-    mapLng: 46.6753,
+    // Arches Engineering Consultancy office, Riyadh.
+    mapLat: 24.7975681,
+    mapLng: 46.6451025,
     mapZoom: 15,
     directionsLabel: "الاتجاهات على الخريطة",
     form: {
@@ -568,14 +565,12 @@ const en: SiteContent = {
       {
         name: "Khalid Al-Otaibi",
         role: "Founding Partner — Architect",
-        image: IMG.team1,
-        bio: "With over fifteen years of experience in residential architectural design, Khalid leads the firm's vision and oversees every project from concept to handover",
+        image: IMG.team1
       },
       {
         name: "Khalid Al-Otaibi",
         role: "Founding Partner — Architect",
-        image: IMG.team2,
-        bio: "With over fifteen years of experience in residential architectural design, Khalid leads the firm's vision and oversees every project from concept to handover",
+        image: IMG.team2
       },
     ],
   },
@@ -593,9 +588,9 @@ const en: SiteContent = {
     phone: "+966 54 66 54 333",
     whatsappLabel: "WhatsApp",
     mapLabel: "Location",
-    // Placeholder: Riyadh city center — replace with the exact office coordinates.
-    mapLat: 24.7136,
-    mapLng: 46.6753,
+    // Arches Engineering Consultancy office, Riyadh.
+    mapLat: 24.7975681,
+    mapLng: 46.6451025,
     mapZoom: 15,
     directionsLabel: "Get directions",
     form: {
