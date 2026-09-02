@@ -335,12 +335,12 @@ const ar: SiteContent = {
       {
         name: "م. ابراهيم القصير",
         role: "الشريك المؤسس — مهندس معماري",
-        image: IMG.team1
+        image: IMG.team1,
       },
       {
         name: "م. تركي الحصيني",
         role: "الشريك المؤسس — مهندس معماري",
-        image: IMG.team2
+        image: IMG.team2,
       },
     ],
   },
@@ -565,12 +565,12 @@ const en: SiteContent = {
       {
         name: "Khalid Al-Otaibi",
         role: "Founding Partner — Architect",
-        image: IMG.team1
+        image: IMG.team1,
       },
       {
         name: "Khalid Al-Otaibi",
         role: "Founding Partner — Architect",
-        image: IMG.team2
+        image: IMG.team2,
       },
     ],
   },
