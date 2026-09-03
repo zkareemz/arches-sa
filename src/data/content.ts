@@ -563,12 +563,12 @@ const en: SiteContent = {
       "A diverse range of expertise brought together to bring your vision to life",
     members: [
       {
-        name: "Khalid Al-Otaibi",
+        name: "Ibrahim Alqusair",
         role: "Founding Partner — Architect",
         image: IMG.team1,
       },
       {
-        name: "Khalid Al-Otaibi",
+        name: "Turki Alhussaini",
         role: "Founding Partner — Architect",
         image: IMG.team2,
       },
