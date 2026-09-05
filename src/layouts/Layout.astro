@@ -3,11 +3,13 @@ import "../styles/global.css";
 
 import Footer from "../components/Footer.astro";
 import HeaderCentered from "../components/sections/header/HeaderCentered.astro";
-import { getContent } from "../data/content";
+import { getContent, SITE_URL } from "../data/content";
 
 interface Props {
   title?: string;
   description?: string;
+  noindex?: boolean;
+  breadcrumbs?: { name: string; path: string }[];
 }
 
 const locale = Astro.currentLocale || "ar";
@@ -15,11 +17,83 @@ const content = getContent(locale);
 const dir = content.dir;
 
 const {
-  title = locale === "en"
-    ? "Arches | Architecture & Construction — Riyadh"
-    : "أقواس | مكتب هندسي متعدد التخصصات — الرياض",
-  description = content.hero.p,
+  title = content.seo.title,
+  description = content.seo.description,
+  noindex = false,
+  breadcrumbs = [],
 } = Astro.props;
+const pathname = Astro.url.pathname.replace(/\/+$/, "") || "/";
+const arabicPath = pathname.replace(/^\/en(?=\/|$)/, "") || "/";
+const arPath = arabicPath === "/" ? "/" : `${arabicPath}/`;
+const enPath = arPath === "/" ? "/en/" : `/en${arPath}`;
+const canonical = new URL(locale === "en" ? enPath : arPath, SITE_URL).href;
+const image = new URL(`/social/${locale}.png`, SITE_URL).href;
+const headerContent = {
+  ...content,
+  altLocale: { ...content.altLocale, href: locale === "en" ? arPath : enPath },
+};
+const businessId = `${SITE_URL}/#business`;
+const graph = [
+  {
+    "@type": "ProfessionalService",
+    "@id": businessId,
+    name: getContent("ar").footer.tagline,
+    alternateName: getContent("en").footer.tagline,
+    url: `${SITE_URL}/`,
+    logo: `${SITE_URL}/logo.svg`,
+    image,
+    telephone: content.contact.phone,
+    email: content.contact.email,
+    foundingDate: "2015",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress:
+        locale === "en"
+          ? "Prince Salman bin Mohammed bin Saud Street, Al Sahafa"
+          : "شارع الأمير سلمان بن محمد بن سعود، حي الصحافة",
+      addressLocality: locale === "en" ? "Riyadh" : "الرياض",
+      postalCode: "13315",
+      addressCountry: "SA",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: content.contact.mapLat,
+      longitude: content.contact.mapLng,
+    },
+    areaServed: { "@type": "City", name: "Riyadh" },
+  },
+  {
+    "@type": "WebSite",
+    "@id": `${SITE_URL}/#website`,
+    url: `${SITE_URL}/`,
+    name: "أقواس | Arches",
+    publisher: { "@id": businessId },
+    inLanguage: ["ar", "en"],
+  },
+  {
+    "@type": "WebPage",
+    "@id": `${canonical}#webpage`,
+    url: canonical,
+    name: title,
+    description,
+    inLanguage: locale,
+    isPartOf: { "@id": `${SITE_URL}/#website` },
+    about: { "@id": businessId },
+  },
+  ...(breadcrumbs.length
+    ? [
+        {
+          "@type": "BreadcrumbList",
+          itemListElement: breadcrumbs.map((item, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            name: item.name,
+            item: new URL(item.path, SITE_URL).href,
+          })),
+        },
+      ]
+    : []),
+];
 ---
 
 <!doctype html>
@@ -34,9 +108,59 @@ const {
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {
+      noindex ? (
+        <meta name="robots" content="noindex, follow" />
+      ) : (
+        <>
+          <link rel="canonical" href={canonical} />
+          <link
+            rel="alternate"
+            hreflang="ar"
+            href={new URL(arPath, SITE_URL).href}
+          />
+          <link
+            rel="alternate"
+            hreflang="en"
+            href={new URL(enPath, SITE_URL).href}
+          />
+          <link
+            rel="alternate"
+            hreflang="x-default"
+            href={new URL(arPath, SITE_URL).href}
+          />
+          <script
+            is:inline
+            type="application/ld+json"
+            set:html={JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": graph,
+            }).replace(/</g, "\\u003c")}
+          />
+        </>
+      )
+    }
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="أقواس | Arches" />
+    <meta property="og:locale" content={locale === "en" ? "en_US" : "ar_SA"} />
+    <meta
+      property="og:locale:alternate"
+      content={locale === "en" ? "ar_SA" : "en_US"}
+    />
+    <meta property="og:image" content={image} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={content.seo.imageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
+    <meta name="twitter:image:alt" content={content.seo.imageAlt} />
+    <meta name="theme-color" content="#1e1f28" />
   </head>
   <body
     class:list={[
@@ -50,7 +174,7 @@ const {
       "antialiased",
     ]}
   >
-    <HeaderCentered content={content} />
+    <HeaderCentered content={headerContent} />
     <main class:list={["flex", "flex-1", "flex-col"]}>
       <slot />
     </main>

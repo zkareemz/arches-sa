@@ -2,6 +2,7 @@
 import type { SiteContent } from "../data/content";
 
 import WhatsappLogo from "../assets/whatsapp.svg";
+import { whatsappUrl } from "../data/content";
 import Button from "./Button.astro";
 
 interface Props {
@@ -89,14 +90,13 @@ const wrapClass =
     </span>
     <div class:list={["inline-block", "pt-1"]}>
       <Button
-        href={`https://wa.me/${contact.phone.replace(/\D/g, "")}`}
+        href={whatsappUrl(content)}
         target="_blank"
         rel="noopener noreferrer"
         variant="whatsapp"
         tone="light"
         customIcon
-        dir="ltr"
-        label={contact.phone}
+        label={content.ui.whatsappCta}
       >
         <WhatsappLogo class:list={["w-4", "h-auto"]} />
       </Button>

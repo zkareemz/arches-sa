@@ -1,6 +1,8 @@
 ---
 import type { SiteContent } from "../../../data/content";
 
+import { servicePath } from "../../../data/content";
+import Button from "../../../ui/Button.astro";
 import Eyebrow from "../../../ui/Eyebrow.astro";
 import Reveal from "../../../ui/Reveal.astro";
 import ServiceItem from "../../../ui/ServiceItem.astro";
@@ -144,6 +146,16 @@ const { services } = content;
                 {service.items.map((item) => (
                   <ServiceItem title={item.title} desc={item.desc} />
                 ))}
+              </div>
+              <div class:list={["mt-3"]}>
+                <Button
+                  href={servicePath(
+                    service.slug,
+                    content.dir === "rtl" ? "ar" : "en",
+                  )}
+                  label={`${content.ui.serviceDetails}: ${service.title}`}
+                  variant="outline"
+                />
               </div>
             </Reveal>
           ))

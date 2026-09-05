@@ -3,14 +3,16 @@ interface Props {
   as?: string;
   delay?: number;
   class?: string;
+  id?: string;
 }
 
-const { as = "div", delay = 0, class: className } = Astro.props;
+const { as = "div", delay = 0, class: className, id } = Astro.props;
 const Tag = as;
 ---
 
 <Tag
   data-reveal
+  id={id}
   class:list={[className]}
   style={delay ? `transition-delay:${delay}ms` : undefined}
 >

@@ -27,7 +27,15 @@ function initReveal(): void {
     { rootMargin: "0px 0px -10% 0px", threshold: 0.12 },
   );
 
-  els.forEach((el) => observer.observe(el));
+  els.forEach((el) => {
+    // Above-the-fold content stays visible; only enhance offscreen elements.
+    if (el.getBoundingClientRect().top < window.innerHeight) {
+      el.setAttribute("data-revealed", "");
+    } else {
+      observer.observe(el);
+      el.setAttribute("data-reveal-pending", "");
+    }
+  });
 }
 
 if (document.readyState !== "loading") {

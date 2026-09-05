@@ -2,6 +2,13 @@
   "hosting": {
     "public": "dist",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "trailingSlash": true,
+    "redirects": [
+      { "source": "/contact-us", "destination": "/#contact", "type": 301 },
+      { "source": "/contact-us/", "destination": "/#contact", "type": 301 },
+      { "source": "/about-us-2", "destination": "/#about", "type": 301 },
+      { "source": "/about-us-2/", "destination": "/#about", "type": 301 }
+    ],
     "headers": [
       {
         "source": "**/*.@(js|css|woff2)",

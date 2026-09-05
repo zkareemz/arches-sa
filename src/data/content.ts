@@ -16,6 +16,12 @@ export interface ServiceSubItem {
 }
 
 export interface Service {
+  slug: string;
+  heading: string;
+  pageTitle: string;
+  description: string;
+  details: Point[];
+  galleryCategory?: string;
   index: string;
   label: string;
   title: string;
@@ -46,6 +52,33 @@ export interface TeamMember {
 }
 
 export interface SiteContent {
+  seo: { title: string; description: string; imageAlt: string };
+  ui: {
+    home: string;
+    breadcrumb: string;
+    menu: string;
+    navigation: string;
+    serviceDetails: string;
+    serviceScope: string;
+    relatedServices: string;
+    projectExamples: string;
+    whatsappCta: string;
+    whatsappMessage: string;
+    formWhatsapp: string;
+    formWhatsappNote: string;
+    gallery: {
+      residential: string;
+      interior: string;
+      commercial: string;
+      image: string;
+      open: string;
+      close: string;
+      previous: string;
+      next: string;
+      fullscreen: string;
+      exitFullscreen: string;
+    };
+  };
   dir: "rtl" | "ltr";
   langName: string;
   altLocale: { label: string; href: string };
@@ -160,6 +193,39 @@ const IMG = {
 } as const;
 
 const ar: SiteContent = {
+  seo: {
+    title: "أقواس | مكتب هندسي في الرياض لتصميم الفلل والإشراف",
+    description:
+      "أقواس مكتب هندسي في الرياض يقدم تصميم الفلل والمخططات التنفيذية ورخص البناء، وإدارة المشاريع والإشراف الهندسي، والتصميم الداخلي والتأثيث. تواصل معنا لمناقشة مشروعك.",
+    imageAlt: "أقواس — تصميم معماري وإشراف هندسي وتصميم داخلي في الرياض",
+  },
+  ui: {
+    home: "الرئيسية",
+    breadcrumb: "مسار الصفحة",
+    menu: "القائمة",
+    navigation: "التنقل الرئيسي",
+    serviceDetails: "تعرّف على الخدمة",
+    serviceScope: "ماذا تشمل الخدمة؟",
+    relatedServices: "خدمات متكاملة لمشروعك",
+    projectExamples: "من تصاميم أقواس",
+    whatsappCta: "تواصل معنا",
+    whatsappMessage: "مرحباً أقواس، أرغب في مناقشة تصميم فيلتي في الرياض.",
+    formWhatsapp: "متابعة عبر واتساب",
+    formWhatsappNote:
+      "اكتب تفاصيل مشروعك، ثم تابع إلى واتساب لمراجعة الرسالة وإرسالها إلى فريقنا.",
+    gallery: {
+      residential: "مشاريع سكنية",
+      interior: "تصميم داخلي",
+      commercial: "مشاريع تجارية",
+      image: "صورة",
+      open: "عرض معرض",
+      close: "إغلاق المعرض",
+      previous: "الصورة السابقة",
+      next: "الصورة التالية",
+      fullscreen: "ملء الشاشة",
+      exitFullscreen: "الخروج من ملء الشاشة",
+    },
+  },
   dir: "rtl",
   langName: "العربية",
   altLocale: { label: "EN", href: "/en" },
@@ -184,7 +250,7 @@ const ar: SiteContent = {
       "نؤمن أن العمارة الجيدة تبدأ من فهمٍ عميق لاحتياجاتك، وتنتهي بفراغاتٍ تُغني حياتك اليومية",
     points: [
       {
-        title: "شركة هندسية متعدد التخصصات",
+        title: "شركة هندسية متعددة التخصصات في الرياض",
         desc: "نقدّم خدمات متكاملة في التصميم والإنشاء تحت سقفٍ واحد منذ عام 2015",
       },
       {
@@ -203,6 +269,26 @@ const ar: SiteContent = {
     title: "خدماتنا",
     items: [
       {
+        slug: "architectural-design",
+        heading: "تصميم فلل في الرياض",
+        pageTitle: "تصميم فلل في الرياض — التصميم المعماري من أقواس",
+        description:
+          "تصميم فلل في الرياض من أقواس: تصميم معماري مخصص لاحتياجاتك، من الأفكار الأولية وتطوير التصميم إلى المخططات التنفيذية والتنسيق الهندسي ورخص البناء.",
+        galleryCategory: "residential",
+        details: [
+          {
+            title: "تصميم فيلا يبدأ من احتياجاتك",
+            desc: "نبدأ بفهم رؤيتك واحتياجاتك للفراغات المعيشية، ونحوّلها إلى تصاميم أولية مخصصة لمشروعك السكني. ثم نطوّر الفكرة والتفاصيل للوصول إلى تصميم قابل للتنفيذ.",
+          },
+          {
+            title: "من التصميم إلى المخططات التنفيذية",
+            desc: "نعدّ المخططات التنفيذية لكافة التخصصات الهندسية، مع التنسيق بتقنية نمذجة معلومات البناء (BIM). يجمع العمل بين التصميم المعماري والمعرفة باشتراطات البناء لإعداد مشروع واضح التفاصيل.",
+          },
+          {
+            title: "التراخيص واستكمال رحلة المشروع",
+            desc: "تشمل خدماتنا إصدار رخص البناء وفق الاشتراطات التنظيمية. ويمكن استكمال رحلة مشروعك مع أقواس بخدمات إدارة المشروع والإشراف على التنفيذ والتصميم الداخلي والتأثيث.",
+          },
+        ],
         index: "01",
         label: "خدمة / 01",
         title: "التصميم المعماري",
@@ -223,12 +309,31 @@ const ar: SiteContent = {
           },
           {
             title: "التراخيص الحكومية",
-            desc: "اصدار رخص البناء وفقاً للاشتراطات التنظيمية",
+            desc: "إصدار رخص البناء وفقاً للاشتراطات التنظيمية",
           },
         ],
         image: IMG.service1,
       },
       {
+        slug: "construction-supervision",
+        heading: "إشراف هندسي وإدارة مشاريع البناء بالرياض",
+        pageTitle: "إشراف هندسي وإدارة مشاريع البناء بالرياض — أقواس",
+        description:
+          "إدارة مشاريع البناء والإشراف الهندسي بالرياض من أقواس: متابعة المقاولين والجودة والجدول الزمني، وضبط التكاليف من مرحلة ما قبل الإنشاء حتى التسليم.",
+        details: [
+          {
+            title: "إدارة مشروعك من ما قبل الإنشاء",
+            desc: "ندير مشروع البناء من مرحلة ما قبل الإنشاء حتى التسليم النهائي، مع تنسيق أعمال المقاولين ومتابعة مراحل العمل. تجمع الخدمة بين إدارة المشروع والإشراف على التنفيذ ضمن رؤية متكاملة.",
+          },
+          {
+            title: "وضوح في الميزانية والجدول الزمني",
+            desc: "نراجع جداول الكميات وندير التعديلات ونعدّ تقارير التكلفة. ونتابع البرنامج الزمني والتقدم في الأعمال لمعالجة التأخيرات ومساعدة المالك على متابعة سير مشروعه.",
+          },
+          {
+            title: "متابعة الجودة على أرض الواقع",
+            desc: "يشمل الإشراف متابعة التنفيذ واختيار المواد والفحوصات والتقارير الدورية. ترتبط هذه الأعمال بمتابعة المقاولين وتطبيق معايير الجودة خلال مراحل المشروع حتى التسليم.",
+          },
+        ],
         index: "02",
         label: "خدمة / 02",
         title: "إدارة المشروع والإشراف على التنفيذ",
@@ -245,16 +350,36 @@ const ar: SiteContent = {
           },
           {
             title: "ضمان الجودة والفحوصات",
-            desc: "الاشراف على التنفيذ، اختيار المواد، التقارير الدورية",
+            desc: "الإشراف على التنفيذ، اختيار المواد، التقارير الدورية",
           },
           {
-            title: "ادارة مشروع",
+            title: "إدارة المشروع",
             desc: "إدارة متكاملة من ما قبل الإنشاء حتى التسليم",
           },
         ],
         image: IMG.service2,
       },
       {
+        slug: "interior-design",
+        heading: "تصميم داخلي للفلل بالرياض والتأثيث",
+        pageTitle: "تصميم داخلي للفلل بالرياض والتأثيث — أقواس",
+        description:
+          "تصميم داخلي للفلل بالرياض مع أقواس: تخطيط الفراغات، والتصور ثلاثي الأبعاد، واختيار الأثاث والتجهيزات، وإدارة التوريد والتركيب بما يناسب أسلوب حياتك.",
+        galleryCategory: "interior",
+        details: [
+          {
+            title: "فراغات داخلية تناسب أسلوب حياتك",
+            desc: "نطوّر المفهوم الداخلي وتخطيط الفراغات بما يناسب احتياجاتك وهويتك. تشمل هذه المرحلة دراسات المخططات ولوحات المزاج واستراتيجيات تقسيم الفراغات، لتجتمع الوظيفة والطابع الذي تريده لبيتك.",
+          },
+          {
+            title: "رؤية التصميم قبل تنفيذه",
+            desc: "نقدّم التصوّر ثلاثي الأبعاد بمشاهد فوتوواقعية وجولات افتراضية لاعتماد التصميم. ونختار مواصفات الأثاث والتركيبات والمعدات بعناية لتنسجم تفاصيل التأثيث مع التصميم الداخلي.",
+          },
+          {
+            title: "من اختيار التجهيزات إلى التركيب",
+            desc: "تمتد الخدمة إلى التوريد والتركيب وإدارة المورّدين والمقاولين ضمن حلول التجهيز التام. نتابع التفاصيل من لوحة المزاج الأولى إلى اللمسة الأخيرة، مع إمكانية تكامل العمل مع التصميم المعماري وإدارة المشروع.",
+          },
+        ],
         index: "03",
         label: "خدمة / 03",
         title: "التصميم الداخلي والتأثيث",
@@ -307,7 +432,8 @@ const ar: SiteContent = {
   projects: {
     eyebrow: "مختارات من أعمالنا",
     title: "أعمالنا",
-    intro: "نماذج من مشاريعنا السكنية — قريباً مجموعة كاملة من أعمالنا المنجزة",
+    intro:
+      "نماذج من مشاريع أقواس السكنية والتجارية والتصميم الداخلي — تصاميم تعبّر عن تنوّع احتياجات عملائنا",
     items: [
       { name: "فيلا الياسمين", type: "سكني — الرياض", image: IMG.project1 },
       { name: "إقامة الفناء", type: "تصميم داخلي", image: IMG.project2 },
@@ -349,7 +475,8 @@ const ar: SiteContent = {
     title: "لنبنِ معاً شيئاً استثنائياً",
     intro: "أخبرنا عن مشروعك، وسنعاود التواصل معك خلال يومي عمل",
     officeLabel: "المكتب",
-    office: "الرياض، المملكة العربية السعودية",
+    office:
+      "شارع الأمير سلمان بن محمد بن سعود، حي الصحافة، الرياض 13315، المملكة العربية السعودية",
     website: "arches.sa",
     websiteUrl: "https://arches.sa",
     contactLabel: "تواصل",
@@ -374,12 +501,47 @@ const ar: SiteContent = {
     },
   },
   footer: {
-    tagline: "شركة اقواس للاستشارات الهندسية",
+    tagline: "شركة أقواس للاستشارات الهندسية",
     rights: "جميع الحقوق محفوظة",
   },
 };
 
 const en: SiteContent = {
+  seo: {
+    title: "Arches | Engineering Office & Villa Design in Riyadh",
+    description:
+      "Arches provides villa design, construction drawings, permitting, project management, site supervision and interior design in Riyadh. Discuss your project with our team.",
+    imageAlt:
+      "Arches — architectural design, site supervision and interior design in Riyadh",
+  },
+  ui: {
+    home: "Home",
+    breadcrumb: "Breadcrumb",
+    menu: "Menu",
+    navigation: "Main navigation",
+    serviceDetails: "Explore this service",
+    serviceScope: "What does the service include?",
+    relatedServices: "Integrated services for your project",
+    projectExamples: "Designs by Arches",
+    whatsappCta: "Contact us",
+    whatsappMessage:
+      "Hello Arches, I would like to discuss my villa design in Riyadh.",
+    formWhatsapp: "Continue to WhatsApp",
+    formWhatsappNote:
+      "Tell us about your project, then continue to WhatsApp to review and send your message to our team.",
+    gallery: {
+      residential: "Residential projects",
+      interior: "Interior design",
+      commercial: "Commercial projects",
+      image: "Photo",
+      open: "Open gallery",
+      close: "Close gallery",
+      previous: "Previous photo",
+      next: "Next photo",
+      fullscreen: "Full screen",
+      exitFullscreen: "Exit full screen",
+    },
+  },
   dir: "ltr",
   langName: "English",
   altLocale: { label: "ع", href: "/" },
@@ -405,10 +567,10 @@ const en: SiteContent = {
     points: [
       {
         title: "A multidisciplinary engineering office",
-        desc: "Integrated design and construction services under one roof",
+        desc: "Integrated design and construction services under one roof since 2015",
       },
       {
-        title: "Specialised in residential projects",
+        title: "Distinctive designs tailored to your needs",
         desc: "Alongside you at every stage — from concept to handover",
       },
       {
@@ -423,11 +585,31 @@ const en: SiteContent = {
     title: "Our services",
     items: [
       {
+        slug: "architectural-design",
+        heading: "Villa Design in Riyadh",
+        pageTitle: "Villa Design in Riyadh — Architectural Design by Arches",
+        description:
+          "Villa design in Riyadh, from concepts and design development to coordinated construction drawings and building permits. Plan your home with Arches.",
+        details: [
+          {
+            title: "Villa design starts with your needs",
+            desc: "We begin by understanding your vision and the living spaces you need, translating them into initial designs tailored to your residential project. We then develop the concept and details into a buildable design.",
+          },
+          {
+            title: "From design to construction drawings",
+            desc: "We prepare construction drawings across engineering disciplines, coordinated using Building Information Modelling (BIM). Architectural design and knowledge of building requirements come together to make project details clear.",
+          },
+          {
+            title: "Permits and the next stages",
+            desc: "Our services include obtaining building permits in line with regulatory requirements. You can continue your project with Arches through project management, site supervision, interior design and furnishing.",
+          },
+        ],
+        galleryCategory: "residential",
         index: "01",
         label: "SERVICE / 01",
         title: "Architectural Design",
         subtitle: "Designing spaces that elevate quality of life",
-        p: "We provide complete architectural design services for residential projects — from the first concept sketches to building documents approved by the relevant authorities. Our approach pairs BIM digital delivery with deep knowledge of local regulations, ensuring designs that are ambitious yet buildable",
+        p: "We provide complete architectural design services for residential projects, from initial concepts to construction drawings. Our approach combines BIM digital delivery with knowledge of building requirements to create distinctive, buildable designs",
         items: [
           {
             title: "Concept & Schematic Design",
@@ -439,7 +621,7 @@ const en: SiteContent = {
           },
           {
             title: "Construction Documents",
-            desc: "Complete working drawings, specifications, and coordination sets",
+            desc: "Complete construction drawings across engineering disciplines",
           },
           {
             title: "Permitting",
@@ -449,6 +631,26 @@ const en: SiteContent = {
         image: IMG.service1,
       },
       {
+        slug: "construction-supervision",
+        heading: "Construction Supervision & Project Management in Riyadh",
+        pageTitle:
+          "Construction Supervision & Project Management in Riyadh — Arches",
+        description:
+          "Construction supervision and project management in Riyadh: contractor coordination, quality checks, cost control and schedule monitoring through handover.",
+        details: [
+          {
+            title: "Management from pre-construction",
+            desc: "We manage building projects from pre-construction through final handover, coordinating contractors and monitoring each stage. The service brings project management and site supervision together.",
+          },
+          {
+            title: "Visibility into budgets and schedules",
+            desc: "We review bills of quantities, manage changes and prepare cost reports. We track the programme and progress to address delays and help owners understand how their project is progressing.",
+          },
+          {
+            title: "Quality checks on site",
+            desc: "Supervision includes monitoring construction, selecting materials, inspections and periodic reports. These activities connect contractor oversight with quality standards throughout the project until handover.",
+          },
+        ],
         index: "02",
         label: "SERVICE / 02",
         title: "Construction Management & Supervision",
@@ -465,7 +667,7 @@ const en: SiteContent = {
           },
           {
             title: "Quality Assurance & Inspections",
-            desc: "Site visits, material approvals, NCR and snag management",
+            desc: "Construction supervision, material selection and periodic reports",
           },
           {
             title: "Full PMC Role",
@@ -475,6 +677,26 @@ const en: SiteContent = {
         image: IMG.service2,
       },
       {
+        slug: "interior-design",
+        heading: "Villa Interior Design & Furnishing in Riyadh",
+        pageTitle: "Villa Interior Design & Furnishing in Riyadh — Arches",
+        description:
+          "Villa interior design in Riyadh: space planning, 3D visualisation, furniture selection, supply and installation management tailored to your lifestyle.",
+        details: [
+          {
+            title: "Interiors suited to your lifestyle",
+            desc: "We develop the interior concept and space plan around your needs and identity. Layout studies, mood boards and zoning strategies bring together everyday function and the character you want for your home.",
+          },
+          {
+            title: "See the design before implementation",
+            desc: "We provide photorealistic 3D visualisations and virtual walkthroughs for design approval. Furniture, fixtures and equipment specifications are selected to make the furnishing details work with the interior design.",
+          },
+          {
+            title: "From selecting fittings to installation",
+            desc: "The service extends to supply, installation, and supplier and contractor management through turnkey fit-out solutions. We follow the details from the first mood board to the final touch, with architectural design and project management available alongside.",
+          },
+        ],
+        galleryCategory: "interior",
         index: "03",
         label: "SERVICE / 03",
         title: "Interior Design & Furnishing",
@@ -520,7 +742,7 @@ const en: SiteContent = {
       },
       {
         title: "Local roots, professional performance",
-        desc: "Deep regulatory knowledge and trusted relationships",
+        desc: "Continual development, connected to our identity and local roots",
       },
     ],
   },
@@ -528,7 +750,7 @@ const en: SiteContent = {
     eyebrow: "Selected works",
     title: "Projects",
     intro:
-      "A glimpse of our residential work — a full portfolio of completed projects is coming soon",
+      "A selection of Arches residential, commercial and interior design projects — designs reflecting our clients' varied needs",
     items: [
       {
         name: "Yasmin Villa",
@@ -551,9 +773,9 @@ const en: SiteContent = {
     title: "Our awards",
     intro: "A mark of our commitment to design and delivery excellence",
     year: "2017",
-    awardName: "Best Residential Architecture Award",
-    organization: "Saudi Council of Engineers",
-    desc: "Arches received this award in recognition of excellence in residential architectural design, where the jury commended the refined balance of local identity and contemporary form, the efficiency of the spaces, and the quality of natural light. It reflects our commitment to delivering residential projects that exceed our clients' expectations",
+    awardName: "Best-selling Architectural Design Award",
+    organization: "Sakani platform",
+    desc: "Arches received this award in recognition of its design being the best-selling architectural design on the platform",
     image: IMG.award,
   },
   team: {
@@ -580,12 +802,13 @@ const en: SiteContent = {
     intro:
       "Tell us about your project and we'll get back to you within two business days",
     officeLabel: "Office",
-    office: "Riyadh, Saudi Arabia",
+    office:
+      "Prince Salman bin Mohammed bin Saud Street, Al Sahafa, Riyadh 13315, Saudi Arabia",
     website: "arches.sa",
     websiteUrl: "https://arches.sa",
     contactLabel: "Contact",
-    email: "contact@arches.sa",
-    phone: "+966 54 66 54 333",
+    email: "info@arches.sa",
+    phone: "+966559995768",
     whatsappLabel: "WhatsApp",
     mapLabel: "Location",
     // Arches Engineering Consultancy office, Riyadh.
@@ -605,7 +828,7 @@ const en: SiteContent = {
     },
   },
   footer: {
-    tagline: "A multidisciplinary engineering office — Riyadh",
+    tagline: "Arches Engineering Consultancy",
     rights: "All rights reserved",
   },
 };
@@ -614,4 +837,14 @@ const CONTENT: Record<Locale, SiteContent> = { ar, en };
 
 export function getContent(locale: string | undefined): SiteContent {
   return locale === "en" ? CONTENT.en : CONTENT.ar;
+}
+
+export const SITE_URL = "https://arches.sa";
+
+export function servicePath(slug: string, locale: string = "ar"): string {
+  return `${locale === "en" ? "/en" : ""}/services/${slug}/`;
+}
+
+export function whatsappUrl(content: SiteContent): string {
+  return `https://wa.me/${content.contact.phone.replace(/\D/g, "")}?text=${encodeURIComponent(content.ui.whatsappMessage)}`;
 }

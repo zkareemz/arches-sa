@@ -1,0 +1,167 @@
+---
+import type { Service, SiteContent } from "../data/content";
+
+import ContactFormFocus from "../components/sections/contact/ContactFormFocus.astro";
+import { servicePath, whatsappUrl } from "../data/content";
+import { gallery } from "../data/gallery";
+import Button from "../ui/Button.astro";
+import Reveal from "../ui/Reveal.astro";
+
+interface Props {
+  content: SiteContent;
+  service: Service;
+  class?: string;
+}
+
+const { content, service, class: className } = Astro.props;
+const locale = content.dir === "rtl" ? "ar" : "en";
+const category = gallery.categories.find(
+  (item) => item.slug === service.galleryCategory,
+);
+const photos = category
+  ? [
+      ...category.images,
+      ...category.projects.flatMap((project) => project.images),
+    ].slice(0, 6)
+  : [];
+---
+
+<article class:list={["bg-quill-gray-50 text-ink-900", className]}>
+  <header class:list={["mx-auto max-w-7xl px-6 pb-16 pt-32 sm:px-10 sm:pt-40"]}>
+    <nav
+      aria-label={content.ui.breadcrumb}
+      class:list={["mb-8 text-sm text-ink-500"]}
+    >
+      <ol class:list={["flex flex-wrap items-center gap-3"]}>
+        <li>
+          <a
+            href={locale === "ar" ? "/" : "/en/"}
+            class:list={["hover:text-clay-600"]}>{content.ui.home}</a
+          >
+        </li>
+        <li aria-hidden="true">/</li>
+        <li aria-current="page">{service.title}</li>
+      </ol>
+    </nav>
+    <p class:list={["mb-5 text-sm text-clay-600"]}>
+      {content.hero.eyebrow} — {service.title}
+    </p>
+    <h1
+      class:list={[
+        "max-w-5xl text-balance text-4xl leading-tight font-light sm:text-6xl",
+      ]}
+    >
+      {service.heading}
+    </h1>
+    <p class:list={["mt-8 max-w-3xl text-lg leading-relaxed text-ink-500"]}>
+      {service.p}
+    </p>
+    <div class:list={["mt-8"]}>
+      <Button href={whatsappUrl(content)} label={content.ui.whatsappCta} />
+    </div>
+  </header>
+
+  <section
+    class:list={["bg-quill-gray-100"]}
+    aria-label={content.ui.serviceScope}
+  >
+    <div
+      class:list={[
+        "mx-auto grid max-w-7xl gap-12 px-6 py-16 sm:px-10 lg:grid-cols-2 lg:gap-20",
+      ]}
+    >
+      <div>
+        <h2 class:list={["text-3xl leading-snug font-light"]}>
+          {content.ui.serviceScope}
+        </h2>
+        <p class:list={["mt-5 text-lg text-clay-700"]}>{service.subtitle}</p>
+        <ul class:list={["mt-8 grid gap-6"]}>
+          {
+            service.items.map((item) => (
+              <li class:list={["border-t border-ink-900/15 pt-5"]}>
+                <h3 class:list={["text-xl"]}>{item.title}</h3>
+                <p class:list={["mt-2 leading-relaxed text-ink-500"]}>
+                  {item.desc}
+                </p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div class:list={["flex flex-col gap-10"]}>
+        {
+          service.details.map((point) => (
+            <Reveal>
+              <h2 class:list={["text-2xl leading-snug font-light"]}>
+                {point.title}
+              </h2>
+              <p class:list={["mt-4 leading-relaxed text-ink-500"]}>
+                {point.desc}
+              </p>
+            </Reveal>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {
+    photos.length > 0 && (
+      <section class:list={["mx-auto max-w-7xl px-6 py-16 sm:px-10"]}>
+        <h2 class:list={["mb-8 text-3xl font-light"]}>
+          {content.ui.projectExamples}
+        </h2>
+        <div
+          class:list={["grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"]}
+        >
+          {photos.map((photo, i) => (
+            <figure>
+              <a href={`/${photo.full}`}>
+                <img
+                  src={`/${photo.thumb}`}
+                  srcset={`/${photo.thumb} 480w, /${photo.full} ${photo.width}w`}
+                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  width={photo.width}
+                  height={photo.height}
+                  loading="lazy"
+                  decoding="async"
+                  alt={`${content.ui.projectExamples} — ${service.title} — ${content.ui.gallery.image} ${i + 1}`}
+                  class:list={["aspect-[4/3] w-full rounded-sm object-cover"]}
+                />
+              </a>
+              <figcaption class:list={["mt-3 text-sm text-ink-500"]}>
+                {service.title} — {content.ui.projectExamples}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <section class:list={["mx-auto max-w-7xl px-6 py-16 sm:px-10"]}>
+    <h2 class:list={["mb-8 text-3xl font-light"]}>
+      {content.ui.relatedServices}
+    </h2>
+    <div class:list={["grid gap-6 sm:grid-cols-2"]}>
+      {
+        content.services.items
+          .filter((item) => item.slug !== service.slug)
+          .map((item) => (
+            <a
+              href={servicePath(item.slug, locale)}
+              class:list={[
+                "rounded-sm border border-ink-900/15 p-6 transition-colors hover:border-clay-600",
+              ]}
+            >
+              <h3 class:list={["text-xl text-clay-700"]}>{item.title}</h3>
+              <p class:list={["mt-3 leading-relaxed text-ink-500"]}>
+                {item.subtitle}
+              </p>
+            </a>
+          ))
+      }
+    </div>
+  </section>
+</article>
+<ContactFormFocus content={content} />

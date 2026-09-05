@@ -2,6 +2,7 @@
 import type { SiteContent } from "../data/content";
 
 import Logo from "../assets/logo.svg";
+import { servicePath } from "../data/content";
 
 interface Props {
   content: SiteContent;
@@ -35,6 +36,29 @@ const year = new Date().getFullYear();
           aria-hidden="true"
         />
       </div>
+      <nav aria-label={content.services.title}>
+        <ul
+          class:list={[
+            "flex flex-col gap-3 text-sm sm:flex-row sm:flex-wrap sm:gap-6",
+          ]}
+        >
+          {
+            content.services.items.map((service) => (
+              <li>
+                <a
+                  class:list={["hover:text-quill-gray-50"]}
+                  href={servicePath(
+                    service.slug,
+                    content.dir === "rtl" ? "ar" : "en",
+                  )}
+                >
+                  {service.title}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
     </div>
 
     <div

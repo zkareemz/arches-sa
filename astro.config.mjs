@@ -4,7 +4,8 @@ import { defineConfig } from "astro/config";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://arches-sa.web.app",
+  site: "https://arches.sa",
+  trailingSlash: "always",
   i18n: {
     defaultLocale: "ar",
     locales: ["ar", "en"],

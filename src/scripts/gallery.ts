@@ -148,14 +148,14 @@ function initGallery(): void {
     dotsWrap.innerHTML = current.photos
       .map(
         (_, i) =>
-          `<button type="button" data-dot data-i="${i}" aria-label="Go to photo ${i + 1}" class="gallery-dot"></button>`,
+          `<button type="button" data-dot data-i="${i}" aria-label="${overlay.dataset.photoLabel} ${i + 1}" class="gallery-dot"></button>`,
       )
       .join("");
 
     thumbsWrap.innerHTML = current.photos
       .map(
         (photo, i) =>
-          `<button type="button" data-thumb data-i="${i}" aria-label="Photo ${i + 1}" class="gallery-thumb"><img src="${photo.thumb}" alt="" loading="lazy" decoding="async" /></button>`,
+          `<button type="button" data-thumb data-i="${i}" aria-label="${overlay.dataset.photoLabel} ${i + 1}" class="gallery-thumb"><img src="${photo.thumb}" alt="" loading="lazy" decoding="async" /></button>`,
       )
       .join("");
   };
@@ -238,8 +238,8 @@ function initGallery(): void {
 
   // Fullscreen toggle (hidden when the API is unavailable, e.g. iOS Safari).
   const btnFull = overlay.querySelector<HTMLButtonElement>("[data-fullscreen]");
-  const fsEnterIcon = overlay.querySelector<HTMLElement>("[data-fs-enter]");
-  const fsExitIcon = overlay.querySelector<HTMLElement>("[data-fs-exit]");
+  const fsEnterIcon = overlay.querySelector<SVGElement>("[data-fs-enter]");
+  const fsExitIcon = overlay.querySelector<SVGElement>("[data-fs-exit]");
   if (btnFull) {
     if (!fsSupported) {
       btnFull.hidden = true;
@@ -248,10 +248,12 @@ function initGallery(): void {
         const active = !!fsElement();
         btnFull.setAttribute(
           "aria-label",
-          active ? "Exit full screen" : "Full screen",
+          (active
+            ? overlay.dataset.exitFullscreenLabel
+            : overlay.dataset.fullscreenLabel) ?? "",
         );
-        if (fsEnterIcon) fsEnterIcon.hidden = active;
-        if (fsExitIcon) fsExitIcon.hidden = !active;
+        if (fsEnterIcon) fsEnterIcon.style.display = active ? "none" : "";
+        if (fsExitIcon) fsExitIcon.style.display = active ? "" : "none";
       };
       btnFull.addEventListener("click", () =>
         fsElement() ? exitFs() : enterFs(),

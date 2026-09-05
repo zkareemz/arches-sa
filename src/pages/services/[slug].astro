@@ -1,0 +1,25 @@
+---
+import ServicePage from "../../content/ServicePage.astro";
+import { getContent, servicePath } from "../../data/content";
+import Layout from "../../layouts/Layout.astro";
+
+export function getStaticPaths() {
+  return getContent("ar").services.items.map((service) => ({
+    params: { slug: service.slug },
+    props: { service },
+  }));
+}
+const { service } = Astro.props;
+const content = getContent("ar");
+---
+
+<Layout
+  title={service.pageTitle}
+  description={service.description}
+  breadcrumbs={[
+    { name: content.ui.home, path: "/" },
+    { name: service.title, path: servicePath(service.slug) },
+  ]}
+>
+  <ServicePage content={content} service={service} />
+</Layout>

@@ -4,6 +4,7 @@ import type { SiteContent } from "../../../data/content";
 import Globe from "../../../assets/globe.svg";
 import Logo from "../../../assets/logo.svg";
 import Menu from "../../../assets/menu.svg";
+import { servicePath } from "../../../data/content";
 
 interface Props {
   content: SiteContent;
@@ -11,7 +12,8 @@ interface Props {
 }
 
 const { content, preview = false } = Astro.props;
-const home = content.dir === "rtl" ? "/" : "/en";
+const locale = content.dir === "rtl" ? "ar" : "en";
+const home = locale === "ar" ? "/" : "/en/";
 ---
 
 <header
@@ -46,24 +48,69 @@ const home = content.dir === "rtl" ? "/" : "/en";
     <Logo class:list={["h-8", "w-auto", "sm:h-9"]} aria-hidden="true" />
   </a>
 
-  <button
-    type="button"
-    data-nav-toggle
-    aria-controls="nav-overlay"
-    aria-expanded="false"
-    aria-label="Open menu"
-    class:list={[
-      "flex",
-      "h-10",
-      "w-10",
-      "items-center",
-      "justify-center",
-      "rounded-full",
-      "text-ink-900",
-      "transition-colors",
-      "hover:text-clay-600",
-    ]}
-  >
-    <Menu class:list={["h-6", "w-6"]} aria-hidden="true" />
-  </button>
+  <details data-navigation class:list={["relative"]}>
+    <summary
+      aria-label={content.ui.menu}
+      class:list={[
+        "flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded-full text-ink-900 hover:text-clay-600 [&::-webkit-details-marker]:hidden",
+      ]}
+    >
+      <Menu class:list={["h-6", "w-6"]} aria-hidden="true" />
+    </summary>
+    <nav
+      aria-label={content.ui.navigation}
+      class:list={[
+        "absolute end-0 top-14 max-h-[80svh] w-72 max-w-[90vw] overflow-y-auto rounded-md border border-ink-900/10 bg-quill-gray-50 p-6 shadow-lg",
+      ]}
+    >
+      <ul class:list={["flex flex-col gap-4"]}>
+        <li>
+          <a href={home} class:list={["hover:text-clay-600"]}
+            >{content.ui.home}</a>
+        </li>
+        {
+          content.nav.map((item) => (
+            <li>
+              <a
+                href={`${home}${item.href}`}
+                class:list={["hover:text-clay-600"]}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+        {
+          content.services.items.map((service) => (
+            <li class:list={["border-t border-ink-900/10 pt-3"]}>
+              <a
+                href={servicePath(service.slug, locale)}
+                class:list={["hover:text-clay-600"]}
+              >
+                {service.title}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </details>
 </header>
+
+<script>
+  const navigation =
+    document.querySelector<HTMLDetailsElement>("[data-navigation]");
+  navigation?.addEventListener("click", (event) => {
+    if ((event.target as Element).closest("a")) navigation.open = false;
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && navigation?.open) {
+      navigation.open = false;
+      navigation.querySelector("summary")?.focus();
+    }
+  });
+  document.addEventListener("click", (event) => {
+    if (navigation?.open && !navigation.contains(event.target as Node))
+      navigation.open = false;
+  });
+</script>

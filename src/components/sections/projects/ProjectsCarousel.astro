@@ -11,6 +11,13 @@ interface Props {
 
 const { content } = Astro.props;
 const { projects } = content;
+const labels = content.ui.gallery;
+const categoryTitle = (slug: string) =>
+  ({
+    residential: labels.residential,
+    interior: labels.interior,
+    commercial: labels.commercial,
+  })[slug] ?? projects.title;
 
 // Image paths in gallery.json are public-root-relative WITHOUT a leading slash —
 // prepend "/" so they resolve from the site root.
@@ -21,20 +28,21 @@ const withBase = (p: string) => `/${p}`;
 const categories = gallery.categories
   .map((cat) => ({
     slug: cat.slug,
-    title: cat.title,
+    title: categoryTitle(cat.slug),
     photos: [...cat.images, ...cat.projects.flatMap((p) => p.images)].map(
-      (img) => ({
+      (img, i) => ({
         full: withBase(img.full),
         thumb: withBase(img.thumb),
         width: img.width,
         height: img.height,
-        alt: img.alt,
+        alt: `${categoryTitle(cat.slug)} — ${content.ui.projectExamples} — ${labels.image} ${i + 1}`,
       }),
     ),
   }))
   .filter((cat) => cat.photos.length > 0);
 
-const photoLabel = (n: number) => (n === 1 ? "photo" : "photos");
+const photoLabel = (n: number) =>
+  content.dir === "rtl" ? labels.image : n === 1 ? "photo" : "photos";
 ---
 
 <section
@@ -81,7 +89,7 @@ const photoLabel = (n: number) => (n === 1 ? "photo" : "photos");
               <button
                 type="button"
                 data-cat-index={i}
-                aria-label={`Open ${cat.title} gallery (${cat.photos.length} ${photoLabel(cat.photos.length)})`}
+                aria-label={`${labels.open}: ${cat.title} (${cat.photos.length} ${photoLabel(cat.photos.length)})`}
                 class:list={[
                   "group",
                   "relative",
@@ -141,13 +149,17 @@ const photoLabel = (n: number) => (n === 1 ? "photo" : "photos");
 
   {/* Model consumed by src/scripts/gallery.ts (randomiser + lightbox). */}
   <script
+    is:inline
     type="application/json"
     id="gallery-data"
-    set:html={JSON.stringify(categories)}
+    set:html={JSON.stringify(categories).replace(/</g, "\\u003c")}
   />
 
   <div
     id="gallery-lightbox"
+    data-photo-label={labels.image}
+    data-fullscreen-label={labels.fullscreen}
+    data-exit-fullscreen-label={labels.exitFullscreen}
     role="dialog"
     aria-modal="true"
     aria-label={projects.title}
@@ -169,7 +181,7 @@ const photoLabel = (n: number) => (n === 1 ? "photo" : "photos");
           <button
             type="button"
             data-fullscreen
-            aria-label="Full screen"
+            aria-label={labels.fullscreen}
             class:list={[
               "grid",
               "h-10",
@@ -202,7 +214,7 @@ const photoLabel = (n: number) => (n === 1 ? "photo" : "photos");
             </svg>
             <svg
               data-fs-exit
-              hidden
+              style="display:none"
               xmlns="http://www.w3.org/2000/svg"
               width="20"
               height="20"
@@ -223,7 +235,7 @@ const photoLabel = (n: number) => (n === 1 ? "photo" : "photos");
           <button
             type="button"
             data-close
-            aria-label="Close gallery"
+            aria-label={labels.close}
             class:list={[
               "grid",
               "h-10",
@@ -261,7 +273,7 @@ const photoLabel = (n: number) => (n === 1 ? "photo" : "photos");
         <button
           type="button"
           data-prev
-          aria-label="Previous photo"
+          aria-label={labels.previous}
           class:list={[
             "absolute",
             "start-2",
@@ -309,7 +321,7 @@ const photoLabel = (n: number) => (n === 1 ? "photo" : "photos");
         <button
           type="button"
           data-next
-          aria-label="Next photo"
+          aria-label={labels.next}
           class:list={[
             "absolute",
             "end-2",

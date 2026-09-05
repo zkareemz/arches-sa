@@ -1,6 +1,7 @@
 ---
 import type { SiteContent } from "../../../data/content";
 
+import { whatsappUrl } from "../../../data/content";
 import Button from "../../../ui/Button.astro";
 import Eyebrow from "../../../ui/Eyebrow.astro";
 
@@ -41,7 +42,8 @@ const { hero } = content;
   <video
     id="hero-video"
     data-hero-video
-    preload="auto"
+    poster="/background.jpg"
+    aria-hidden="true"
     muted
     playsinline
     loop
@@ -69,7 +71,7 @@ const { hero } = content;
       "min-h-svh",
       "bg-cover",
       "bg-center",
-      "z-20",
+      "z-10",
     ]}
     style={{
       backgroundImage: "url('/background.jpg')",
@@ -80,7 +82,7 @@ const { hero } = content;
   <div
     class:list={[
       "relative",
-      "z-20",
+      "z-30",
       "mx-auto",
       "w-full",
       "max-w-7xl",
@@ -123,7 +125,11 @@ const { hero } = content;
         {hero.p}
       </p>
       <div class="hero__item mt-4" style="--i: 3">
-        <Button href="#contact" label={hero.cta} variant="primary" />
+        <Button
+          href={whatsappUrl(content)}
+          label={hero.cta}
+          variant="primary"
+        />
       </div>
     </div>
   </div>
@@ -133,7 +139,8 @@ const { hero } = content;
       "hero__scrim",
       "absolute",
       "inset-0",
-      "z-10",
+      "z-20",
+      "bg-ink-950/20",
       "bg-linear-to-t",
       "from-ink-950/85",
       "via-ink-950/30",
@@ -144,17 +151,22 @@ const { hero } = content;
 </section>
 
 <style>
+  .hero__scrim {
+    opacity: 1;
+    animation: none;
+    pointer-events: none;
+  }
+
   .hero__item {
-    opacity: 0;
+    opacity: 1;
     animation: hero-rise 0.75s cubic-bezier(0.22, 1, 0.36, 1)
-      calc(var(--content-at) + var(--content-delay, 0s) + var(--i) * 0.12s)
-      forwards;
+      calc(var(--i) * 0.08s) forwards;
   }
 
   @keyframes hero-rise {
     from {
-      opacity: 0;
-      transform: translateY(26px);
+      opacity: 1;
+      transform: translateY(10px);
     }
     to {
       opacity: 1;
@@ -175,9 +187,11 @@ const { hero } = content;
   }
 </style>
 
-<script define:vars={{ delay, duration, easing }}>
+<script is:inline define:vars={{ delay, duration, easing }}>
   (function () {
     var video = document.querySelector("[data-hero-video]");
+
+    if (!video) return;
 
     video.addEventListener(
       "loadeddata",
@@ -205,7 +219,7 @@ const { hero } = content;
     ).matches;
     if (reduceMotion) {
       overlay.style.display = "none";
-      video.play().catch(function () {});
+      video.pause();
       return;
     }
 

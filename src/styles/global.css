@@ -76,7 +76,7 @@
 
 @layer components {
   /* Scroll-reveal — toggled by src/scripts/reveal.ts */
-  [data-reveal] {
+  [data-reveal][data-reveal-pending] {
     opacity: 0;
     transform: translateY(1.25rem);
     transition:

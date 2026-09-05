@@ -1,6 +1,8 @@
 ---
 import type { SiteContent } from "../data/content";
 
+import { whatsappUrl } from "../data/content";
+
 interface Props {
   content: SiteContent;
   class?: string;
@@ -9,8 +11,11 @@ interface Props {
 const { content, class: className } = Astro.props;
 const { form } = content.contact;
 
-// Replace with your free Web3Forms access key from https://web3forms.com
-const ACCESS_KEY = "YOUR_WEB3FORMS_ACCESS_KEY";
+// Web3Forms access keys are public form identifiers, not server secrets.
+const ACCESS_KEY = import.meta.env.PUBLIC_WEB3FORMS_ACCESS_KEY?.trim();
+const useWeb3Forms = Boolean(
+  ACCESS_KEY && ACCESS_KEY !== "YOUR_WEB3FORMS_ACCESS_KEY",
+);
 
 const fieldClass =
   "w-full border-b border-quill-gray-50/25 bg-transparent py-3 text-quill-gray-50 placeholder:text-quill-gray-500 transition-colors focus:border-clay-400 focus:outline-none";
@@ -21,11 +26,15 @@ const fieldClass =
   data-sending={form.sending}
   data-success={form.success}
   data-error={form.error}
-  action="https://api.web3forms.com/submit"
-  method="POST"
+  data-channel={useWeb3Forms ? "web3forms" : "whatsapp"}
+  data-whatsapp={whatsappUrl(content)}
+  action={useWeb3Forms
+    ? "https://api.web3forms.com/submit"
+    : whatsappUrl(content)}
+  method={useWeb3Forms ? "POST" : "GET"}
   class:list={["flex", "flex-col", "gap-6", className]}
 >
-  <input type="hidden" name="access_key" value={ACCESS_KEY} />
+  {useWeb3Forms && <input type="hidden" name="access_key" value={ACCESS_KEY} />}
   <input type="hidden" name="subject" value={form.subject} />
   <input
     type="checkbox"
@@ -35,6 +44,14 @@ const fieldClass =
     tabindex="-1"
     autocomplete="off"
   />
+
+  {
+    !useWeb3Forms && (
+      <p class:list={["leading-relaxed text-quill-gray-300"]}>
+        {content.ui.formWhatsappNote}
+      </p>
+    )
+  }
 
   <div class:list={["flex", "flex-col", "gap-6", "sm:flex-row", "sm:gap-8"]}>
     <div class:list={["flex-1"]}>
@@ -100,7 +117,7 @@ const fieldClass =
         "focus-visible:outline-clay-400",
       ]}
     >
-      {form.submit}
+      {useWeb3Forms ? form.submit : content.ui.formWhatsapp}
       <span
         aria-hidden="true"
         class:list={[
@@ -120,6 +137,25 @@ const fieldClass =
     </p>
   </div>
 </form>
+
+{
+  !useWeb3Forms && (
+    <noscript>
+      <style
+        is:inline
+        set:html={
+          'form[data-channel="whatsapp"] [data-submit] { display: none; }'
+        }
+      />
+      <a
+        href={whatsappUrl(content)}
+        class:list={["mt-4 inline-block text-quill-gray-50 underline"]}
+      >
+        {content.ui.whatsappCta}
+      </a>
+    </noscript>
+  )
+}
 
 <script>
   const forms = document.querySelectorAll<HTMLFormElement>("[data-enquiry]");
@@ -153,6 +189,20 @@ const fieldClass =
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       if (!form.reportValidity()) return;
+
+      if (form.dataset.channel === "whatsapp") {
+        const fields = new FormData(form);
+        const destination = new URL(form.dataset.whatsapp!);
+        const details = ["name", "email", "message"]
+          .map((name) => String(fields.get(name) ?? "").trim())
+          .filter(Boolean);
+        destination.searchParams.set(
+          "text",
+          `${destination.searchParams.get("text")}\n\n${details.join("\n\n")}`,
+        );
+        window.location.assign(destination.href);
+        return;
+      }
 
       if (submit) submit.disabled = true;
       setStatus(messages.sending, "sending");
