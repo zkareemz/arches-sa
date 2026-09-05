@@ -1,9 +1,9 @@
 ---
 import type { SiteContent } from "../../../data/content";
 
+import Eyebrow from "../../../ui/Eyebrow.astro";
 import ImageFrame from "../../../ui/ImageFrame.astro";
 import Reveal from "../../../ui/Reveal.astro";
-import SectionHeader from "../../../ui/SectionHeader.astro";
 
 interface Props {
   content: SiteContent;
@@ -26,23 +26,58 @@ const { team } = content;
     ]}
   >
     <Reveal>
-      <SectionHeader
-        eyebrow={team.eyebrow}
-        title={team.title}
-        intro={team.intro}
-        align="center"
-        class:list={["mx-auto"]}
-      />
+      <header
+        class:list={[
+          "flex",
+          "flex-col",
+          "items-start",
+          "gap-5",
+          "text-start",
+          "sm:items-center",
+          "sm:text-center",
+        ]}
+      >
+        <Eyebrow text={team.eyebrow} tone="clay" bar />
+        <h2
+          class:list={[
+            "max-w-3xl",
+            "text-balance",
+            "text-4xl",
+            "font-light",
+            "leading-[1.1]",
+            "tracking-tight",
+            "sm:text-5xl",
+            "lg:text-6xl",
+          ]}
+        >
+          {team.title}
+        </h2>
+        <p
+          class:list={[
+            "max-w-2xl",
+            "text-base",
+            "leading-relaxed",
+            "text-ink-500",
+            "sm:mx-auto",
+            "sm:text-lg",
+          ]}
+        >
+          {team.intro}
+        </p>
+      </header>
     </Reveal>
 
     <div
       class:list={[
-        "mt-16",
-        "grid",
-        "grid-cols-1",
-        "gap-10",
+        "mt-14",
+        "border-y",
+        "border-ink-900/12",
+        "sm:mx-auto",
+        "sm:grid",
+        "sm:max-w-xl",
         "sm:grid-cols-2",
         "sm:gap-8",
+        "sm:border-y-0",
       ]}
     >
       {
@@ -50,38 +85,60 @@ const { team } = content;
           <Reveal
             delay={i * 100}
             as="figure"
-            class:list={["group", "flex", "flex-col", "gap-4"]}
+            class:list={[
+              "group",
+              "grid",
+              "grid-cols-[5.5rem_1fr]",
+              "items-center",
+              "gap-6",
+              "py-6",
+              "not-last:border-b",
+              "not-last:border-ink-900/12",
+              "sm:flex",
+              "sm:flex-col",
+              "sm:items-stretch",
+              "sm:gap-4",
+              "sm:py-0",
+              "sm:not-last:border-b-0",
+            ]}
           >
             <ImageFrame
               src={member.image}
               alt={member.name}
-              ratio="aspect-[4/4]"
-              class:list={["rounded-sm"]}
-              imgClass="transition-transform duration-[900ms] ease-out"
+              ratio="aspect-square sm:aspect-[4/5]"
+              class:list={["rounded-sm", "sm:w-full"]}
+              imgClass="transition-transform duration-[900ms] ease-out group-hover:scale-105"
             />
             <figcaption
               class:list={[
                 "flex",
                 "flex-col",
                 "gap-1.5",
-                "border-t",
-                "border-ink-900/12",
-                "pt-4",
+                "sm:border-t",
+                "sm:border-ink-900/12",
+                "sm:pt-3",
               ]}
             >
-              <span class:list={["text-lg", "font-light", "text-ink-900"]}>
+              <p
+                class:list={[
+                  "text-base",
+                  "font-light",
+                  "text-ink-900",
+                  "sm:text-lg",
+                ]}
+              >
                 {member.name}
-              </span>
-              <span
+              </p>
+              <p
                 class:list={[
                   "text-xs",
                   "uppercase",
-                  "ltr:tracking-[0.18em]",
+                  "ltr:tracking-[0.16em]",
                   "text-clay-600",
                 ]}
               >
                 {member.role}
-              </span>
+              </p>
             </figcaption>
           </Reveal>
         ))
