@@ -13,10 +13,23 @@ export default defineConfig({
     screenshot: "only-on-failure",
   },
   projects: [
-    { name: "desktop", use: { viewport: { width: 1440, height: 1000 } } },
+    {
+      name: "desktop",
+      testIgnore: "hero-video.spec.ts",
+      use: { viewport: { width: 1440, height: 1000 } },
+    },
     {
       name: "mobile",
+      testIgnore: "hero-video.spec.ts",
       use: { ...devices["iPhone 13"], defaultBrowserType: "chromium" },
+    },
+    {
+      name: "webkit",
+      testMatch: "hero-video.spec.ts",
+      use: {
+        browserName: "webkit",
+        viewport: { width: 1440, height: 1000 },
+      },
     },
   ],
   webServer: {

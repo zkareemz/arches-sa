@@ -193,24 +193,6 @@ const { hero } = content;
 
     if (!video) return;
 
-    video.addEventListener(
-      "loadeddata",
-      function () {
-        video
-          .play()
-          .then(() => {
-            // Immediately pause it once it starts playing
-            video.pause();
-            // Optional: Force it back to the exact start
-            video.currentTime = 0;
-          })
-          .catch((error) => {
-            console.log("Playback was prevented by the browser:", error);
-          });
-      },
-      { once: true },
-    ); // { once: true } ensures this only runs once
-
     var overlay = document.getElementById("hero-overlay");
     if (!video || !overlay) return;
 
@@ -313,6 +295,21 @@ const { hero } = content;
     overlay.style.setProperty("-webkit-mask-image", buildMask(0));
     overlay.style.setProperty("mask-image", buildMask(0));
 
+    function showPoster(error) {
+      overlay.style.display = "none";
+      console.warn(
+        "Hero video playback was prevented; showing the poster instead.",
+        error,
+      );
+    }
+
+    function primeVideo() {
+      return video.play().then(function () {
+        video.pause();
+        video.currentTime = 0;
+      });
+    }
+
     function startWipe() {
       var startTime = performance.now();
 
@@ -331,18 +328,25 @@ const { hero } = content;
         } else {
           // Reveal complete — start playback now. startWipe() runs after
           // `delay` and progress reaches 1 after `duration`, so this fires
-          // delay + duration ms after load.
-          video.play().catch(function () {});
+          // delay + duration ms after the opening frame has been primed.
+          video.play().catch(showPoster);
         }
       }
 
       requestAnimationFrame(tick);
     }
 
-    if (delay > 0) {
-      setTimeout(startWipe, delay);
-    } else {
-      startWipe();
-    }
+    // Decode and hold the opening frame before revealing the video. Keeping
+    // this work in one promise chain prevents WebKit's `loadeddata` event from
+    // pausing the final playback attempt after the wipe has already started.
+    primeVideo()
+      .then(function () {
+        if (delay > 0) {
+          setTimeout(startWipe, delay);
+        } else {
+          startWipe();
+        }
+      })
+      .catch(showPoster);
   })();
 </script>
