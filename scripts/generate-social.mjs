@@ -7,6 +7,10 @@ const logo = await fs.readFile(
   "utf8",
 );
 const output = new URL("../public/social/", import.meta.url);
+const shareBackground = new URL(
+  "../public/social/share-background.png",
+  import.meta.url,
+);
 await fs.mkdir(output, { recursive: true });
 await fs.writeFile(
   new URL("../public/logo.svg", import.meta.url),
@@ -19,6 +23,8 @@ const paths = logo
 
 for (const locale of ["ar", "en"]) {
   const rtl = locale === "ar";
+  const textAnchor = rtl ? "end" : "start";
+  const textX = rtl ? 680 : 72;
   const lines = rtl
     ? ["مكتب هندسي في الرياض", "تصميم معماري · إشراف هندسي · تصميم داخلي"]
     : [
@@ -26,15 +32,23 @@ for (const locale of ["ar", "en"]) {
         "Architecture · Supervision · Interior design",
       ];
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
-    <rect width="1200" height="630" fill="#1e1f28"/>
-    <path d="M920 630V280a170 170 0 0 1 340 0v350M960 630V280a130 130 0 0 1 260 0v350" fill="none" stroke="#854b28" stroke-width="3"/>
-    <g transform="translate(64 64) scale(1.1)">${paths}</g>
-    <rect x="64" y="255" width="80" height="5" fill="#b9794f"/>
-    <text x="600" y="360" text-anchor="middle" direction="${rtl ? "rtl" : "ltr"}" font-family="Arial, sans-serif" font-size="54" fill="#f9faf9">${lines[0]}</text>
-    <text x="600" y="432" text-anchor="middle" direction="${rtl ? "rtl" : "ltr"}" font-family="Arial, sans-serif" font-size="30" fill="#d8d8d1">${lines[1]}</text>
-    <text x="64" y="566" font-family="Arial, sans-serif" font-size="26" fill="#d8d8d1">arches.sa</text>
+    <defs>
+      <linearGradient id="copy-backdrop" x1="0" x2="1" y1="0" y2="0">
+        <stop offset="0" stop-color="#17191f" stop-opacity="0.9"/>
+        <stop offset="0.58" stop-color="#17191f" stop-opacity="0.72"/>
+        <stop offset="1" stop-color="#17191f" stop-opacity="0.04"/>
+      </linearGradient>
+    </defs>
+    <rect width="1200" height="630" fill="url(#copy-backdrop)"/>
+    <g transform="translate(72 62) scale(0.98)">${paths}</g>
+    <rect x="72" y="300" width="62" height="4" fill="#b9794f"/>
+    <text x="${textX}" y="390" text-anchor="${textAnchor}" direction="${rtl ? "rtl" : "ltr"}" font-family="Arial, sans-serif" font-size="48" font-weight="600" fill="#f9faf9">${lines[0]}</text>
+    <text x="${textX}" y="448" text-anchor="${textAnchor}" direction="${rtl ? "rtl" : "ltr"}" font-family="Arial, sans-serif" font-size="25" fill="#e0ddd5">${lines[1]}</text>
+    <text x="72" y="566" font-family="Arial, sans-serif" font-size="22" letter-spacing="1.5" fill="#e0ddd5">ARCHES.SA</text>
   </svg>`;
-  await sharp(Buffer.from(svg))
+  await sharp(shareBackground.pathname)
+    .resize(1200, 630, { fit: "cover" })
+    .composite([{ input: Buffer.from(svg) }])
     .png()
     .toFile(new URL(`${locale}.png`, output).pathname);
 }
