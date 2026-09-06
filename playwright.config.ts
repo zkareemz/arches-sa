@@ -1,34 +1,59 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const chromiumChannel = process.env.PLAYWRIGHT_CHANNEL
+  ? { channel: process.env.PLAYWRIGHT_CHANNEL }
+  : {};
+
 export default defineConfig({
   testDir: "./tests",
   fullyParallel: true,
   workers: 2,
   use: {
     baseURL: "http://127.0.0.1:4322",
-    browserName: "chromium",
-    ...(process.env.PLAYWRIGHT_CHANNEL
-      ? { channel: process.env.PLAYWRIGHT_CHANNEL }
-      : {}),
     screenshot: "only-on-failure",
   },
   projects: [
     {
       name: "desktop",
       testIgnore: "hero-video.spec.ts",
-      use: { viewport: { width: 1440, height: 1000 } },
+      use: {
+        browserName: "chromium",
+        ...chromiumChannel,
+        viewport: { width: 1440, height: 1000 },
+      },
     },
     {
       name: "mobile",
       testIgnore: "hero-video.spec.ts",
-      use: { ...devices["iPhone 13"], defaultBrowserType: "chromium" },
+      use: {
+        ...devices["iPhone 13"],
+        browserName: "chromium",
+        ...chromiumChannel,
+      },
     },
     {
-      name: "webkit",
+      name: "hero-chromium",
+      testMatch: "hero-video.spec.ts",
+      use: {
+        browserName: "chromium",
+        ...chromiumChannel,
+        viewport: { width: 1440, height: 1000 },
+      },
+    },
+    {
+      name: "hero-webkit",
       testMatch: "hero-video.spec.ts",
       use: {
         browserName: "webkit",
         viewport: { width: 1440, height: 1000 },
+      },
+    },
+    {
+      name: "hero-webkit-mobile",
+      testMatch: "hero-video.spec.ts",
+      use: {
+        ...devices["iPhone 13"],
+        browserName: "webkit",
       },
     },
   ],

@@ -42,12 +42,13 @@ const { hero } = content;
   <video
     id="hero-video"
     data-hero-video
-    poster="/background.jpg"
+    poster="/background-video-poster.jpg"
     aria-hidden="true"
+    autoplay
     muted
     playsinline
     loop
-    preload="metadata"
+    preload="auto"
     class:list={[
       "absolute",
       "inset-0",
@@ -58,6 +59,7 @@ const { hero } = content;
     ]}
   >
     <source src="/background.mp4" type="video/mp4" />
+    <source src="/background.webm" type="video/webm" />
   </video>
 
   <!-- Layer 2: Static image (masked away by the growing circle) -->
@@ -201,7 +203,9 @@ const { hero } = content;
     ).matches;
     if (reduceMotion) {
       overlay.style.display = "none";
+      video.removeAttribute("autoplay");
       video.pause();
+      video.dataset.heroState = "reduced-motion";
       return;
     }
 
@@ -295,22 +299,86 @@ const { hero } = content;
     overlay.style.setProperty("-webkit-mask-image", buildMask(0));
     overlay.style.setProperty("mask-image", buildMask(0));
 
-    function showPoster(error) {
-      overlay.style.display = "none";
+    var playbackTimeout = 2500;
+    var staticFallback = false;
+    var wipeStarted = false;
+    var wipeComplete = false;
+
+    function useStaticFallback(reason, error) {
+      if (staticFallback) return;
+
+      staticFallback = true;
+      video.removeAttribute("autoplay");
+      video.pause();
+      video.dataset.heroState = "fallback-" + reason;
       console.warn(
-        "Hero video playback was prevented; showing the poster instead.",
+        "Hero video is unavailable; continuing with the static hero.",
+        reason,
         error,
       );
     }
 
-    function primeVideo() {
-      return video.play().then(function () {
-        video.pause();
-        video.currentTime = 0;
-      });
+    function startPlayback() {
+      var playResult;
+
+      video.dataset.heroState = "play-pending";
+
+      try {
+        playResult = video.play();
+      } catch (error) {
+        useStaticFallback("exception", error);
+        return;
+      }
+
+      // Very old browsers did not return a Promise from play(). In that case,
+      // let the media events below report the eventual state.
+      if (!playResult || typeof playResult.then !== "function") return;
+
+      var settled = false;
+      var timeoutId = window.setTimeout(function () {
+        if (settled) return;
+        settled = true;
+        useStaticFallback(
+          "timeout",
+          new Error("Playback did not start in time."),
+        );
+      }, playbackTimeout);
+
+      playResult
+        .then(function () {
+          if (settled || staticFallback) {
+            video.pause();
+            return;
+          }
+
+          settled = true;
+          window.clearTimeout(timeoutId);
+          video.dataset.heroState = "playing";
+
+          // If playback became ready while the wipe was running, restart at
+          // the opening frame so the reveal still shows the intended sequence.
+          if (wipeStarted && !wipeComplete) {
+            video.currentTime = 0;
+          }
+        })
+        .catch(function (error) {
+          if (settled) return;
+          settled = true;
+          window.clearTimeout(timeoutId);
+          useStaticFallback(
+            error && error.name === "NotAllowedError" ? "policy" : "media",
+            error,
+          );
+        });
     }
 
     function startWipe() {
+      wipeStarted = true;
+
+      if (!staticFallback && !video.paused) {
+        video.currentTime = 0;
+      }
+
       var startTime = performance.now();
 
       function tick(now) {
@@ -326,27 +394,40 @@ const { hero } = content;
         if (progress < 1) {
           requestAnimationFrame(tick);
         } else {
-          // Reveal complete — start playback now. startWipe() runs after
-          // `delay` and progress reaches 1 after `duration`, so this fires
-          // delay + duration ms after the opening frame has been primed.
-          video.play().catch(showPoster);
+          wipeComplete = true;
+
+          // Removing the overlay guarantees a usable final state even when a
+          // browser does not support the animated CSS mask.
+          overlay.style.display = "none";
         }
       }
 
       requestAnimationFrame(tick);
     }
 
-    // Decode and hold the opening frame before revealing the video. Keeping
-    // this work in one promise chain prevents WebKit's `loadeddata` event from
-    // pausing the final playback attempt after the wipe has already started.
-    primeVideo()
-      .then(function () {
-        if (delay > 0) {
-          setTimeout(startWipe, delay);
-        } else {
-          startWipe();
-        }
-      })
-      .catch(showPoster);
+    video.addEventListener("playing", function () {
+      if (!staticFallback) video.dataset.heroState = "playing";
+    });
+    video.addEventListener("error", function () {
+      useStaticFallback("media", video.error);
+    });
+
+    function scheduleWipe() {
+      if (delay > 0) {
+        setTimeout(startWipe, delay);
+      } else {
+        startWipe();
+      }
+    }
+
+    // Playback and the visual reveal deliberately run independently. A slow,
+    // blocked, or unsupported video can no longer leave the mask at radius 0.
+    // The reveal clock starts only after the full page has loaded.
+    startPlayback();
+    if (document.readyState === "complete") {
+      scheduleWipe();
+    } else {
+      window.addEventListener("load", scheduleWipe, { once: true });
+    }
   })();
 </script>
