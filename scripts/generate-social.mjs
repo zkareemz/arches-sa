@@ -1,4 +1,4 @@
-// Rasterize a brand-native SVG composition for social platforms that need PNG.
+// Rasterize a compact, opaque JPEG for reliable social-crawler downloads.
 import fs from "node:fs/promises";
 import sharp from "sharp";
 
@@ -49,9 +49,10 @@ for (const locale of ["ar", "en"]) {
   await sharp(shareBackground.pathname)
     .resize(1200, 630, { fit: "cover" })
     .composite([{ input: Buffer.from(svg) }])
-    .png()
-    .toFile(new URL(`${locale}.png`, output).pathname);
+    .flatten({ background: "#17191f" })
+    .jpeg({ quality: 82, chromaSubsampling: "4:4:4", mozjpeg: true })
+    .toFile(new URL(`${locale}-v2.jpg`, output).pathname);
 }
 console.log(
-  "Generated Arabic and English social previews (1200 × 630) and public logo.",
+  "Generated compact Arabic and English social previews (1200 × 630 JPEG) and public logo.",
 );
