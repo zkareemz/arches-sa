@@ -15,6 +15,7 @@ interface Props {
 const locale = Astro.currentLocale || "ar";
 const content = getContent(locale);
 const dir = content.dir;
+const GA_MEASUREMENT_ID = "G-VM4HEGPWP0";
 
 const {
   title = content.seo.title,
@@ -107,6 +108,19 @@ const graph = [
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light dark" />
     <meta name="theme-color" content="#f9faf9" />
+    <script
+      is:inline
+      async
+      src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+    ></script>
+    <script is:inline define:vars={{ GA_MEASUREMENT_ID }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", GA_MEASUREMENT_ID);
+    </script>
     <script is:inline>
       (() => {
         let theme;
