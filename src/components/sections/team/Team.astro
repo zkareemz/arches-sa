@@ -13,7 +13,7 @@ const { content } = Astro.props;
 const { team } = content;
 ---
 
-<section id="team" class:list={["bg-quill-gray-50", "text-ink-900"]}>
+<section id="team" class:list={["bg-page", "text-heading"]}>
   <div
     class:list={[
       "mx-auto",
@@ -57,7 +57,7 @@ const { team } = content;
             "max-w-2xl",
             "text-base",
             "leading-relaxed",
-            "text-ink-500",
+            "text-copy",
             "sm:mx-auto",
             "sm:text-lg",
           ]}
@@ -71,7 +71,7 @@ const { team } = content;
       class:list={[
         "mt-14",
         "border-y",
-        "border-ink-900/12",
+        "border-rule",
         "sm:mx-auto",
         "sm:grid",
         "sm:max-w-xl",
@@ -93,7 +93,7 @@ const { team } = content;
               "gap-6",
               "py-6",
               "not-last:border-b",
-              "not-last:border-ink-900/12",
+              "not-last:border-rule",
               "sm:flex",
               "sm:flex-col",
               "sm:items-stretch",
@@ -115,7 +115,7 @@ const { team } = content;
                 "flex-col",
                 "gap-1.5",
                 "sm:border-t",
-                "sm:border-ink-900/12",
+                "sm:border-rule",
                 "sm:pt-3",
               ]}
             >
@@ -123,7 +123,7 @@ const { team } = content;
                 class:list={[
                   "text-base",
                   "font-light",
-                  "text-ink-900",
+                  "text-heading",
                   "sm:text-lg",
                 ]}
               >
@@ -134,7 +134,7 @@ const { team } = content;
                   "text-xs",
                   "uppercase",
                   "ltr:tracking-[0.16em]",
-                  "text-clay-600",
+                  "text-accent",
                 ]}
               >
                 {member.role}

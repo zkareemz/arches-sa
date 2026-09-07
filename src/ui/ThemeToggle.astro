@@ -1,0 +1,87 @@
+---
+import Moon from "../assets/moon.svg";
+import Sun from "../assets/sun.svg";
+
+interface Props {
+  darkLabel: string;
+  lightLabel: string;
+  class?: string;
+}
+
+const { darkLabel, lightLabel, class: className } = Astro.props;
+---
+
+<button
+  type="button"
+  data-theme-toggle
+  data-dark-label={darkLabel}
+  data-light-label={lightLabel}
+  aria-label={darkLabel}
+  aria-pressed="false"
+  title={darkLabel}
+  class:list={[
+    "relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full text-heading transition-colors hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
+    className,
+  ]}
+>
+  <Moon
+    data-theme-icon="moon"
+    class:list={[
+      "absolute h-5 w-5 scale-100 opacity-100 transition duration-300",
+      "motion-reduce:transition-none",
+    ]}
+    aria-hidden="true"
+  />
+  <Sun
+    data-theme-icon="sun"
+    class:list={[
+      "absolute h-5 w-5 scale-75 opacity-0 transition duration-300",
+      "motion-reduce:transition-none",
+    ]}
+    aria-hidden="true"
+  />
+</button>
+
+<style>
+  :global(html[data-theme="dark"]) [data-theme-icon="moon"] {
+    opacity: 0;
+    transform: scale(0.75);
+  }
+
+  :global(html[data-theme="dark"]) [data-theme-icon="sun"] {
+    opacity: 1;
+    transform: scale(1);
+  }
+</style>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>(
+    "[data-theme-toggle]",
+  );
+
+  const setToggleState = (theme: "light" | "dark") => {
+    if (!toggle) return;
+    const isDark = theme === "dark";
+    const label = isDark ? toggle.dataset.lightLabel : toggle.dataset.darkLabel;
+    toggle.ariaPressed = String(isDark);
+    toggle.ariaLabel = label ?? "";
+    toggle.title = label ?? "";
+  };
+
+  const currentTheme = () =>
+    document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+
+  setToggleState(currentTheme());
+
+  toggle?.addEventListener("click", () => {
+    const theme = currentTheme() === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = theme;
+    try {
+      localStorage.setItem("arches-theme", theme);
+    } catch {}
+    document
+      .querySelector<HTMLMetaElement>('meta[name="theme-color"]')
+      ?.setAttribute("content", theme === "dark" ? "#141520" : "#f9faf9");
+    setToggleState(theme);
+  });
+</script>

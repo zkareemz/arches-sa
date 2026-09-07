@@ -12,7 +12,7 @@ const { content } = Astro.props;
 const { who } = content;
 ---
 
-<section id="about" class:list={["bg-quill-gray-50", "text-ink-900"]}>
+<section id="about" class:list={["bg-page", "text-heading"]}>
   <div
     class:list={[
       "mx-auto",
@@ -54,17 +54,17 @@ const { who } = content;
               "flex-col",
               "gap-4",
               "border-t",
-              "border-ink-900/12",
+              "border-rule",
               "pt-6",
             ]}
           >
-            <span class:list={["text-sm", "font-medium", "text-clay-600"]}>
+            <span class:list={["text-sm", "font-medium", "text-accent"]}>
               0{i + 1}
             </span>
             <h3 class:list={["text-xl", "font-light", "tracking-tight"]}>
               {point.title}
             </h3>
-            <p class:list={["leading-relaxed", "text-ink-500"]}>{point.desc}</p>
+            <p class:list={["leading-relaxed", "text-copy"]}>{point.desc}</p>
           </Reveal>
         ))
       }

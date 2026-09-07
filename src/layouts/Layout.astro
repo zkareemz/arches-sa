@@ -105,6 +105,25 @@ const graph = [
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f9faf9" />
+    <script is:inline>
+      (() => {
+        let theme;
+        try {
+          theme = localStorage.getItem("arches-theme");
+        } catch {}
+        if (theme !== "light" && theme !== "dark") {
+          theme = matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+        }
+        document.documentElement.dataset.theme = theme;
+        document
+          .querySelector('meta[name="theme-color"]')
+          ?.setAttribute("content", theme === "dark" ? "#141520" : "#f9faf9");
+      })();
+    </script>
     <link rel="icon" href="/favicon/favicon.ico" sizes="any" />
     <link rel="icon" href="/favicon/favicon.svg" type="image/svg+xml" />
     <link
@@ -175,7 +194,6 @@ const graph = [
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={image} />
     <meta name="twitter:image:alt" content={content.seo.imageAlt} />
-    <meta name="theme-color" content="#1e1f28" />
   </head>
   <body
     class:list={[
@@ -183,9 +201,9 @@ const graph = [
       "flex-1",
       "flex-col",
       "min-h-svh",
-      "bg-quill-gray-50",
+      "bg-page",
       "font-sans",
-      "text-ink-900",
+      "text-heading",
       "antialiased",
     ]}
   >

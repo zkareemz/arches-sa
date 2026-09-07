@@ -15,7 +15,7 @@ const { content } = Astro.props;
 const { services } = content;
 ---
 
-<section id="services" class:list={["bg-quill-gray-100", "text-ink-900"]}>
+<section id="services" class:list={["bg-surface", "text-heading"]}>
   <div
     class:list={[
       "mx-auto",
@@ -66,14 +66,14 @@ const { services } = content;
                       "items-baseline",
                       "gap-3",
                       "border-t",
-                      "border-ink-900/12",
+                      "border-rule",
                       "py-4",
                       "transition-colors",
-                      "hover:text-clay-600",
+                      "hover:text-accent",
                     ]}
                   >
                     <span
-                      class:list={["text-sm", "font-medium", "text-clay-600"]}
+                      class:list={["text-sm", "font-medium", "text-accent"]}
                     >
                       {service.index}
                     </span>
@@ -112,7 +112,7 @@ const { services } = content;
                   "font-medium",
                   "uppercase",
                   "tracking-[0.22em]",
-                  "text-clay-600",
+                  "text-accent",
                 ]}
               >
                 {service.label}
@@ -127,10 +127,10 @@ const { services } = content;
               >
                 {service.title}
               </h3>
-              <p class:list={["text-lg", "font-light", "text-clay-700"]}>
+              <p class:list={["text-lg", "font-light", "text-accent-strong"]}>
                 {service.subtitle}
               </p>
-              <p class:list={["max-w-2xl", "leading-relaxed", "text-ink-500"]}>
+              <p class:list={["max-w-2xl", "leading-relaxed", "text-copy"]}>
                 {service.p}
               </p>
               <div

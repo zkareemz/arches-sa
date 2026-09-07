@@ -12,7 +12,7 @@ const { content } = Astro.props;
 const { why } = content;
 ---
 
-<section id="why" class:list={["bg-quill-gray-50", "text-ink-900"]}>
+<section id="why" class:list={["bg-page", "text-heading"]}>
   <div
     class:list={[
       "mx-auto",
@@ -46,21 +46,21 @@ const { why } = content;
               "flex-col",
               "gap-3",
               "border-t",
-              "border-ink-900/12",
+              "border-rule",
               "py-8",
               "sm:px-8",
               "sm:[&:nth-child(odd)]:ps-0",
               "sm:[&:nth-child(even)]:border-s",
-              "sm:[&:nth-child(even)]:border-ink-900/12",
+              "sm:[&:nth-child(even)]:border-rule",
             ]}
           >
-            <span class:list={["text-sm", "font-medium", "text-clay-600"]}>
+            <span class:list={["text-sm", "font-medium", "text-accent"]}>
               0{i + 1}
             </span>
             <h3 class:list={["text-2xl", "font-light", "tracking-tight"]}>
               {item.title}
             </h3>
-            <p class:list={["max-w-md", "leading-relaxed", "text-ink-500"]}>
+            <p class:list={["max-w-md", "leading-relaxed", "text-copy"]}>
               {item.desc}
             </p>
           </Reveal>

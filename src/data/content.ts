@@ -58,6 +58,8 @@ export interface SiteContent {
     breadcrumb: string;
     menu: string;
     navigation: string;
+    darkMode: string;
+    lightMode: string;
     serviceDetails: string;
     serviceScope: string;
     relatedServices: string;
@@ -204,6 +206,8 @@ const ar: SiteContent = {
     breadcrumb: "مسار الصفحة",
     menu: "القائمة",
     navigation: "التنقل الرئيسي",
+    darkMode: "تفعيل الوضع الداكن",
+    lightMode: "تفعيل الوضع الفاتح",
     serviceDetails: "تعرّف على الخدمة",
     serviceScope: "ماذا تشمل الخدمة؟",
     relatedServices: "خدمات متكاملة لمشروعك",
@@ -519,6 +523,8 @@ const en: SiteContent = {
     breadcrumb: "Breadcrumb",
     menu: "Menu",
     navigation: "Main navigation",
+    darkMode: "Switch to dark mode",
+    lightMode: "Switch to light mode",
     serviceDetails: "Explore this service",
     serviceScope: "What does the service include?",
     relatedServices: "Integrated services for your project",

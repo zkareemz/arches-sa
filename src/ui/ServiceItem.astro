@@ -10,9 +10,9 @@ interface Props {
 const { title, desc, number, tone = "dark", class: className } = Astro.props;
 
 const borderClass =
-  tone === "light" ? "border-quill-gray-50/15" : "border-ink-900/12";
-const titleColor = tone === "light" ? "text-quill-gray-50" : "text-ink-900";
-const descColor = tone === "light" ? "text-quill-gray-300" : "text-ink-500";
+  tone === "light" ? "border-quill-gray-50/15" : "border-rule";
+const titleColor = tone === "light" ? "text-quill-gray-50" : "text-heading";
+const descColor = tone === "light" ? "text-quill-gray-300" : "text-copy";
 ---
 
 <div
@@ -29,7 +29,7 @@ const descColor = tone === "light" ? "text-quill-gray-300" : "text-ink-500";
   <div class:list={["flex", "items-baseline", "gap-2"]}>
     {
       number && (
-        <span class:list={["text-xs", "font-medium", "text-clay-600"]}>
+        <span class:list={["text-xs", "font-medium", "text-accent"]}>
           {number}
         </span>
       )

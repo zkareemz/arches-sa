@@ -15,12 +15,7 @@ const { award } = content;
 
 <section
   id="award"
-  class:list={[
-    "relative",
-    "overflow-hidden",
-    "bg-quill-gray-100",
-    "text-ink-900",
-  ]}
+  class:list={["relative", "overflow-hidden", "bg-surface", "text-heading"]}
 >
   <span
     aria-hidden="true"
@@ -34,7 +29,7 @@ const { award } = content;
       "text-[7rem]",
       "font-light",
       "leading-none",
-      "text-ink-900/4",
+      "text-heading/4",
       "sm:text-[12rem]",
       "md:top-10",
     ]}
@@ -75,7 +70,7 @@ const { award } = content;
               "translate-x-5",
               "translate-y-5",
               "rounded-sm",
-              "bg-clay-600",
+              "bg-accent",
               "rtl:-translate-x-5",
             ]}
           >
@@ -121,14 +116,14 @@ const { award } = content;
             "flex-col",
             "gap-3",
             "border-t",
-            "border-ink-900/12",
+            "border-rule",
             "pt-5",
           ]}
         >
-          <span class:list={["text-sm", "font-medium", "text-clay-600"]}>
+          <span class:list={["text-sm", "font-medium", "text-accent"]}>
             {award.organization} — {award.year}
           </span>
-          <p class:list={["max-w-xl", "leading-relaxed", "text-ink-500"]}>
+          <p class:list={["max-w-xl", "leading-relaxed", "text-copy"]}>
             {award.desc}
           </p>
         </div>

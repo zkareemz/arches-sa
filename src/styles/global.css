@@ -50,11 +50,36 @@
   --color-whatsapp: #25d366;
   --color-whatsapp-600: #25d366;
   --color-whatsapp-700: #1da851;
+
+  /* Semantic brand roles — these are remapped for the selected colour mode. */
+  --color-page: #f9faf9;
+  --color-surface: #f4f5f4;
+  --color-heading: #1e1f28;
+  --color-copy: #494a58;
+  --color-muted: #2a2b36;
+  --color-rule: rgb(30 31 40 / 12%);
+  --color-accent: #854b28;
+  --color-accent-strong: #6d3e22;
+  --color-accent-contrast: #f9faf9;
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
+    color-scheme: light;
+  }
+
+  html[data-theme="dark"] {
+    color-scheme: dark;
+    --color-page: #141520;
+    --color-surface: #1e1f28;
+    --color-heading: #e8e8e3;
+    --color-copy: #aaaa9c;
+    --color-muted: #d8d8d1;
+    --color-rule: rgb(216 216 209 / 14%);
+    --color-accent: #cd9c79;
+    --color-accent-strong: #e0c0a8;
+    --color-accent-contrast: #141520;
   }
 
   body {
@@ -115,7 +140,7 @@
     position: absolute;
     inset: 0;
     z-index: 40;
-    background: var(--color-quill-gray-50);
+    background: var(--color-page);
     pointer-events: none;
     transform-origin: 50% 50%;
     will-change: transform, opacity;
@@ -137,7 +162,7 @@
     width: var(--logo-w);
     height: auto;
     transform: translate(-50%, -50%);
-    color: var(--color-ink);
+    color: var(--color-heading);
     pointer-events: none;
     animation: hero-logo-out 0.8s ease var(--logo-out-at) forwards;
   }

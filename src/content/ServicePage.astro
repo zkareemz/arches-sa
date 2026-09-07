@@ -26,24 +26,24 @@ const photos = category
   : [];
 ---
 
-<article class:list={["bg-quill-gray-50 text-ink-900", className]}>
+<article class:list={["bg-page text-heading", className]}>
   <header class:list={["mx-auto max-w-7xl px-6 pb-16 pt-32 sm:px-10 sm:pt-40"]}>
     <nav
       aria-label={content.ui.breadcrumb}
-      class:list={["mb-8 text-sm text-ink-500"]}
+      class:list={["mb-8 text-sm text-copy"]}
     >
       <ol class:list={["flex flex-wrap items-center gap-3"]}>
         <li>
           <a
             href={locale === "ar" ? "/" : "/en/"}
-            class:list={["hover:text-clay-600"]}>{content.ui.home}</a
+            class:list={["hover:text-accent"]}>{content.ui.home}</a
           >
         </li>
         <li aria-hidden="true">/</li>
         <li aria-current="page">{service.title}</li>
       </ol>
     </nav>
-    <p class:list={["mb-5 text-sm text-clay-600"]}>
+    <p class:list={["mb-5 text-sm text-accent"]}>
       {content.hero.eyebrow} — {service.title}
     </p>
     <h1
@@ -53,7 +53,7 @@ const photos = category
     >
       {service.heading}
     </h1>
-    <p class:list={["mt-8 max-w-3xl text-lg leading-relaxed text-ink-500"]}>
+    <p class:list={["mt-8 max-w-3xl text-lg leading-relaxed text-copy"]}>
       {service.p}
     </p>
     <div class:list={["mt-8"]}>
@@ -61,10 +61,7 @@ const photos = category
     </div>
   </header>
 
-  <section
-    class:list={["bg-quill-gray-100"]}
-    aria-label={content.ui.serviceScope}
-  >
+  <section class:list={["bg-surface"]} aria-label={content.ui.serviceScope}>
     <div
       class:list={[
         "mx-auto grid max-w-7xl gap-12 px-6 py-16 sm:px-10 lg:grid-cols-2 lg:gap-20",
@@ -74,13 +71,15 @@ const photos = category
         <h2 class:list={["text-3xl leading-snug font-light"]}>
           {content.ui.serviceScope}
         </h2>
-        <p class:list={["mt-5 text-lg text-clay-700"]}>{service.subtitle}</p>
+        <p class:list={["mt-5 text-lg text-accent-strong"]}>
+          {service.subtitle}
+        </p>
         <ul class:list={["mt-8 grid gap-6"]}>
           {
             service.items.map((item) => (
-              <li class:list={["border-t border-ink-900/15 pt-5"]}>
+              <li class:list={["border-t border-rule pt-5"]}>
                 <h3 class:list={["text-xl"]}>{item.title}</h3>
-                <p class:list={["mt-2 leading-relaxed text-ink-500"]}>
+                <p class:list={["mt-2 leading-relaxed text-copy"]}>
                   {item.desc}
                 </p>
               </li>
@@ -95,7 +94,7 @@ const photos = category
               <h2 class:list={["text-2xl leading-snug font-light"]}>
                 {point.title}
               </h2>
-              <p class:list={["mt-4 leading-relaxed text-ink-500"]}>
+              <p class:list={["mt-4 leading-relaxed text-copy"]}>
                 {point.desc}
               </p>
             </Reveal>
@@ -129,7 +128,7 @@ const photos = category
                   class:list={["aspect-[4/3] w-full rounded-sm object-cover"]}
                 />
               </a>
-              <figcaption class:list={["mt-3 text-sm text-ink-500"]}>
+              <figcaption class:list={["mt-3 text-sm text-copy"]}>
                 {service.title} — {content.ui.projectExamples}
               </figcaption>
             </figure>
@@ -151,11 +150,11 @@ const photos = category
             <a
               href={servicePath(item.slug, locale)}
               class:list={[
-                "rounded-sm border border-ink-900/15 p-6 transition-colors hover:border-clay-600",
+                "rounded-sm border border-rule p-6 transition-colors hover:border-accent",
               ]}
             >
-              <h3 class:list={["text-xl text-clay-700"]}>{item.title}</h3>
-              <p class:list={["mt-3 leading-relaxed text-ink-500"]}>
+              <h3 class:list={["text-xl text-accent-strong"]}>{item.title}</h3>
+              <p class:list={["mt-3 leading-relaxed text-copy"]}>
                 {item.subtitle}
               </p>
             </a>
