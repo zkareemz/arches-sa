@@ -466,6 +466,7 @@ const ar: SiteContent = {
       {
         name: "م. ابراهيم القصير",
         role: "الشريك المؤسس — معماري",
+        bio: "بكالوريوس عمارة من جامعة الملك سعود | ماجستير إدارة المشاريع من جامعة نيو ساوث ويلز، أستراليا",
         image: IMG.team1,
       },
       {
@@ -788,7 +789,7 @@ const en: SiteContent = {
   },
   team: {
     eyebrow: "Our team",
-    title: "Meet the team",
+    title: "Meet the Founders",
     intro:
       "A diverse range of expertise brought together to bring your vision to life",
     members: [
@@ -801,6 +802,7 @@ const en: SiteContent = {
       {
         name: "Turki Alhussaini",
         role: "Founding Partner — Architect",
+        bio: "King Saud University — College of Architecture and Building Sciences",
         image: IMG.team2,
       },
     ],
