@@ -472,7 +472,7 @@ const ar: SiteContent = {
       {
         name: "م. تركي الحصيني",
         role: "الشريك المؤسس — معماري",
-        bio: "جامعة الملك سعود - كلية العمارة وعلوم البناء",
+        bio: "بكالوريوس عمارة من جامعة الملك سعود",
         image: IMG.team2,
       },
     ],
@@ -802,7 +802,7 @@ const en: SiteContent = {
       {
         name: "Turki Alhussaini",
         role: "Founding Partner — Architect",
-        bio: "King Saud University — College of Architecture and Building Sciences",
+        bio: "Bachelor of Architecture from King Saud University",
         image: IMG.team2,
       },
     ],
