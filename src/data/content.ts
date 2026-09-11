@@ -48,6 +48,7 @@ export interface Award {
 export interface TeamMember {
   name: string;
   role: string;
+  bio?: string;
   image: string;
 }
 
@@ -470,6 +471,7 @@ const ar: SiteContent = {
       {
         name: "م. تركي الحصيني",
         role: "الشريك المؤسس — معماري",
+        bio: "جامعة الملك سعود - كلية العمارة وعلوم البناء",
         image: IMG.team2,
       },
     ],
@@ -793,6 +795,7 @@ const en: SiteContent = {
       {
         name: "Ibrahim Alqusair",
         role: "Founding Partner — Architect",
+        bio: "Bachelor of Architecture from KSU | Master of Projects Management from UNSW Australia",
         image: IMG.team1,
       },
       {

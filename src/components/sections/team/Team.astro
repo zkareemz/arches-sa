@@ -139,6 +139,17 @@ const { team } = content;
               >
                 {member.role}
               </p>
+              {member.bio && (
+                <p
+                  class:list={[
+                    "text-sm",
+                    "leading-relaxed",
+                    "text-copy",
+                  ]}
+                >
+                  {member.bio}
+                </p>
+              )}
             </figcaption>
           </Reveal>
         ))
