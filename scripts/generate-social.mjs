@@ -1,5 +1,6 @@
 // Rasterize a compact, opaque JPEG for reliable social-crawler downloads.
 import fs from "node:fs/promises";
+import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 
 const logo = await fs.readFile(
@@ -46,12 +47,12 @@ for (const locale of ["ar", "en"]) {
     <text x="${textX}" y="448" text-anchor="${textAnchor}" direction="${rtl ? "rtl" : "ltr"}" font-family="Arial, sans-serif" font-size="25" fill="#e0ddd5">${lines[1]}</text>
     <text x="72" y="566" font-family="Arial, sans-serif" font-size="22" letter-spacing="1.5" fill="#e0ddd5">ARCHES.SA</text>
   </svg>`;
-  await sharp(shareBackground.pathname)
+  await sharp(fileURLToPath(shareBackground))
     .resize(1200, 630, { fit: "cover" })
     .composite([{ input: Buffer.from(svg) }])
     .flatten({ background: "#17191f" })
     .jpeg({ quality: 82, chromaSubsampling: "4:4:4", mozjpeg: true })
-    .toFile(new URL(`${locale}-v2.jpg`, output).pathname);
+    .toFile(fileURLToPath(new URL(`${locale}-v2.jpg`, output)));
 }
 console.log(
   "Generated compact Arabic and English social previews (1200 × 630 JPEG) and public logo.",
