@@ -492,8 +492,8 @@ const ar: SiteContent = {
     whatsappLabel: "WhatsApp",
     mapLabel: "الموقع",
     // Arches Engineering Consultancy office, Riyadh.
-    mapLat: 24.7975681,
-    mapLng: 46.6451025,
+    mapLat: 24.797574,
+    mapLng: 46.6451009,
     mapZoom: 15,
     directionsLabel: "الاتجاهات على الخريطة",
     form: {
@@ -823,8 +823,8 @@ const en: SiteContent = {
     whatsappLabel: "WhatsApp",
     mapLabel: "Location",
     // Arches Engineering Consultancy office, Riyadh.
-    mapLat: 24.7975681,
-    mapLng: 46.6451025,
+    mapLat: 24.797574,
+    mapLng: 46.6451009,
     mapZoom: 15,
     directionsLabel: "Get directions",
     form: {
