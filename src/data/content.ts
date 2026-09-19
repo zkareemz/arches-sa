@@ -37,6 +37,11 @@ export interface Project {
   image: string;
 }
 
+export interface ProjectVideo {
+  id: string;
+  title: string;
+}
+
 export interface Award {
   year: string;
   awardName: string;
@@ -80,6 +85,8 @@ export interface SiteContent {
       next: string;
       fullscreen: string;
       exitFullscreen: string;
+      playVideo: string;
+      closeVideo: string;
     };
   };
   dir: "rtl" | "ltr";
@@ -116,6 +123,8 @@ export interface SiteContent {
     title: string;
     intro: string;
     items: Project[];
+    videoGalleryTitle: string;
+    videos: ProjectVideo[];
   };
   award: {
     eyebrow: string;
@@ -229,6 +238,8 @@ const ar: SiteContent = {
       next: "الصورة التالية",
       fullscreen: "ملء الشاشة",
       exitFullscreen: "الخروج من ملء الشاشة",
+      playVideo: "تشغيل الفيديو",
+      closeVideo: "إغلاق الفيديو",
     },
   },
   dir: "rtl",
@@ -447,6 +458,12 @@ const ar: SiteContent = {
       { name: "شقق العليا", type: "سكني", image: IMG.project5 },
       { name: "ملاذ الواحة", type: "تصميم داخلي", image: IMG.project6 },
     ],
+    videoGalleryTitle: "فيديوهات",
+    videos: [
+      { id: "Rp5MGOSAg5o", title: "فيلا السليمانية 3" },
+      { id: "eBfpxVO5yOY", title: "فيلا السليمانية 2" },
+      { id: "Uf-OolW69qY", title: "فيلا حي السليمانية" },
+    ],
   },
   award: {
     eyebrow: "تقدير وتميّز",
@@ -549,6 +566,8 @@ const en: SiteContent = {
       next: "Next photo",
       fullscreen: "Full screen",
       exitFullscreen: "Exit full screen",
+      playVideo: "Play video",
+      closeVideo: "Close video",
     },
   },
   dir: "ltr",
@@ -775,6 +794,12 @@ const en: SiteContent = {
       { name: "Desert Retreat", type: "Architecture", image: IMG.project4 },
       { name: "Olaya Apartments", type: "Residential", image: IMG.project5 },
       { name: "Oasis Hideaway", type: "Interior Design", image: IMG.project6 },
+    ],
+    videoGalleryTitle: "Videos",
+    videos: [
+      { id: "Rp5MGOSAg5o", title: "فيلا السليمانية 3" },
+      { id: "eBfpxVO5yOY", title: "فيلا السليمانية 2" },
+      { id: "Uf-OolW69qY", title: "فيلا حي السليمانية" },
     ],
   },
   award: {
