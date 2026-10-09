@@ -146,14 +146,65 @@ const photoLabel = (n: number) =>
       }
     </div>
 
-    <div class="border-t border-rule py-16 sm:py-20">
+    <div data-video-carousel class="border-t border-rule py-16 sm:py-20">
       <Reveal>
         <h3 class="text-2xl font-light text-heading sm:text-3xl">
           {projects.videoGalleryTitle}
         </h3>
       </Reveal>
 
+      <div class:list={["mt-6", "hidden", "justify-end", "gap-3", "lg:flex"]}>
+        {
+          [
+            {
+              action: "previous",
+              label: projects.previousVideo,
+              path: "M15 5l-7 7 7 7",
+            },
+            { action: "next", label: projects.nextVideo, path: "M9 5l7 7-7 7" },
+          ].map(({ action, label, path }) => (
+            <button
+              type="button"
+              data-video-action={action}
+              aria-label={label}
+              aria-controls="video-track"
+              class:list={[
+                "flex",
+                "h-11",
+                "w-11",
+                "items-center",
+                "justify-center",
+                "rounded-sm",
+                "border",
+                "border-rule",
+                "hover:bg-ink-900/10",
+                "focus-visible:outline-2",
+                "focus-visible:outline-clay-500",
+                "disabled:opacity-30",
+                "disabled:cursor-default",
+              ]}
+            >
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                class:list={["h-5", "w-5", "rtl:-scale-x-100"]}
+              >
+                <path d={path} />
+              </svg>
+            </button>
+          ))
+        }
+      </div>
+
       <div
+        id="video-track"
+        data-video-track
+        role="region"
+        aria-label={projects.videoGalleryTitle}
+        tabindex="0"
         class:list={[
           "mt-8",
           "grid",
@@ -161,11 +212,21 @@ const photoLabel = (n: number) =>
           "gap-6",
           "sm:mt-10",
           "sm:grid-cols-3",
+          "lg:flex",
+          "lg:overflow-x-auto",
+          "lg:snap-x",
+          "lg:snap-mandatory",
+          "pb-3",
+          "focus-visible:outline-2",
+          "focus-visible:outline-clay-500",
         ]}
       >
         {
           projects.videos.map((video, i) => (
-            <Reveal delay={i * 120}>
+            <Reveal
+              delay={i * 120}
+              class="lg:min-w-0 lg:shrink-0 lg:basis-[calc((100%-4.5rem)/3.25)] lg:snap-start"
+            >
               <figure class:list={["w-full"]}>
                 <div
                   class:list={[
@@ -444,5 +505,51 @@ const photoLabel = (n: number) =>
 
   <script>
     import "../../../scripts/gallery.ts";
+
+    const carousel = document.querySelector<HTMLElement>(
+      "[data-video-carousel]",
+    );
+    const track = carousel?.querySelector<HTMLElement>("[data-video-track]");
+    const previous = carousel?.querySelector<HTMLButtonElement>(
+      '[data-video-action="previous"]',
+    );
+    const next = carousel?.querySelector<HTMLButtonElement>(
+      '[data-video-action="next"]',
+    );
+
+    if (track && previous && next) {
+      const rtl = getComputedStyle(track).direction === "rtl";
+      const updateButtons = () => {
+        const viewport = track.getBoundingClientRect();
+        const first = track.firstElementChild?.getBoundingClientRect();
+        const last = track.lastElementChild?.getBoundingClientRect();
+        if (!first || !last) return;
+        previous.disabled = rtl
+          ? first.right <= viewport.right + 2
+          : first.left >= viewport.left - 2;
+        next.disabled = rtl
+          ? last.left >= viewport.left - 2
+          : last.right <= viewport.right + 2;
+      };
+      const move = (direction: number) => {
+        const card = track.firstElementChild;
+        if (!card) return;
+        const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+        track.scrollBy({
+          left:
+            direction *
+            (rtl ? -1 : 1) *
+            (card.getBoundingClientRect().width + gap),
+          behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
+            ? "instant"
+            : "smooth",
+        });
+      };
+      previous.addEventListener("click", () => move(-1));
+      next.addEventListener("click", () => move(1));
+      track.addEventListener("scroll", updateButtons, { passive: true });
+      new ResizeObserver(updateButtons).observe(track);
+      updateButtons();
+    }
   </script>
 </section>

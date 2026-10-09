@@ -124,6 +124,8 @@ export interface SiteContent {
     intro: string;
     items: Project[];
     videoGalleryTitle: string;
+    previousVideo: string;
+    nextVideo: string;
     videos: ProjectVideo[];
   };
   award: {
@@ -459,6 +461,8 @@ const ar: SiteContent = {
       { name: "ملاذ الواحة", type: "تصميم داخلي", image: IMG.project6 },
     ],
     videoGalleryTitle: "فيديوهات",
+    previousVideo: "الفيديو السابق",
+    nextVideo: "الفيديو التالي",
     videos: [
       { id: "ARJs46guKLc", title: "فيلا السليمانية" },
       { id: "TfE0JXQ-jn4", title: "فيلا السلمانية 2" },
@@ -797,6 +801,8 @@ const en: SiteContent = {
       { name: "Oasis Hideaway", type: "Interior Design", image: IMG.project6 },
     ],
     videoGalleryTitle: "Videos",
+    previousVideo: "Previous video",
+    nextVideo: "Next video",
     videos: [
       { id: "ARJs46guKLc", title: "Alsulimania Villa" },
       { id: "TfE0JXQ-jn4", title: "Alsalmania Villa 2" },
