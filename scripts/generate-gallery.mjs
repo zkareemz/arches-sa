@@ -258,14 +258,6 @@ const main = async () => {
 
     const entries = await readDir(catDir);
 
-    // direct images on the category (e.g. residential/1.jpg)
-    const directFiles = entries
-      .filter((e) => e.isFile() && isImage(e.name))
-      .map((e) => e.name)
-      .sort((a, b) =>
-        a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" }),
-      );
-
     const projectNames = entries
       .filter((e) => e.isDirectory() && !e.name.startsWith("."))
       .map((e) => e.name)

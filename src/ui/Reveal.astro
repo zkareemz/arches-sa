@@ -1,12 +1,14 @@
 ---
+import type { HTMLTag } from "astro/types";
+
 interface Props {
-  as?: string;
+  as?: HTMLTag;
   delay?: number;
   class?: string;
   id?: string;
 }
 
-const { as = "div", delay = 0, class: className, id } = Astro.props;
+const { as = "div", delay = 0, class: className, id }: Props = Astro.props;
 const Tag = as;
 ---
 
