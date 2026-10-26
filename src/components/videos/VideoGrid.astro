@@ -7,25 +7,36 @@ interface Props {
   videos: ProjectVideo[];
   locale: "ar" | "en";
   limit?: number;
+  randomizeOnLoad?: boolean;
   class?: string;
 }
 
-const { videos, locale, limit, class: className } = Astro.props;
-const orderedVideos = videos
-  .filter((video) => video.published)
-  .sort((a, b) => {
-    const featuredOrder =
-      Number(b.featured ?? false) - Number(a.featured ?? false);
-    if (featuredOrder !== 0) return featuredOrder;
-    if (a.publishedAt && b.publishedAt) {
-      return b.publishedAt.localeCompare(a.publishedAt);
-    }
-    if (a.publishedAt) return -1;
-    if (b.publishedAt) return 1;
-    return 0;
-  });
-const visibleVideos =
-  limit === undefined ? orderedVideos : orderedVideos.slice(0, limit);
+const {
+  videos,
+  locale,
+  limit,
+  randomizeOnLoad = false,
+  class: className,
+} = Astro.props;
+const publishedVideos = videos.filter((video) => video.published);
+const orderedVideos = randomizeOnLoad
+  ? publishedVideos
+  : [...publishedVideos].sort((a, b) => {
+      const featuredOrder =
+        Number(b.featured ?? false) - Number(a.featured ?? false);
+      if (featuredOrder !== 0) return featuredOrder;
+      if (a.publishedAt && b.publishedAt) {
+        return b.publishedAt.localeCompare(a.publishedAt);
+      }
+      if (a.publishedAt) return -1;
+      if (b.publishedAt) return 1;
+      return 0;
+    });
+const renderedVideos =
+  randomizeOnLoad || limit === undefined
+    ? orderedVideos
+    : orderedVideos.slice(0, limit);
+const fallbackCount = limit ?? renderedVideos.length;
 ---
 
 <div
@@ -38,19 +49,114 @@ const visibleVideos =
     "lg:grid-cols-3",
     className,
   ]}
+  data-randomize-on-load={randomizeOnLoad ? "true" : undefined}
+  data-selection-limit={randomizeOnLoad ? fallbackCount : undefined}
 >
-  {visibleVideos.map((video) => <VideoCard video={video} locale={locale} />)}
+  {
+    renderedVideos.map((video, index) => (
+      <VideoCard
+        video={video}
+        locale={locale}
+        position={index < fallbackCount ? index + 1 : undefined}
+        class={randomizeOnLoad && index >= fallbackCount ? "hidden" : undefined}
+      />
+    ))
+  }
 </div>
 
 <script>
-  const trackVideoCard = (eventName: string) => {
-    (window as Window & { plausible?: (name: string) => void }).plausible?.(
-      eventName,
-    );
+  type PlausibleOptions = { props: Record<string, string> };
+  const trackVideoCard = (eventName: string, options?: PlausibleOptions) => {
+    (
+      window as Window & {
+        plausible?: (name: string, options?: PlausibleOptions) => void;
+      }
+    ).plausible?.(eventName, options);
   };
   document
     .querySelectorAll<HTMLAnchorElement>("[data-video-card]")
     .forEach((card) => {
-      card.addEventListener("click", () => trackVideoCard("Video Card Click"));
+      card.addEventListener("click", () => {
+        const position = card.dataset.videoPosition;
+        trackVideoCard(
+          "Video Card Click",
+          position ? { props: { position } } : undefined,
+        );
+      });
+    });
+
+  document
+    .querySelectorAll<HTMLElement>('[data-randomize-on-load="true"]')
+    .forEach((grid) => {
+      const cards = Array.from(
+        grid.querySelectorAll<HTMLAnchorElement>("[data-video-card]"),
+      );
+      const limit = Number(grid.dataset.selectionLimit) || 3;
+      const stateKey = "homepageVideoSelection";
+      const existingState =
+        typeof history.state === "object" && history.state !== null
+          ? (history.state as Record<string, unknown>)
+          : {};
+      const navigationEntry = performance.getEntriesByType(
+        "navigation",
+      )[0] as PerformanceNavigationTiming | undefined;
+      const navigationType = navigationEntry?.type;
+      const savedSelection = existingState[stateKey];
+      const savedCards =
+        navigationType === "back_forward" && Array.isArray(savedSelection)
+          ? savedSelection
+              .map((slug) =>
+                cards.find((card) => card.dataset.videoCard === slug),
+              )
+              .filter((card): card is HTMLAnchorElement => Boolean(card))
+              .slice(0, limit)
+          : [];
+
+      const shuffledCards = [...cards];
+      if (savedCards.length === 0) {
+        for (let index = shuffledCards.length - 1; index > 0; index--) {
+          const swapIndex = Math.floor(Math.random() * (index + 1));
+          [shuffledCards[index], shuffledCards[swapIndex]] = [
+            shuffledCards[swapIndex],
+            shuffledCards[index],
+          ];
+        }
+      }
+
+      const selectedCards =
+        savedCards.length > 0 ? savedCards : shuffledCards.slice(0, limit);
+      const selectedSlugs = new Set(
+        selectedCards.map((card) => card.dataset.videoCard),
+      );
+      const orderedCards =
+        savedCards.length > 0
+          ? [
+              ...selectedCards,
+              ...cards.filter(
+                (card) => !selectedSlugs.has(card.dataset.videoCard),
+              ),
+            ]
+          : shuffledCards;
+
+      orderedCards.forEach((card) => {
+        const position = selectedCards.indexOf(card);
+        card.classList.toggle("hidden", position === -1);
+        if (position === -1) {
+          delete card.dataset.videoPosition;
+        } else {
+          card.dataset.videoPosition = String(position + 1);
+        }
+      });
+      grid.replaceChildren(...orderedCards);
+
+      if (savedCards.length === 0) {
+        history.replaceState(
+          {
+            ...existingState,
+            [stateKey]: selectedCards.map((card) => card.dataset.videoCard),
+          },
+          "",
+        );
+      }
     });
 </script>

@@ -4,10 +4,11 @@ import type { ProjectVideo } from "../../data/content";
 interface Props {
   video: ProjectVideo;
   locale: "ar" | "en";
+  position?: number;
   class?: string;
 }
 
-const { video, locale, class: className } = Astro.props;
+const { video, locale, position, class: className } = Astro.props;
 const href = `${locale === "en" ? "/en" : ""}/videos/${video.slug}/`;
 const dateLabel = video.publishedAt
   ? new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(
@@ -19,6 +20,7 @@ const dateLabel = video.publishedAt
 <a
   href={href}
   data-video-card={video.slug}
+  data-video-position={position}
   class:list={[
     "group",
     "block",
