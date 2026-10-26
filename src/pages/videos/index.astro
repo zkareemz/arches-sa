@@ -1,0 +1,14 @@
+---
+import VideoLibraryPage from "../../components/videos/VideoLibraryPage.astro";
+import { getContent } from "../../data/content";
+import Layout from "../../layouts/Layout.astro";
+
+const content = getContent("ar");
+---
+
+<Layout
+  title={`${content.videoLibrary.title} | ${content.footer.tagline}`}
+  description={content.videoLibrary.description}
+>
+  <VideoLibraryPage content={content} />
+</Layout>

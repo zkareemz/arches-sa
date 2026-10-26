@@ -1,0 +1,59 @@
+---
+import type { SiteContent } from "../data/content";
+
+interface Props {
+  content: SiteContent;
+  class?: string;
+}
+
+const { content, class: className } = Astro.props;
+---
+
+<section
+  class:list={[
+    "mx-auto",
+    "w-full",
+    "max-w-4xl",
+    "px-6",
+    "pb-24",
+    "pt-32",
+    "sm:px-10",
+    "sm:pb-32",
+    "sm:pt-40",
+    className,
+  ]}
+>
+  <header class:list={["mb-12", "max-w-3xl", "sm:mb-16"]}>
+    <h1
+      class:list={[
+        "text-4xl",
+        "font-light",
+        "tracking-tight",
+        "text-heading",
+        "sm:text-6xl",
+      ]}
+    >
+      {content.privacy.title}
+    </h1>
+    <p
+      class:list={[
+        "mt-5",
+        "text-base",
+        "leading-8",
+        "text-muted",
+        "sm:text-lg",
+      ]}
+    >
+      {content.privacy.intro}
+    </p>
+  </header>
+
+  <div class:list={["space-y-10", "border-t", "border-rule", "pt-10"]}>
+    <p class:list={["text-base", "leading-8", "text-muted", "sm:text-lg"]}>
+      {content.privacy.analytics}
+    </p>
+    <p class:list={["text-base", "leading-8", "text-muted", "sm:text-lg"]}>
+      {content.privacy.video}
+    </p>
+  </div>
+</section>

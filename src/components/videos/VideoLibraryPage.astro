@@ -1,0 +1,67 @@
+---
+import type { SiteContent } from "../../data/content";
+
+import VideoGrid from "./VideoGrid.astro";
+
+interface Props {
+  content: SiteContent;
+  class?: string;
+}
+
+const { content, class: className } = Astro.props;
+const locale = content.dir === "rtl" ? "ar" : "en";
+---
+
+<section
+  class:list={[
+    "mx-auto",
+    "w-full",
+    "max-w-7xl",
+    "px-6",
+    "pb-24",
+    "pt-32",
+    "sm:px-10",
+    "sm:pb-32",
+    "sm:pt-40",
+    className,
+  ]}
+>
+  <header class:list={["mb-12", "max-w-3xl", "sm:mb-16"]}>
+    <p
+      class:list={[
+        "mb-4",
+        "text-xs",
+        "font-medium",
+        "uppercase",
+        "tracking-[0.2em]",
+        "text-accent",
+      ]}
+    >
+      {content.projects.eyebrow}
+    </p>
+    <h1
+      class:list={[
+        "text-4xl",
+        "font-light",
+        "tracking-tight",
+        "text-heading",
+        "sm:text-6xl",
+      ]}
+    >
+      {content.videoLibrary.title}
+    </h1>
+    <p
+      class:list={[
+        "mt-5",
+        "max-w-2xl",
+        "text-base",
+        "leading-8",
+        "text-muted",
+        "sm:text-lg",
+      ]}
+    >
+      {content.videoLibrary.description}
+    </p>
+  </header>
+  <VideoGrid videos={content.projects.videos} locale={locale} />
+</section>

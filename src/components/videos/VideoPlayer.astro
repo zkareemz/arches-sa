@@ -1,0 +1,114 @@
+---
+interface Props {
+  id: string;
+  title: string;
+  playLabel: string;
+  class?: string;
+}
+
+const { id, title, playLabel, class: className } = Astro.props;
+---
+
+<div
+  data-video-player
+  data-video-id={id}
+  data-video-title={title}
+  class:list={[
+    "relative",
+    "mx-auto",
+    "aspect-[9/16]",
+    "max-w-md",
+    "overflow-hidden",
+    "rounded-sm",
+    "bg-ink-950",
+    className,
+  ]}
+>
+  <button
+    type="button"
+    data-play-video
+    aria-label={`${playLabel}: ${title}`}
+    class:list={[
+      "group",
+      "absolute",
+      "inset-0",
+      "grid",
+      "w-full",
+      "place-items-center",
+      "text-quill-gray-50",
+      "focus-visible:outline-2",
+      "focus-visible:outline-offset-[-4px]",
+      "focus-visible:outline-accent",
+    ]}
+  >
+    <img
+      src={`/video-thumbnails/${id}.jpg`}
+      alt=""
+      width="480"
+      height="360"
+      fetchpriority="high"
+      class:list={[
+        "absolute",
+        "inset-0",
+        "h-full",
+        "w-full",
+        "object-cover",
+        "opacity-80",
+        "transition-transform",
+        "duration-500",
+        "group-hover:scale-105",
+      ]}
+    />
+    <span class:list={["absolute", "inset-0", "bg-ink-950/20"]}></span>
+    <span
+      class:list={[
+        "relative",
+        "grid",
+        "h-16",
+        "w-16",
+        "place-items-center",
+        "rounded-full",
+        "bg-page/90",
+        "text-accent",
+        "shadow-xl",
+        "transition-transform",
+        "group-hover:scale-110",
+        "sm:h-20",
+        "sm:w-20",
+      ]}
+    >
+      <svg
+        viewBox="0 0 24 24"
+        class="ms-1 h-8 w-8 fill-current"
+        aria-hidden="true"
+      >
+        <path d="M8 5v14l11-7z"></path>
+      </svg>
+    </span>
+  </button>
+</div>
+
+<script>
+  document
+    .querySelectorAll<HTMLElement>("[data-video-player]")
+    .forEach((player) => {
+      const button =
+        player.querySelector<HTMLButtonElement>("[data-play-video]");
+      button?.addEventListener("click", () => {
+        const id = player.dataset.videoId;
+        const title = player.dataset.videoTitle ?? "Video";
+        if (!id) return;
+
+        const frame = document.createElement("iframe");
+        frame.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?autoplay=1&modestbranding=1&rel=0`;
+        frame.title = title;
+        frame.allow =
+          "autoplay; encrypted-media; picture-in-picture; fullscreen";
+        frame.allowFullscreen = true;
+        frame.referrerPolicy = "strict-origin-when-cross-origin";
+        frame.className = "absolute inset-0 h-full w-full border-0";
+        player.replaceChildren(frame);
+        player.dispatchEvent(new CustomEvent("video-play", { bubbles: true }));
+      });
+    });
+</script>

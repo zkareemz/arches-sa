@@ -10,25 +10,27 @@ interface Props {
   description?: string;
   noindex?: boolean;
   breadcrumbs?: { name: string; path: string }[];
+  socialImage?: string;
 }
 
 const locale = Astro.currentLocale || "ar";
 const content = getContent(locale);
 const dir = content.dir;
-const GA_MEASUREMENT_ID = "G-VM4HEGPWP0";
-
 const {
   title = content.seo.title,
   description = content.seo.description,
   noindex = false,
   breadcrumbs = [],
+  socialImage,
 } = Astro.props;
 const pathname = Astro.url.pathname.replace(/\/+$/, "") || "/";
 const arabicPath = pathname.replace(/^\/en(?=\/|$)/, "") || "/";
 const arPath = arabicPath === "/" ? "/" : `${arabicPath}/`;
 const enPath = arPath === "/" ? "/en/" : `/en${arPath}`;
 const canonical = new URL(locale === "en" ? enPath : arPath, SITE_URL).href;
-const image = new URL(`/social/${locale}-v2.jpg`, SITE_URL).href;
+const image = socialImage
+  ? new URL(socialImage, SITE_URL).href
+  : new URL(`/social/${locale}-v2.jpg`, SITE_URL).href;
 const headerContent = {
   ...content,
   altLocale: { ...content.altLocale, href: locale === "en" ? arPath : enPath },
@@ -108,19 +110,16 @@ const graph = [
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light dark" />
     <meta name="theme-color" content="#f9faf9" />
-    <script
-      is:inline
-      async
-      src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-    ></script>
-    <script is:inline define:vars={{ GA_MEASUREMENT_ID }}>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-      gtag("config", GA_MEASUREMENT_ID);
-    </script>
+    {
+      import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN && (
+        <script
+          is:inline
+          defer
+          data-domain={import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN}
+          src="https://plausible.io/js/script.js"
+        />
+      )
+    }
     <script is:inline>
       (() => {
         let theme;

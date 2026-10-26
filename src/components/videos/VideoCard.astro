@@ -1,0 +1,122 @@
+---
+import type { ProjectVideo } from "../../data/content";
+
+interface Props {
+  video: ProjectVideo;
+  locale: "ar" | "en";
+  class?: string;
+}
+
+const { video, locale, class: className } = Astro.props;
+const href = `${locale === "en" ? "/en" : ""}/videos/${video.slug}/`;
+const dateLabel = video.publishedAt
+  ? new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(
+      new Date(`${video.publishedAt}T00:00:00`),
+    )
+  : undefined;
+---
+
+<a
+  href={href}
+  data-video-card={video.slug}
+  class:list={[
+    "group",
+    "block",
+    "overflow-hidden",
+    "rounded-sm",
+    "text-start",
+    "focus-visible:outline-2",
+    "focus-visible:outline-offset-4",
+    "focus-visible:outline-accent",
+    className,
+  ]}
+>
+  <span
+    class:list={[
+      "relative",
+      "block",
+      "aspect-[9/16]",
+      "overflow-hidden",
+      "bg-ink-900",
+    ]}
+  >
+    <img
+      src={`/video-thumbnails/${video.id}.jpg`}
+      alt=""
+      width="480"
+      height="360"
+      loading="lazy"
+      decoding="async"
+      class:list={[
+        "h-full",
+        "w-full",
+        "object-cover",
+        "transition-transform",
+        "duration-500",
+        "group-hover:scale-105",
+      ]}
+    />
+    <span
+      class:list={[
+        "absolute",
+        "inset-0",
+        "grid",
+        "place-items-center",
+        "bg-ink-950/10",
+        "transition-colors",
+        "group-hover:bg-ink-950/30",
+      ]}
+    >
+      <span
+        aria-hidden="true"
+        class:list={[
+          "grid",
+          "h-14",
+          "w-14",
+          "place-items-center",
+          "rounded-full",
+          "bg-page/90",
+          "text-accent",
+          "shadow-lg",
+          "transition-transform",
+          "group-hover:scale-110",
+        ]}
+      >
+        <svg
+          viewBox="0 0 24 24"
+          class="ms-1 h-6 w-6 fill-current"
+          aria-hidden="true"
+        >
+          <path d="M8 5v14l11-7z"></path>
+        </svg>
+      </span>
+    </span>
+  </span>
+  <span
+    class:list={[
+      "mt-4",
+      "block",
+      "text-lg",
+      "font-light",
+      "text-heading",
+      "transition-colors",
+      "group-hover:text-accent",
+      "sm:text-xl",
+    ]}
+  >
+    {video.title}
+  </span>
+  <span class:list={["mt-2", "block", "text-sm", "leading-7", "text-muted"]}>
+    {video.description}
+  </span>
+  {
+    video.publishedAt && dateLabel && (
+      <time
+        datetime={video.publishedAt}
+        class:list={["mt-3", "block", "text-xs", "text-muted"]}
+      >
+        {dateLabel}
+      </time>
+    )
+  }
+</a>

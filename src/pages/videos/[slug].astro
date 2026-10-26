@@ -1,0 +1,23 @@
+---
+import VideoWatchPage from "../../components/videos/VideoWatchPage.astro";
+import { getContent } from "../../data/content";
+import Layout from "../../layouts/Layout.astro";
+
+export function getStaticPaths() {
+  const content = getContent("ar");
+  return content.projects.videos
+    .filter((video) => video.published)
+    .map((video) => ({ params: { slug: video.slug }, props: { video } }));
+}
+
+const content = getContent("ar");
+const { video } = Astro.props;
+---
+
+<Layout
+  title={`${video.title} | ${content.videoLibrary.title} | ${content.footer.tagline}`}
+  description={video.description}
+  socialImage={`/video-thumbnails/${video.id}.jpg`}
+>
+  <VideoWatchPage content={content} video={video} />
+</Layout>

@@ -76,6 +76,12 @@ const home = locale === "ar" ? "/" : "/en/";
               >{content.ui.home}</a
             >
           </li>
+          <li>
+            <a
+              href={locale === "en" ? "/en/videos/" : "/videos/"}
+              class:list={["hover:text-accent"]}>{content.videoLibrary.title}</a
+            >
+          </li>
           {
             content.nav.map((item) => (
               <li>

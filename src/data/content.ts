@@ -39,7 +39,12 @@ export interface Project {
 
 export interface ProjectVideo {
   id: string;
+  slug: string;
   title: string;
+  description: string;
+  published: boolean;
+  publishedAt?: string;
+  featured?: boolean;
 }
 
 export interface Award {
@@ -127,6 +132,22 @@ export interface SiteContent {
     previousVideo: string;
     nextVideo: string;
     videos: ProjectVideo[];
+  };
+  videoLibrary: {
+    title: string;
+    description: string;
+    viewAll: string;
+    backToVideos: string;
+    play: string;
+    youtubeFallback: string;
+    contact: string;
+    related: string;
+  };
+  privacy: {
+    title: string;
+    intro: string;
+    analytics: string;
+    video: string;
   };
   award: {
     eyebrow: string;
@@ -464,12 +485,60 @@ const ar: SiteContent = {
     previousVideo: "الفيديو السابق",
     nextVideo: "الفيديو التالي",
     videos: [
-      { id: "ARJs46guKLc", title: "فيلا السليمانية" },
-      { id: "TfE0JXQ-jn4", title: "فيلا السلمانية 2" },
-      { id: "9jlNgVK8k9Q", title: "فيلا النرجس" },
-      { id: "ss26-h_qw7w", title: "فيلا الملقا" },
-      { id: "wKV0fHybwq0", title: "فيلا حي الملك سلمان" },
+      {
+        id: "ARJs46guKLc",
+        slug: "alsulimania-villa",
+        title: "فيلا السليمانية",
+        description: "شاهدوا لمحة عن مشروع فيلا السليمانية من أعمال أقواس.",
+        published: true,
+      },
+      {
+        id: "TfE0JXQ-jn4",
+        slug: "alsalmania-villa-2",
+        title: "فيلا السلمانية 2",
+        description: "شاهدوا لمحة عن مشروع فيلا السلمانية 2 من أعمال أقواس.",
+        published: true,
+      },
+      {
+        id: "9jlNgVK8k9Q",
+        slug: "al-narjis-villa",
+        title: "فيلا النرجس",
+        description: "شاهدوا لمحة عن مشروع فيلا النرجس من أعمال أقواس.",
+        published: true,
+      },
+      {
+        id: "ss26-h_qw7w",
+        slug: "al-malqa-villa",
+        title: "فيلا الملقا",
+        description: "شاهدوا لمحة عن مشروع فيلا الملقا من أعمال أقواس.",
+        published: true,
+      },
+      {
+        id: "wKV0fHybwq0",
+        slug: "king-salman-district-villa",
+        title: "فيلا حي الملك سلمان",
+        description: "شاهدوا لمحة عن مشروع فيلا حي الملك سلمان من أعمال أقواس.",
+        published: true,
+      },
     ],
+  },
+  videoLibrary: {
+    title: "أفلام المشاريع",
+    description: "اكتشفوا مشاريع أقواس من خلال أفلامنا.",
+    viewAll: "عرض جميع الأفلام",
+    backToVideos: "العودة إلى أفلام المشاريع",
+    play: "تشغيل الفيديو",
+    youtubeFallback: "تعذّر تشغيل الفيديو؟ شاهده على YouTube",
+    contact: "ناقش مشروعك معنا",
+    related: "اكتشفوا المزيد من مشاريعنا",
+  },
+  privacy: {
+    title: "الخصوصية",
+    intro: "نحترم خصوصيتك ونوضح هنا ما يحدث عند استخدام هذا الموقع.",
+    analytics:
+      "قد يستخدم الموقع Plausible Analytics لقياس الزيارات والتفاعلات بصورة إجمالية عند تفعيل الخدمة في إعدادات النشر. لا تُحمّل أداة التحليلات عند عدم ضبط الإعداد.",
+    video:
+      "تُخزّن صور معاينة الفيديو على هذا الموقع. لا يتصل المشغل بخدمات YouTube إلا بعد اختيارك تشغيل الفيديو، وعندها تنطبق سياسات YouTube على تشغيله.",
   },
   award: {
     eyebrow: "تقدير وتميّز",
@@ -805,12 +874,66 @@ const en: SiteContent = {
     previousVideo: "Previous video",
     nextVideo: "Next video",
     videos: [
-      { id: "ARJs46guKLc", title: "Alsulimania Villa" },
-      { id: "TfE0JXQ-jn4", title: "Alsalmania Villa 2" },
-      { id: "9jlNgVK8k9Q", title: "Al Narjis Villa" },
-      { id: "ss26-h_qw7w", title: "Al Malqa Villa" },
-      { id: "wKV0fHybwq0", title: "King Salman District Villa" },
+      {
+        id: "ARJs46guKLc",
+        slug: "alsulimania-villa",
+        title: "Alsulimania Villa",
+        description:
+          "A short film featuring the Alsulimania Villa project by Arches.",
+        published: true,
+      },
+      {
+        id: "TfE0JXQ-jn4",
+        slug: "alsalmania-villa-2",
+        title: "Alsalmania Villa 2",
+        description:
+          "A short film featuring the Alsalmania Villa 2 project by Arches.",
+        published: true,
+      },
+      {
+        id: "9jlNgVK8k9Q",
+        slug: "al-narjis-villa",
+        title: "Al Narjis Villa",
+        description:
+          "A short film featuring the Al Narjis Villa project by Arches.",
+        published: true,
+      },
+      {
+        id: "ss26-h_qw7w",
+        slug: "al-malqa-villa",
+        title: "Al Malqa Villa",
+        description:
+          "A short film featuring the Al Malqa Villa project by Arches.",
+        published: true,
+      },
+      {
+        id: "wKV0fHybwq0",
+        slug: "king-salman-district-villa",
+        title: "King Salman District Villa",
+        description:
+          "A short film featuring the King Salman District Villa project by Arches.",
+        published: true,
+      },
     ],
+  },
+  videoLibrary: {
+    title: "Project Films",
+    description: "Explore Arches projects through our films.",
+    viewAll: "View all films",
+    backToVideos: "Back to project films",
+    play: "Play video",
+    youtubeFallback: "Having trouble playing? Watch on YouTube",
+    contact: "Discuss your project",
+    related: "Explore more projects",
+  },
+  privacy: {
+    title: "Privacy",
+    intro:
+      "We respect your privacy and explain here what happens when you use this site.",
+    analytics:
+      "The site may use Plausible Analytics to measure visits and interactions in aggregate when enabled in the deployment settings. The analytics script is not loaded when that setting is absent.",
+    video:
+      "Video preview images are stored on this site. The player connects to YouTube only after you choose to play a video; YouTube's policies then apply to playback.",
   },
   award: {
     eyebrow: "Recognition",

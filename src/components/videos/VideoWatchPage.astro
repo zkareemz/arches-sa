@@ -1,0 +1,189 @@
+---
+import type { ProjectVideo, SiteContent } from "../../data/content";
+
+import VideoGrid from "./VideoGrid.astro";
+import VideoPlayer from "./VideoPlayer.astro";
+
+interface Props {
+  content: SiteContent;
+  video: ProjectVideo;
+  class?: string;
+}
+
+const { content, video, class: className } = Astro.props;
+const locale = content.dir === "rtl" ? "ar" : "en";
+const related = content.projects.videos
+  .filter((item) => item.published && item.slug !== video.slug)
+  .slice(0, 3);
+const libraryPath = locale === "en" ? "/en/videos/" : "/videos/";
+const videoSchema = {
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  name: video.title,
+  description: video.description,
+  thumbnailUrl: new URL(
+    `/video-thumbnails/${video.id}.jpg`,
+    "https://arches.sa",
+  ).href,
+  embedUrl: `https://www.youtube-nocookie.com/embed/${video.id}`,
+  contentUrl: `https://www.youtube.com/watch?v=${video.id}`,
+};
+---
+
+<section
+  class:list={[
+    "mx-auto",
+    "w-full",
+    "max-w-6xl",
+    "px-6",
+    "pb-24",
+    "pt-32",
+    "sm:px-10",
+    "sm:pb-32",
+    "sm:pt-40",
+    className,
+  ]}
+>
+  <a
+    href={libraryPath}
+    class:list={[
+      "mb-8",
+      "inline-flex",
+      "items-center",
+      "gap-2",
+      "text-sm",
+      "text-muted",
+      "transition-colors",
+      "hover:text-accent",
+      "focus-visible:outline-2",
+      "focus-visible:outline-offset-4",
+      "focus-visible:outline-accent",
+    ]}
+  >
+    <span aria-hidden="true" class="rtl:-scale-x-100">&larr;</span>
+    {content.videoLibrary.backToVideos}
+  </a>
+
+  <VideoPlayer
+    id={video.id}
+    title={video.title}
+    playLabel={content.videoLibrary.play}
+  />
+
+  <a
+    href={`https://www.youtube.com/watch?v=${encodeURIComponent(video.id)}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    class:list={[
+      "mt-4",
+      "inline-block",
+      "text-sm",
+      "text-muted",
+      "underline",
+      "underline-offset-4",
+      "hover:text-accent",
+      "focus-visible:outline-2",
+      "focus-visible:outline-offset-4",
+      "focus-visible:outline-accent",
+    ]}
+  >
+    {content.videoLibrary.youtubeFallback}
+  </a>
+
+  <header class:list={["mt-8", "max-w-3xl"]}>
+    <h1
+      class:list={[
+        "text-3xl",
+        "font-light",
+        "tracking-tight",
+        "text-heading",
+        "sm:text-5xl",
+      ]}
+    >
+      {video.title}
+    </h1>
+    <p
+      class:list={[
+        "mt-4",
+        "text-base",
+        "leading-8",
+        "text-muted",
+        "sm:text-lg",
+      ]}
+    >
+      {video.description}
+    </p>
+    <a
+      href={locale === "en" ? "/en/#contact" : "/#contact"}
+      data-contact-cta
+      class:list={[
+        "mt-7",
+        "inline-flex",
+        "items-center",
+        "gap-2",
+        "rounded-md",
+        "bg-accent",
+        "px-6",
+        "py-3",
+        "text-sm",
+        "font-medium",
+        "text-accent-contrast",
+        "transition-colors",
+        "hover:bg-accent-strong",
+        "focus-visible:outline-2",
+        "focus-visible:outline-offset-2",
+        "focus-visible:outline-accent",
+      ]}
+    >
+      {content.videoLibrary.contact}
+      <span aria-hidden="true" class="rtl:-scale-x-100">&rarr;</span>
+    </a>
+  </header>
+
+  <section
+    class:list={[
+      "mt-20",
+      "border-t",
+      "border-rule",
+      "pt-12",
+      "sm:mt-28",
+      "sm:pt-16",
+    ]}
+  >
+    <h2
+      class:list={[
+        "mb-8",
+        "text-2xl",
+        "font-light",
+        "text-heading",
+        "sm:mb-10",
+        "sm:text-3xl",
+      ]}
+    >
+      {content.videoLibrary.related}
+    </h2>
+    <VideoGrid videos={related} locale={locale} />
+  </section>
+</section>
+
+<script
+  is:inline
+  type="application/ld+json"
+  set:html={JSON.stringify(videoSchema).replace(/</g, "\\u003c")}
+/>
+
+<script>
+  const track = (eventName: string) => {
+    (window as Window & { plausible?: (name: string) => void }).plausible?.(
+      eventName,
+    );
+  };
+  document.addEventListener("video-play", () => {
+    track("Video Play");
+  });
+  document
+    .querySelector<HTMLAnchorElement>("[data-contact-cta]")
+    ?.addEventListener("click", () => {
+      track("Contact CTA");
+    });
+</script>

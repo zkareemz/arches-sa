@@ -1,0 +1,14 @@
+---
+import PrivacyPage from "../../components/PrivacyPage.astro";
+import { getContent } from "../../data/content";
+import Layout from "../../layouts/Layout.astro";
+
+const content = getContent("en");
+---
+
+<Layout
+  title={`${content.privacy.title} | ${content.footer.tagline}`}
+  description={content.privacy.intro}
+>
+  <PrivacyPage content={content} />
+</Layout>

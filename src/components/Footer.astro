@@ -75,7 +75,15 @@ const year = new Date().getFullYear();
       ]}
     >
       <span>© {year} Arches. {footer.rights}</span>
-      <span>{contact.office}</span>
+      <span class:list={["flex", "flex-col", "gap-2", "sm:items-end"]}>
+        <span>{contact.office}</span>
+        <a
+          href={content.dir === "rtl" ? "/privacy/" : "/en/privacy/"}
+          class:list={["transition-colors", "hover:text-quill-gray-50"]}
+        >
+          {content.privacy.title}
+        </a>
+      </span>
     </div>
   </div>
 </footer>

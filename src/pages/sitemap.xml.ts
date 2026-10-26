@@ -11,6 +11,17 @@ export const GET: APIRoute = () => {
         servicePath(service.slug, locale),
       ),
     ),
+    ...["ar", "en"].flatMap((locale) => {
+      const content = getContent(locale);
+      const prefix = locale === "en" ? "/en" : "";
+      return [
+        `${prefix}/videos/`,
+        `${prefix}/privacy/`,
+        ...content.projects.videos
+          .filter((video) => video.published)
+          .map((video) => `${prefix}/videos/${video.slug}/`),
+      ];
+    }),
   ];
   return new Response(
     `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${paths.map((path) => `<url><loc>${SITE_URL}${path}</loc></url>`).join("")}</urlset>`,
