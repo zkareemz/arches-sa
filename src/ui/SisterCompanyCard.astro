@@ -1,0 +1,51 @@
+---
+import type { SisterCompany } from "../data/content";
+
+import Button from "./Button.astro";
+
+interface Props {
+  sisterCompany: SisterCompany;
+  class?: string;
+}
+
+const { sisterCompany, class: className } = Astro.props;
+---
+
+<div
+  class:list={[
+    "flex flex-col justify-between gap-6 rounded-md border border-rule bg-surface/40 p-6 sm:p-8 lg:flex-row lg:items-center",
+    className,
+  ]}
+>
+  <div class:list={["flex flex-col gap-2.5 max-w-2xl"]}>
+    <div class:list={["flex items-center gap-2"]}>
+      <span class:list={["inline-block h-2 w-2 rounded-full bg-accent"]}></span>
+      <span
+        class:list={[
+          "text-xs font-medium uppercase tracking-[0.18em] text-accent",
+        ]}
+      >
+        {sisterCompany.badge}
+      </span>
+    </div>
+    <h4
+      class:list={[
+        "text-xl font-light tracking-tight text-heading sm:text-2xl",
+      ]}
+    >
+      {sisterCompany.name}
+    </h4>
+    <p class:list={["text-sm leading-relaxed text-copy"]}>
+      {sisterCompany.desc}
+    </p>
+  </div>
+  <div class:list={["shrink-0 pt-2 lg:pt-0"]}>
+    <Button
+      href={sisterCompany.url}
+      label={sisterCompany.cta}
+      target="_blank"
+      rel="noopener noreferrer"
+      variant="outline"
+    />
+  </div>
+</div>

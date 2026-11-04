@@ -6,6 +6,7 @@ import Button from "../../../ui/Button.astro";
 import Eyebrow from "../../../ui/Eyebrow.astro";
 import Reveal from "../../../ui/Reveal.astro";
 import ServiceItem from "../../../ui/ServiceItem.astro";
+import SisterCompanyCard from "../../../ui/SisterCompanyCard.astro";
 
 interface Props {
   content: SiteContent;
@@ -147,6 +148,11 @@ const { services } = content;
                   <ServiceItem title={item.title} desc={item.desc} />
                 ))}
               </div>
+              {service.sisterCompany && (
+                <div class:list={["mt-4"]}>
+                  <SisterCompanyCard sisterCompany={service.sisterCompany} />
+                </div>
+              )}
               <div class:list={["mt-3"]}>
                 <Button
                   href={servicePath(

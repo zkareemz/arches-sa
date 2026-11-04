@@ -15,6 +15,14 @@ export interface ServiceSubItem {
   desc: string;
 }
 
+export interface SisterCompany {
+  badge: string;
+  name: string;
+  desc: string;
+  url: string;
+  cta: string;
+}
+
 export interface Service {
   slug: string;
   heading: string;
@@ -28,6 +36,7 @@ export interface Service {
   subtitle: string;
   p: string;
   items: ServiceSubItem[];
+  sisterCompany?: SisterCompany;
   image: string;
 }
 
@@ -442,6 +451,13 @@ const ar: SiteContent = {
             desc: "توريد وتركيب وإدارة مقاولين من الألف إلى الياء",
           },
         ],
+        sisterCompany: {
+          badge: "الشركة الشقيقة",
+          name: "بيلد بلس",
+          desc: "تنفذ مشاريع التصميم الداخلي والتشطيب بالتعاون مع شركتنا الشقيقة بيلد بلس، المتخصصة في الاستشارات والتصميم الداخلي والتنفيذ التام.",
+          url: "https://www.buildplus.sa/",
+          cta: "زيارة موقع بيلد بلس",
+        },
         image: IMG.service3,
       },
     ],
@@ -823,6 +839,13 @@ const en: SiteContent = {
             desc: "Supply, installation, and contractor management end to end",
           },
         ],
+        sisterCompany: {
+          badge: "Sister Company",
+          name: "Build Plus",
+          desc: "Interior design and turnkey fit-out projects are delivered in partnership with our sister company, Build Plus, specializing in design, engineering, and execution.",
+          url: "https://www.buildplus.sa/",
+          cta: "Visit Build Plus",
+        },
         image: IMG.service3,
       },
     ],

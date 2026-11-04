@@ -6,6 +6,7 @@ import { servicePath, whatsappUrl } from "../data/content";
 import { gallery } from "../data/gallery";
 import Button from "../ui/Button.astro";
 import Reveal from "../ui/Reveal.astro";
+import SisterCompanyCard from "../ui/SisterCompanyCard.astro";
 
 interface Props {
   content: SiteContent;
@@ -103,6 +104,16 @@ const photos = category
       </div>
     </div>
   </section>
+
+  {
+    service.sisterCompany && (
+      <section class:list={["mx-auto max-w-7xl px-6 py-10 sm:px-10"]}>
+        <Reveal>
+          <SisterCompanyCard sisterCompany={service.sisterCompany} />
+        </Reveal>
+      </section>
+    )
+  }
 
   {
     photos.length > 0 && (
