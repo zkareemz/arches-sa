@@ -5,10 +5,11 @@ import Sun from "../assets/sun.svg";
 interface Props {
   darkLabel: string;
   lightLabel: string;
+  systemLabel: string;
   class?: string;
 }
 
-const { darkLabel, lightLabel, class: className } = Astro.props;
+const { darkLabel, lightLabel, systemLabel, class: className } = Astro.props;
 ---
 
 <button
@@ -16,8 +17,8 @@ const { darkLabel, lightLabel, class: className } = Astro.props;
   data-theme-toggle
   data-dark-label={darkLabel}
   data-light-label={lightLabel}
+  data-system-label={systemLabel}
   aria-label={darkLabel}
-  aria-pressed="false"
   title={darkLabel}
   class:list={[
     "relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full text-heading transition-colors hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
@@ -43,14 +44,34 @@ const { darkLabel, lightLabel, class: className } = Astro.props;
 </button>
 
 <style>
-  :global(html[data-theme="dark"]) [data-theme-icon="moon"] {
+  :global(html:has(> head > meta[name="color-scheme"][content="dark"]))
+    [data-theme-icon="moon"] {
     opacity: 0;
     transform: scale(0.75);
   }
 
-  :global(html[data-theme="dark"]) [data-theme-icon="sun"] {
+  :global(html:has(> head > meta[name="color-scheme"][content="dark"]))
+    [data-theme-icon="sun"] {
     opacity: 1;
     transform: scale(1);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :global(
+        html:not(:has(> head > meta[name="color-scheme"][content="light"]))
+      )
+      [data-theme-icon="moon"] {
+      opacity: 0;
+      transform: scale(0.75);
+    }
+
+    :global(
+        html:not(:has(> head > meta[name="color-scheme"][content="light"]))
+      )
+      [data-theme-icon="sun"] {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
 </style>
 
@@ -58,30 +79,44 @@ const { darkLabel, lightLabel, class: className } = Astro.props;
   const toggle = document.querySelector<HTMLButtonElement>(
     "[data-theme-toggle]",
   );
+  const KEY = "arches-theme";
+  const scheme = matchMedia("(prefers-color-scheme: dark)");
 
-  const setToggleState = (theme: "light" | "dark") => {
+  const pinnedTheme = () => {
+    try {
+      const value = localStorage.getItem(KEY);
+      return value === "light" || value === "dark" ? value : null;
+    } catch {
+      return null;
+    }
+  };
+
+  // Label always describes the next action: pin the opposite of the system
+  // scheme, or (when pinned) go back to following the system.
+  const sync = () => {
     if (!toggle) return;
-    const isDark = theme === "dark";
-    const label = isDark ? toggle.dataset.lightLabel : toggle.dataset.darkLabel;
-    toggle.ariaPressed = String(isDark);
+    const pinned = pinnedTheme();
+    const dark = pinned ? pinned === "dark" : scheme.matches;
+    const label = pinned
+      ? toggle.dataset.systemLabel
+      : dark
+        ? toggle.dataset.lightLabel
+        : toggle.dataset.darkLabel;
     toggle.ariaLabel = label ?? "";
     toggle.title = label ?? "";
   };
 
-  const currentTheme = () =>
-    document.documentElement.dataset.theme === "dark" ? "dark" : "light";
-
-  setToggleState(currentTheme());
+  sync();
 
   toggle?.addEventListener("click", () => {
-    const theme = currentTheme() === "dark" ? "light" : "dark";
-    document.documentElement.dataset.theme = theme;
     try {
-      localStorage.setItem("arches-theme", theme);
+      if (pinnedTheme()) localStorage.removeItem(KEY);
+      else localStorage.setItem(KEY, scheme.matches ? "light" : "dark");
     } catch {}
-    document
-      .querySelector<HTMLMetaElement>('meta[name="theme-color"]')
-      ?.setAttribute("content", theme === "dark" ? "#141520" : "#f9faf9");
-    setToggleState(theme);
+    dispatchEvent(new Event("arches-theme-change"));
+    sync();
   });
+
+  scheme.addEventListener("change", sync);
+  addEventListener("storage", sync);
 </script>

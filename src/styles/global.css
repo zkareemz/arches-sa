@@ -52,34 +52,31 @@
   --color-whatsapp-700: #1da851;
 
   /* Semantic brand roles — these are remapped for the selected colour mode. */
-  --color-page: #f9faf9;
-  --color-surface: #f4f5f4;
-  --color-heading: #1e1f28;
-  --color-copy: #494a58;
-  --color-muted: #2a2b36;
-  --color-rule: rgb(30 31 40 / 12%);
-  --color-accent: #854b28;
-  --color-accent-strong: #6d3e22;
-  --color-accent-contrast: #f9faf9;
+  --color-page: light-dark(#f9faf9, #141520);
+  --color-surface: light-dark(#f4f5f4, #1e1f28);
+  --color-heading: light-dark(#1e1f28, #e8e8e3);
+  --color-copy: light-dark(#494a58, #aaaa9c);
+  --color-muted: light-dark(#2a2b36, #d8d8d1);
+  --color-rule: light-dark(rgb(30 31 40 / 12%), rgb(216 216 209 / 14%));
+  --color-accent: light-dark(#854b28, #cd9c79);
+  --color-accent-strong: light-dark(#6d3e22, #e0c0a8);
+  --color-accent-contrast: light-dark(#f9faf9, #141520);
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
+    color-scheme: light dark;
+  }
+
+  /* <meta name="color-scheme"> is set by the theme script: "light dark"
+     follows the system, "light"/"dark" pin the user's override. */
+  html:has(> head > meta[name="color-scheme"][content="light"]) {
     color-scheme: light;
   }
 
-  html[data-theme="dark"] {
+  html:has(> head > meta[name="color-scheme"][content="dark"]) {
     color-scheme: dark;
-    --color-page: #141520;
-    --color-surface: #1e1f28;
-    --color-heading: #e8e8e3;
-    --color-copy: #aaaa9c;
-    --color-muted: #d8d8d1;
-    --color-rule: rgb(216 216 209 / 14%);
-    --color-accent: #cd9c79;
-    --color-accent-strong: #e0c0a8;
-    --color-accent-contrast: #141520;
   }
 
   body {

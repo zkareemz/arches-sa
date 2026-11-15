@@ -80,6 +80,7 @@ export interface SiteContent {
     navigation: string;
     darkMode: string;
     lightMode: string;
+    systemMode: string;
     serviceDetails: string;
     serviceScope: string;
     relatedServices: string;
@@ -250,6 +251,7 @@ const ar: SiteContent = {
     navigation: "التنقل الرئيسي",
     darkMode: "تفعيل الوضع الداكن",
     lightMode: "تفعيل الوضع الفاتح",
+    systemMode: "استخدام وضع النظام",
     serviceDetails: "تعرّف على الخدمة",
     serviceScope: "ماذا تشمل الخدمة؟",
     relatedServices: "خدمات متكاملة لمشروعك",
@@ -636,6 +638,7 @@ const en: SiteContent = {
     navigation: "Main navigation",
     darkMode: "Switch to dark mode",
     lightMode: "Switch to light mode",
+    systemMode: "Use system theme",
     serviceDetails: "Explore this service",
     serviceScope: "What does the service include?",
     relatedServices: "Integrated services for your project",

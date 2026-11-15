@@ -11,6 +11,8 @@ interface Props {
   noindex?: boolean;
   breadcrumbs?: { name: string; path: string }[];
   socialImage?: string;
+  /** Above-the-fold image to preload with high priority (e.g. hero poster). */
+  preloadImage?: string;
 }
 
 const locale = Astro.currentLocale || "ar";
@@ -22,6 +24,7 @@ const {
   noindex = false,
   breadcrumbs = [],
   socialImage,
+  preloadImage,
 } = Astro.props;
 const pathname = Astro.url.pathname.replace(/\/+$/, "") || "/";
 const arabicPath = pathname.replace(/^\/en(?=\/|$)/, "") || "/";
@@ -122,19 +125,36 @@ const graph = [
     }
     <script is:inline>
       (() => {
-        let theme;
-        try {
-          theme = localStorage.getItem("arches-theme");
-        } catch {}
-        if (theme !== "light" && theme !== "dark") {
-          theme = "light";
-        }
-        document.documentElement.dataset.theme = theme;
-        document
-          .querySelector('meta[name="theme-color"]')
-          ?.setAttribute("content", theme === "dark" ? "#141520" : "#f9faf9");
+        const meta = document.querySelector('meta[name="color-scheme"]');
+        const scheme = matchMedia("(prefers-color-scheme: dark)");
+        const apply = () => {
+          let theme = null;
+          try {
+            theme = localStorage.getItem("arches-theme");
+          } catch {}
+          const pinned = theme === "light" || theme === "dark";
+          meta.content = pinned ? theme : "light dark";
+          const dark = pinned ? theme === "dark" : scheme.matches;
+          document
+            .querySelector('meta[name="theme-color"]')
+            ?.setAttribute("content", dark ? "#141520" : "#f9faf9");
+        };
+        apply();
+        scheme.addEventListener("change", apply);
+        addEventListener("storage", apply);
+        addEventListener("arches-theme-change", apply);
       })();
     </script>
+    {
+      preloadImage && (
+        <link
+          rel="preload"
+          as="image"
+          href={preloadImage}
+          fetchpriority="high"
+        />
+      )
+    }
     <link rel="icon" href="/favicon/favicon.ico" sizes="any" />
     <link rel="icon" href="/favicon/favicon.svg" type="image/svg+xml" />
     <link

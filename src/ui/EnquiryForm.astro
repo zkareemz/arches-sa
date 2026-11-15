@@ -60,6 +60,7 @@ const fieldClass =
         id="enquiry-name"
         name="name"
         type="text"
+        autocomplete="name"
         required
         placeholder={form.name}
         class:list={[fieldClass]}
@@ -71,6 +72,10 @@ const fieldClass =
         id="enquiry-email"
         name="email"
         type="email"
+        autocomplete="email"
+        autocapitalize="none"
+        autocorrect="off"
+        spellcheck="false"
         required
         placeholder={form.email}
         class:list={[fieldClass, "text-start"]}
