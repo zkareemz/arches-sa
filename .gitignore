@@ -33,3 +33,7 @@ pnpm-debug.log*
 public/gallery/
 src/data/gallery.json
 gallery-cache.json
+
+# locally installed agent skills
+.agents/
+.claude/
